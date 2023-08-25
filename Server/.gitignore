@@ -1,4 +1,4 @@
-node_modules
+/node_modules
 .env
-mongodb_uploads
-data/demo_original.csv
+/mongodb_uploads
+/data
