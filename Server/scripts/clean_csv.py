@@ -1,7 +1,6 @@
 import pandas as pd
 import os
 
-
 current_dir = os.path.dirname(__file__)
 input_file_path = os.path.join(current_dir, "../data/demo_original.csv")
 output_file_path = os.path.join(current_dir, "../mongodb_uploads/cleaned.csv")
@@ -43,7 +42,5 @@ selected_data = data[columns_to_keep]
 selected_data = selected_data.drop_duplicates()
 
 selected_data.to_csv(output_file, index=False)
-
-
 
 # feed the mongodb with clean csv
