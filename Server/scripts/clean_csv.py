@@ -43,4 +43,4 @@ selected_data = selected_data.drop_duplicates()
 
 selected_data.to_csv(output_file, index=False)
 
-# feed the mongodb with clean csv
+
