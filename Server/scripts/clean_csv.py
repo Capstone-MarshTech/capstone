@@ -28,5 +28,19 @@ columns_to_keep = ["claim_number",
 
 #  store the new csv file to mongodb_uploads
 selected_data = data[columns_to_keep]
+
+# convert types
+# selected_data["effective_date"] = pd.to_datetime(selected_data["effective_date"])
+# selected_data["open_claim"] = selected_data["open_claim"].astype(bool)
+# selected_data["closed_claim"] = selected_data["closed_claim"].astype(bool)
+# selected_data["zero_value_claim"] = selected_data["zero_value_claim"].astype(bool)
+# selected_data["total_net_paid"] = pd.to_datetime(selected_data["total_net_paid"]).astype(float).round(2)
+# selected_data["total_net_incurred"] = selected_data["total_net_incurred"].astype(float).round(2)
+# selected_data["total_net_outstanding"] = selected_data["total_net_outstanding"].astype(float).round(2)
+
+# drop duplicate rows
+selected_data = selected_data.drop_duplicates()
+
 selected_data.to_csv(output_file, index=False)
+
 
