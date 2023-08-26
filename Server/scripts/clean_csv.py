@@ -30,5 +30,3 @@ columns_to_keep = ["claim_number",
 selected_data = data[columns_to_keep]
 selected_data.to_csv(output_file, index=False)
 
-
-# feed the mongodb with clean csv
