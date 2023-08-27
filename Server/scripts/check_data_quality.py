@@ -26,6 +26,7 @@ duplicate_rows = clean_data[clean_data.duplicated()]
 print(f'Duplicate rows:\n{duplicate_rows}')
 
 # data summary
+print("Data sumary: ")
 print(clean_data.describe())
 
 # Save profile summary of the data to html file 
