@@ -5,8 +5,8 @@ import { useMemo } from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { themeSettings } from "./theme";
 import NavBar from "@/components/navbar/index"
-// import GraphsDashboard from '@/views/graphs-dashboard';
-// import TablesPredictions from '@/views/tables-dashboard';
+import GraphsDashboard from '@/views/graphs-dashboard';
+import TablesDashboard from '@/views/tables-dasboard';
 
 
 
@@ -23,9 +23,9 @@ function App() {
               <NavBar />
 							<Routes>
                 {/* Graph view */}
-								<Route path='/' element={<div>Welcome, this is the main - graphs - dashboard</div>} />
+								<Route path='/' element={<GraphsDashboard />} />
                 {/* Table view */}
-								<Route path='/table-view' element={<div>tables dashboard</div>} />
+								<Route path='/table-view' element={<TablesDashboard />} />
 							</Routes>
 						</Box>
 					</ThemeProvider>
