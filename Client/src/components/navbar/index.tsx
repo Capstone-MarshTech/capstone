@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, useTheme } from '@mui/material';
@@ -7,10 +8,11 @@ import TableChartIcon from '@mui/icons-material/TableChart';
 import TuneIcon from '@mui/icons-material/Tune';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
+
 type Props = {};
 
 const NavBar = (props: Props) => {
-	const { palette } = useTheme();
+  const { palette } = useTheme();
 	const [selected, setSelected] = useState('graph-view');
 	return (
 		<FlexBetween mt='.25rem' p='.3rem 0rem' color={palette.primary[500]}>
