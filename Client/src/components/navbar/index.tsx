@@ -13,16 +13,13 @@ const NavBar = (props: Props) => {
 	const { palette } = useTheme();
 	const [selected, setSelected] = useState('graph-view');
 	return (
-		<FlexBetween mb='.25rem' p='.5rem 0rem' color={palette.primary[500]}>
-			{/* Left Side */}
-			<FlexBetween gap='.75rem'>
-				<Typography variant='h4' fontSize='20px'>
-					{' '}
-					Blue[i] Dasboard
-				</Typography>
-			</FlexBetween>
-			{/* Rigth Side */}
-			<FlexBetween gap='1rem'>
+		<FlexBetween
+			mt='.25rem'
+			p='.3rem 0rem'
+			color={palette.primary[500]}
+			
+		>
+			<FlexBetween gap='2rem' >
 				<Box sx={{ '&:hover': { color: palette.primary[100] } }}>
 					<FileDownloadIcon sx={{ fontSize: '24px' }} />
 					<Link
@@ -36,6 +33,7 @@ const NavBar = (props: Props) => {
 						Download
 					</Link>
 				</Box>
+				{/* Filter */}
 				<Box sx={{ '&:hover': { color: palette.primary[100] } }}>
 					<TuneIcon sx={{ fontSize: '24px' }} />
 					<Link
@@ -59,8 +57,7 @@ const NavBar = (props: Props) => {
 							color: selected === 'table-view' ? 'inherit' : palette.grey[700],
 							textDecoration: 'inherit',
 						}}
-					>
-					</Link>
+					></Link>
 				</Box>
 				<Box sx={{ '&:hover': { color: palette.primary[100] } }}>
 					<TableChartIcon sx={{ fontSize: '24px' }} />
@@ -71,8 +68,7 @@ const NavBar = (props: Props) => {
 							color: selected === 'table-view' ? 'inherit' : palette.grey[700],
 							textDecoration: 'inherit',
 						}}
-					>
-					</Link>
+					></Link>
 				</Box>
 			</FlexBetween>
 		</FlexBetween>
