@@ -12,6 +12,19 @@ export const tokens = {
 		900: '#000918',
 	},
 
+	black: {
+		100: '#d1d3d5',
+		200: '#a4a7ac',
+		300: '#767a82',
+		400: '#494e59',
+		// Marsh Black 500: '#1b222f'
+		500: '#1b222f',
+		600: '#161b26',
+		700: '#10141c',
+		800: '#0b0e13',
+		900: '#050709',
+	},
+
 	liblue: {
 		// marsh-light-blue
 		100: '#e4f6ff',
@@ -102,6 +115,7 @@ export const themeSettings = {
 		h1: {
 			fontFamily: ['Noto Sans', 'sans-serif'].join(','),
 			fontSize: 32,
+			fontWeight: 800,
 		},
 		h2: {
 			fontFamily: ['Noto Sans', 'sans-serif'].join(','),
@@ -109,9 +123,9 @@ export const themeSettings = {
 		},
 		h3: {
 			fontFamily: ['Noto Sans', 'sans-serif'].join(','),
-			fontSize: 20,
+			fontSize: 24,
 			fontWeight: 800,
-			color: tokens.grey[200],
+			color: tokens.primary[500],
 		},
 		h4: {
 			fontFamily: ['Noto Sans', 'sans-serif'].join(','),
@@ -122,7 +136,7 @@ export const themeSettings = {
 		h5: {
 			fontFamily: ['Noto Sans', 'sans-serif'].join(','),
 			fontSize: 12,
-			fontWeight: 400,
+			fontWeight: 100,
 			color: tokens.grey[500],
 		},
 		h6: {

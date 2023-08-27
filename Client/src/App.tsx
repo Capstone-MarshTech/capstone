@@ -4,7 +4,6 @@ import { Box } from "@mui/material"
 import { useMemo } from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { themeSettings } from "./theme";
-import NavBar from "@/components/navbar/index"
 import GraphsDashboard from '@/views/graphs-dashboard';
 import TablesDashboard from '@/views/tables-dasboard';
 
@@ -20,7 +19,7 @@ function App() {
 					<ThemeProvider theme={ theme }>
 						<CssBaseline />
 						<Box width='100%' height='100%' padding='1rem 2rem 4rem 2rem'>
-              <NavBar />
+              
 							<Routes>
                 {/* Graph view */}
 								<Route path='/' element={<GraphsDashboard />} />
