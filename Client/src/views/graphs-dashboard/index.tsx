@@ -4,8 +4,11 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Box, useMediaQuery } from '@mui/material';
 import NavBar from '@/components/navbar/index';
-
-type Props = {};
+import DashboardBox from '@/components/DashboardBox';
+import GraphsBox1 from '@/components/graphs/box1';
+import GraphsBox2 from '@/components/graphs/box2';
+import GraphsBox3 from '@/components/graphs/box3';
+import GraphsBox4 from '@/components/graphs/box4';
 
 const gridTemplateLargeScreens = `
 't . . . . .'
@@ -49,9 +52,8 @@ const gridTemplateSmallScreens = `
 'b4 b4'
 `;
 
-const GraphsDashboard = (props: Props) => {
-    const isLargeScreen = useMediaQuery('(min-width: 1008px)')
-	// const { palette } = useTheme();
+const GraphsDashboard = () => {
+	const isLargeScreen = useMediaQuery('(min-width: 1008px)');
 	return (
 		<Box
 			width='100%'
@@ -62,7 +64,7 @@ const GraphsDashboard = (props: Props) => {
 				isLargeScreen
 					? {
 							gridTemplateColumns: 'repeat (6,  minmax(150px, 1fr))',
-							gridTemplateRows: 'repeat (15, minmax(20px, 1fr))',
+							gridTemplateRows: 'repeat (15, minmax(60px, 1fr))',
 							gridTemplateAreas: gridTemplateLargeScreens,
 					  }
 					: {
@@ -79,7 +81,7 @@ const GraphsDashboard = (props: Props) => {
 			</Box>
 			{/* Client Dropdown */}
 			<Box gridArea='a'>
-				<h5>Client Name</h5>
+				Client Name
 				<FormControl fullWidth>
 					<InputLabel id='demo-simple-select-label'>Client Name</InputLabel>
 					<Select
@@ -99,28 +101,20 @@ const GraphsDashboard = (props: Props) => {
 				<NavBar />
 			</Box>
 			{/* Number of Claims Box */}
-			<Box bgcolor='#fff' gridArea='b'>
+			<DashboardBox bgcolor='#fff' gridArea='b'>
 				<h5>NUMBER OF CLAIMS </h5>
 				<p>90</p>
-			</Box>
-			{/* Total Incurred Box */}
-			<Box bgcolor='#fff' gridArea='c'>
+			</DashboardBox>
+			{/* Total Incurred DashboardBox */}
+			<DashboardBox bgcolor='#fff' gridArea='c'>
 				<h5>TOTAL INCURRED </h5>
 				<p>$2,000,000</p>
-			</Box>
-			{/* Bar Chart - Number of Claims by Policy Year */}
-			<Box bgcolor='#fff' gridArea='b1'>
-				Number of Claims by Policy Year
-			</Box>
-			<Box bgcolor='#fff' gridArea='b2'>
-				Total Incurred by Policy Year
-			</Box>
-			<Box bgcolor='#fff' gridArea='b3'>
-				Total Incurred Against Number of Claims by Loss Band
-			</Box>
-			<Box bgcolor='#fff' gridArea='b4'>
-				Largest Claim Against Average Cost per Claim by Loss Band
-			</Box>
+			</DashboardBox>
+			{/* Bar Charts */}
+			<GraphsBox1 />
+			<GraphsBox2 />
+			<GraphsBox3 />
+			<GraphsBox4 />
 		</Box>
 	);
 };
