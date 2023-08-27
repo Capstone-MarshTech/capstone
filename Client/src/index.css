@@ -4,9 +4,5 @@ html, body, #root, .app {
   height: 100%;
   width: 100%;
   font-family: "Noto Sans",arial,sans-serif;
-  font-weight: 400;
-  line-height: 24px;
-  font-size: 16px;
-  color: #1b222f;
   background-color: #F8F8F8;
 }
