@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Typography, useTheme } from '@mui/material';
-import FlexBetween from '@/components/FlexBetween'
-import BarChartIcon from '@mui/icons-material/BarChart';
-import TableChartIcon from '@mui/icons-material/TableChart';
-import TuneIcon from '@mui/icons-material/Tune';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Box, Typography, useTheme } from "@mui/material";
+import FlexBetween from "@/components/FlexBetween";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import TuneIcon from "@mui/icons-material/Tune";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 type Props = {};
 
 const NavBar = (props: Props) => {
-	const { palette } = useTheme();
+  const { palette } = useTheme();
 	const [selected, setSelected] = useState('graph-view');
 	return (
 		<FlexBetween
