@@ -4,8 +4,10 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Box, useMediaQuery } from '@mui/material';
 import NavBar from '@/components/navbar/index';
-
-type Props = {};
+import TableBox1 from '@/components/tables/box1';
+import TableBox2 from '@/components/tables/box2';
+import TableBox3 from '@/components/tables/box3';
+import TableBox4 from '@/components/tables/box4';
 
 const gridTemplateLargeScreens = `
 't . . . . .'
@@ -49,9 +51,8 @@ const gridTemplateSmallScreens = `
 'b4 b4'
 `;
 
-const TablesDashboard = (props: Props) => {
-    const isLargeScreen = useMediaQuery('(min-width: 1008px)');
-	// const { palette } = useTheme();
+const TablesDashboard = () => {
+	const isLargeScreen = useMediaQuery('(min-width: 1008px)');
 	return (
 		<Box
 			width='100%'
@@ -108,19 +109,11 @@ const TablesDashboard = (props: Props) => {
 				<h5>TOTAL INCURRED </h5>
 				<p>$2,000,000</p>
 			</Box>
-			{/* Bar Chart - Number of Claims by Policy Year */}
-			<Box bgcolor='#fff' gridArea='b1'>
-				Number of Claims by Policy Year
-			</Box>
-			<Box bgcolor='#fff' gridArea='b2'>
-				Total Incurred by Policy Year
-			</Box>
-			<Box bgcolor='#fff' gridArea='b3'>
-				Total Incurred Against Number of Claims by Loss Band
-			</Box>
-			<Box bgcolor='#fff' gridArea='b4'>
-				Largest Claim Against Average Cost per Claim by Loss Band
-			</Box>
+			{/* Table Charts */}
+			<TableBox1 />
+			<TableBox2 />
+			<TableBox3 />
+			<TableBox4 />
 		</Box>
 	);
 };
