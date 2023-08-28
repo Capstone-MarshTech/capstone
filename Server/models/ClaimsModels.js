@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
+import { loadType } from "mongoose-currency";
 
 const Schema = mongoose.Schema;
+
+loadType(mongoose);
 
 const ClaimsSchema = new Schema(
   {
@@ -17,15 +20,18 @@ const ClaimsSchema = new Schema(
       required: true,
     },
     total_net_paid: {
-      type: Number,
+      type: mongoose.Types.Currency,
+      curreny: "GBP",
       required: true,
     },
     total_net_os: {
-      type: Number,
+      type: mongoose.Types.Currency,
+      curreny: "GBP",
       required: true,
     },
     total_net_incurred: {
-      type: Number,
+      type: mongoose.Types.Currency,
+      curreny: "GBP",
       required: true,
     },
     open_claim: {
