@@ -26,7 +26,7 @@ app.use('/claims', claimsRoutes)
 app.use('/loss_banding', lossBandingRoutes)
 app.use('/dropdown', dropdownRoutes)
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 1337;
 
 mongoose
 	.connect(process.env.MONGO_URI, {
@@ -42,7 +42,12 @@ mongoose
 		console.error('Error connecting to MongoDB:', error);
 	});
 
-   
+
+
+
+
+
+   /////////////////////////////////////////////////////////////
      // app.get('/open_claims/:year', async (req, res) => {
     //     const  year  = parseInt(req.params.year)
 
@@ -70,9 +75,5 @@ mongoose
     // });
 
 
-    
-    
-    
-
-
+    // Import necessary modules and setup your app...
 
