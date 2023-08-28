@@ -4,10 +4,11 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Box, useMediaQuery } from '@mui/material';
 import NavBar from '@/components/navbar/index';
-import TableBox1 from '@/components/tables/box1';
-import TableBox2 from '@/components/tables/box2';
-import TableBox3 from '@/components/tables/box3';
-import TableBox4 from '@/components/tables/box4';
+import DashboardBox from '@/components/DashboardBox';
+import GraphsBox1 from '@/components/graphs/box1';
+import GraphsBox2 from '@/components/graphs/box2';
+import GraphsBox3 from '@/components/graphs/box3';
+import GraphsBox4 from '@/components/graphs/box4';
 
 const gridTemplateLargeScreens = `
 't . . . . .'
@@ -51,7 +52,7 @@ const gridTemplateSmallScreens = `
 'b4 b4'
 `;
 
-const TablesDashboard = () => {
+const GraphsDashboard = () => {
 	const isLargeScreen = useMediaQuery('(min-width: 1008px)');
 	return (
 		<Box
@@ -63,7 +64,7 @@ const TablesDashboard = () => {
 				isLargeScreen
 					? {
 							gridTemplateColumns: 'repeat (6,  minmax(150px, 1fr))',
-							gridTemplateRows: 'repeat (15, minmax(20px, 1fr))',
+							gridTemplateRows: 'repeat (15, minmax(60px, 1fr))',
 							gridTemplateAreas: gridTemplateLargeScreens,
 					  }
 					: {
@@ -76,11 +77,11 @@ const TablesDashboard = () => {
 			{' '}
 			<Box gridArea='t'>
 				<h1>Year & Size</h1>
-				<p>Tabular view</p>
+				<p>Graph view</p>
 			</Box>
 			{/* Client Dropdown */}
 			<Box gridArea='a'>
-				<h5>Client Name</h5>
+				Client Name
 				<FormControl fullWidth>
 					<InputLabel id='demo-simple-select-label'>Client Name</InputLabel>
 					<Select
@@ -100,22 +101,22 @@ const TablesDashboard = () => {
 				<NavBar />
 			</Box>
 			{/* Number of Claims Box */}
-			<Box bgcolor='#fff' gridArea='b'>
+			<DashboardBox bgcolor='#fff' gridArea='b'>
 				<h5>NUMBER OF CLAIMS </h5>
 				<p>90</p>
-			</Box>
-			{/* Total Incurred Box */}
-			<Box bgcolor='#fff' gridArea='c'>
+			</DashboardBox>
+			{/* Total Incurred DashboardBox */}
+			<DashboardBox bgcolor='#fff' gridArea='c'>
 				<h5>TOTAL INCURRED </h5>
 				<p>$2,000,000</p>
-			</Box>
-			{/* Table Charts */}
-			<TableBox1 />
-			<TableBox2 />
-			<TableBox3 />
-			<TableBox4 />
+			</DashboardBox>
+			{/* Bar Charts */}
+			<GraphsBox1 />
+			<GraphsBox2 />
+			<GraphsBox3 />
+			<GraphsBox4 />
 		</Box>
 	);
 };
 
-export default TablesDashboard;
+export default GraphsDashboard;
