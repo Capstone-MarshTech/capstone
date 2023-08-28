@@ -1,4 +1,4 @@
-import DashboardBox from '@/components/DashboardBox';
+import DashboardBox from "@/components/DashboardBox";
 
 import {
 	ComposedChart,
@@ -60,6 +60,7 @@ import {
 type Props = {};
 
 function GraphsBox4({}: Props) {
+
 	return (
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b4'>
