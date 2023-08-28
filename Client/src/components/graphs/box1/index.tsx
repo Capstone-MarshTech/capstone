@@ -1,6 +1,8 @@
 import DashboardBox from '@/components/DashboardBox';
 import React, { PureComponent } from 'react';
 import {
+	ComposedChart,
+	Line,
 	BarChart,
 	Bar,
 	Cell,
@@ -44,7 +46,6 @@ const data = [
 		pv: 4800,
 		amt: 2181,
 	},
-
 ];
 
 type Props = {};
@@ -54,16 +55,16 @@ function GraphsBox1({}: Props) {
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b1'>
 				Number of Claims by Policy Year
-				<ResponsiveContainer width='100%' height='100%'>
-					<BarChart
-						width={500}
-						height={300}
+				<ResponsiveContainer width='90%' height='90%'>
+					<ComposedChart
+						width={200}
+						height={400}
 						data={data}
 						margin={{
-							top: 15,
-							right: 25,
-							left: -10,
-							bottom: 60,
+							top: 20,
+							right: 20,
+							bottom: 20,
+							left: 20,
 						}}
 					>
 						<CartesianGrid strokeDasharray='3 3' />
@@ -73,7 +74,8 @@ function GraphsBox1({}: Props) {
 						<Legend />
 						<Bar dataKey='pv' stackId='a' fill='#002c77' />
 						<Bar dataKey='amt' stackId='a' fill='#76d3ff' />
-					</BarChart>
+						<Line type='monotone' dataKey='uv' stroke='#00968F' />
+					</ComposedChart>
 				</ResponsiveContainer>
 			</DashboardBox>
 		</>
