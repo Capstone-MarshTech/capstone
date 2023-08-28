@@ -26,7 +26,7 @@ app.use('/claims', claimsRoutes)
 app.use('/loss_banding', lossBandingRoutes)
 app.use('/dropdown', dropdownRoutes)
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 1337;
 
 mongoose
 	.connect(process.env.MONGO_URI, {
@@ -43,7 +43,7 @@ mongoose
 	});
     
     
-    
+
 
 
 
