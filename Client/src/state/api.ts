@@ -22,7 +22,7 @@ export const api = createApi({
       providesTags: ["Dropdowns"],
     }),
     getLossBanding: build.query({
-      query: () => "/loss_banding_values",
+      query: () => "/dropdown/loss_banding_values",
       providesTags: ["Dropdowns"],
     }),
     getMarshLineOfBusiness1: build.query({
