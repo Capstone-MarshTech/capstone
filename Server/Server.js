@@ -41,39 +41,9 @@ mongoose
 	.catch((error) => {
 		console.error('Error connecting to MongoDB:', error);
 	});
-
-
-
-
-
-
-   /////////////////////////////////////////////////////////////
-     // app.get('/open_claims/:year', async (req, res) => {
-    //     const  year  = parseInt(req.params.year)
-
-    //     try { 
-    //         const db = mongoose.connection.db
-    //         const claims = await db.collection('claim').find({ open_claim: 1, cleansed_policyyear: year }).toArray(); 
-    //         res.json(claims);
-    //     } catch (error) {
-    //         res.status(error.statusCode || 500).json({ message: error.message });
-    //     }
-    // });
     
-    // app.get('/closed_claims/:year', async (req, res) => {
-        
-    //     const  year  = parseInt(req.params.year)
+    
 
 
-    //     try { 
-    //         const db = mongoose.connection.db
-    //         const claims = await db.collection('claim').find({ closed_claim: 1, cleansed_policyyear: year }).toArray(); 
-    //         res.json(claims);
-    //     } catch (error) {
-    //         res.status(error.statusCode || 500).json({ message: error.message });
-    //     }
-    // });
 
-
-    // Import necessary modules and setup your app...
 

@@ -5,7 +5,7 @@ export const closedCount = async (req, res) => {
 
     try { 
         const db = mongoose.connection.db
-        const claims_count = await db.collection('claim').countDocuments({ closed_claim: 1, cleansed_policyyear: year }); 
+        const claims_count = await db.collection('claim').countDocuments({ closed_claim: true, cleansed_policyyear: year }); 
         res.json(claims_count);
     } catch (error) {
         res.status(error.statusCode || 500).json({ message: error.message });
@@ -17,7 +17,7 @@ export const openCount = async (req, res) => {
 
     try { 
         const db = mongoose.connection.db
-        const claims_count = await db.collection('claim').countDocuments({ open_claim: 1, cleansed_policyyear: year }); 
+        const claims_count = await db.collection('claim').countDocuments({ open_claim: true, cleansed_policyyear: year }); 
         res.json(claims_count);
     } catch (error) {
         res.status(error.statusCode || 500).json({ message: error.message });
@@ -29,7 +29,7 @@ export const zeroValueCount = async (req, res) => {
 
     try { 
         const db = mongoose.connection.db
-        const claims = await db.collection('claim').countDocuments({ zero_value_claim: 1, cleansed_policyyear: year }) 
+        const claims = await db.collection('claim').countDocuments({ zero_value_claim: true, cleansed_policyyear: year }) 
         res.json(claims);
     } catch (error) {
         res.status(error.statusCode || 500).json({ message: error.message });
