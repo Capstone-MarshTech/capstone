@@ -75,18 +75,14 @@ export const api = createApi({
     // Largest Claims by Loss Banding
     getLargestClaimsByLossBanding: build.query({
       query: ({ lossBanding }) =>
-        `/loss_banding/largest_claim_by?loss_banding=${encodeURIComponent(
-          lossBanding
-        )}`,
+        `/loss_banding/largest_claim_by?loss_banding=${lossBanding}`,
       providesTags: ["LargestClaimsByLossBanding"],
     }),
 
     // Average Total Incurred by Loss Banding
     getAverageTotalIncurredByLossBanding: build.query({
       query: ({ year, lossBanding }) =>
-        `/loss_banding/average_total_incurred_by/${year}?loss_banding=${encodeURIComponent(
-          lossBanding
-        )}`,
+        `/loss_banding/average_total_incurred_by?loss_banding=${lossBanding}`,
       providesTags: ["AverageTotalIncurredByLossBanding"],
     }),
 
