@@ -2,3 +2,4 @@
 .env
 /mongodb_uploads
 /data
+/trash
