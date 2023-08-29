@@ -15,6 +15,7 @@ import {
 	Line,
   } from "recharts";
   
+// Mock data
 //   const data = [
 // 	{
 // 	  name: "Page A",
@@ -65,50 +66,86 @@ type Props = {};
 
 function GraphsBox2({}: Props) {
 	const [data, setData] = useState([])
-
-	const fetch = async (years) =>{
-		const resultsData = []
-		years.map((year)=>{
-			const endpoints = [
-				`http://localhost:1337/claims/total_outstanding/${year}`,
-				`http://localhost:1337/claims/total_net_paid/${year}`,
-				`http://localhost:1337/claims/largest/${year}`
-			]
-
-			Promise.all(
-				endpoints.map((endpoint)=>{
-					return axios.get(endpoint);
-				})
-			).then(
-				axios.spread((...allData)=>{
-					let claim = {
-						name: year.toString(),
-						"Total Outstanding": allData[0].data,
-						"Total Paid": allData[1].data,
-						"Largest Claim": allData[2].data
-					}
-					resultsData.push(claim)
-				})
-			)
-		})
-		setData(resultsData);
-		console.log(resultsData)
-	}
+	const [years, setYears] = useState([])
 
 	useEffect(()=>{
-		const years = [2017, 2018, 2019, 2020, 2022];
-		fetch(years)
-		console.log(data)
-	}, [])
+		const fetchYears = async ()=>{
+			try {
+				const response = (await axios.get(`http://localhost:1337/dropdown/years`)).data
+				// console.log(response)
+				setYears(response)
+				// console.log(years)
+			} catch (error) {
+				console.error(error)
+			}
+		}
+		fetchYears();
+	},[])
+
+	
+	useEffect(()=>{
+		if(years.length > 0){
+			const fetch = async () =>{
+				try {
+					const totalOutstanding = years.map(async (year) =>{
+						const response = (await axios.get(`http://localhost:1337/claims/total_outstanding/${year}`)).data
+						// console.log(response)
+						return response
+					})
+
+					const totalPaid = years.map(async (year)=>{
+						const response = (await axios.get(`http://localhost:1337/claims/total_net_paid/${year}`)).data
+						console.log(response)
+						return response
+					})
+
+					const largestClaim = years.map(async (year)=>{
+						const response = (await axios.get(`http://localhost:1337/claims/largest/${year}`)).data
+						return response
+					})
+				} catch (error) {
+					console.error(error)
+				}
+			}
+			fetch()
+		}
+		
+	},[])
+
+	// const fetch = async (years) =>{
+	// 	const resultsData = []
+	// 	years.map((year)=>{
+	// 		const endpoints = [
+	// 			`http://localhost:1337/claims/total_outstanding/${year}`,
+	// 			`http://localhost:1337/claims/total_net_paid/${year}`,
+	// 			`http://localhost:1337/claims/largest/${year}`
+	// 		]
+
+	// 		Promise.all(
+	// 			endpoints.map((endpoint)=>{
+	// 				return axios.get(endpoint);
+	// 			})
+	// 		).then(
+	// 			axios.spread((...allData)=>{
+	// 				let claim = {
+	// 					name: year.toString(),
+	// 					"Total Outstanding": allData[0].data,
+	// 					"Total Paid": allData[1].data,
+	// 					"Largest Claim": allData[2].data
+	// 				}
+	// 				resultsData.push(claim)
+	// 			})
+	// 		)
+	// 	})
+	// 	setData(resultsData);
+	// 	console.log(resultsData)
+	// }
 
 	// useEffect(()=>{
-	// 	const fetch = async ()=>{
-	// 		const results = (await axios.get(`http://localhost:1337/claims/total_outstanding/2017`)).data
-	// 		console.log(results)
-	// 		setData(results)
-	// 	};
-	// 	fetch();
-	// },[])
+	// 	const years = [2017, 2018, 2019, 2020, 2022];
+	// 	fetch(years)
+	// 	console.log(data)
+	// }, [])
 	
 	return (
 		<>
