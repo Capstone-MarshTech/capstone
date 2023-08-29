@@ -17,12 +17,14 @@ import {
 const GraphsBox4 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     const fetchLossBandingData = async () => {
       try {
+        // console.log(import.meta.env.VITE_BASE_URL);
         const response = await axios.get(
-          "http://localhost:1337/dropdown/loss_banding_values"
+          `${baseUrl}/dropdown/loss_banding_values`
         );
         setLossBandingData(response.data);
       } catch (error) {
@@ -40,7 +42,7 @@ const GraphsBox4 = () => {
           const largestClaimsPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `http://localhost:1337/loss_banding/largest_claim_by?loss_banding=${eachBanding}`
+                `${baseUrl}/loss_banding/largest_claim_by?loss_banding=${eachBanding}`
               );
               return response.data;
             }
@@ -49,7 +51,7 @@ const GraphsBox4 = () => {
           const averageTotalIncurredPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `http://localhost:1337/loss_banding/average_total_incurred_by/2017?loss_banding=${eachBanding}`
+                `${baseUrl}/loss_banding/average_total_incurred_by?loss_banding=${eachBanding}`
               );
               return response.data;
             }
@@ -76,6 +78,7 @@ const GraphsBox4 = () => {
     }
   }, [lossBandingData]);
 
+  console.log(dataWithMetrics);
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
