@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 loadType(mongoose);
 
-const ClaimsSchema = new Schema(
+const ClaimSchema = new Schema(
   {
     claim_number: {
       type: String,
@@ -20,30 +20,27 @@ const ClaimsSchema = new Schema(
       required: true,
     },
     total_net_paid: {
-      type: mongoose.Types.Currency,
-      curreny: "GBP",
+      type: Number,
       required: true,
     },
     total_net_os: {
-      type: mongoose.Types.Currency,
-      curreny: "GBP",
+      type: Number,
       required: true,
     },
     total_net_incurred: {
-      type: mongoose.Types.Currency,
-      curreny: "GBP",
+      type: Number,
       required: true,
     },
     open_claim: {
-      type: Number,
+      type: Boolean,
       required: true,
     },
     closed_claim: {
-      type: Number,
+      type: Boolean,
       required: true,
     },
     zero_value_claim: {
-      type: Number,
+      type: Boolean,
       required: true,
     },
     loss_banding: {
@@ -59,9 +56,8 @@ const ClaimsSchema = new Schema(
       required: true,
     },
   },
-  { toJSON: { getters: true } }
 );
 
-const ClaimsModel = mongoose.model("Claims", ClaimsSchema);
+const Claim = mongoose.model("Claim", ClaimSchema, 'claim');
 
-export default ClaimsModel;
+export default Claim;
