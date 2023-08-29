@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
+import Claim from '../models/ClaimModel.js'
 
 export const totalIncurredBy = async (req, res) => {
     const loss_band  = req.query.loss_banding;   
     try { 
-        const db = mongoose.connection.db
-        const total_incurred_keyValue = await db.collection('claim').aggregate([
+
+        const total_incurred_keyValue = await Claim.aggregate([
             {
                 $match: { loss_banding: loss_band }
             },
@@ -19,7 +20,7 @@ export const totalIncurredBy = async (req, res) => {
                     total_incurred: 1
                 }
             }
-        ]).toArray();
+        ]);
         const total_incurred_value = total_incurred_keyValue[0].total_incurred;
         res.json(total_incurred_value);
     }catch (error){
@@ -31,8 +32,8 @@ export const totalIncurredBy = async (req, res) => {
 export const distinctClaimNumbersBy = async (req, res) => {
     const loss_band  = req.query.loss_banding;
     try{
-        const db = mongoose.connection.db;
-        const distinct_loss_banding_values = await db.collection('claim').distinct('claim_number', {loss_banding: loss_band});
+        
+        const distinct_loss_banding_values = await Claim.distinct('claim_number', {loss_banding: loss_band});
         const count = distinct_loss_banding_values.length;
         res.json(count)
     }catch(error){
@@ -43,8 +44,8 @@ export const distinctClaimNumbersBy = async (req, res) => {
 export const largestClaimBy = async (req, res) => {
     const loss_band = req.query.loss_banding;
     try{
-        const db = mongoose.connection.db
-        const largest_claim_by_loss_banding_keyValue = await db.collection('claim').aggregate([
+       
+        const largest_claim_by_loss_banding_keyValue = await Claim.aggregate([
             {
                 $match: {loss_banding : loss_band} 
             },
@@ -61,7 +62,7 @@ export const largestClaimBy = async (req, res) => {
                     largest_claim: 1,
                 }
             }
-        ]).toArray();
+        ]);
         const largest_claim_by_loss_banding_value = largest_claim_by_loss_banding_keyValue[0].largest_claim;
         res.json(largest_claim_by_loss_banding_value)
     }catch(error){
@@ -72,8 +73,8 @@ export const largestClaimBy = async (req, res) => {
 export const averageTotalIncurredBy = async (req, res) => {
     const loss_band = req.query.loss_banding;
     try {
-        const db = mongoose.connection.db;
-        const average_total_incurred_by_loss_banding_keyValue = await db.collection('claim').aggregate([
+
+        const average_total_incurred_by_loss_banding_keyValue = await Claim.aggregate([
             {
                 $match: {loss_banding : loss_band} 
             },
@@ -90,7 +91,7 @@ export const averageTotalIncurredBy = async (req, res) => {
                     average_total_incurred: { $divide: ["$total_incurred_sum", "$count"] }
                 }
             }
-        ]).toArray();
+        ]);
 
         if (average_total_incurred_by_loss_banding_keyValue.length > 0) {
             const average_total_incurred_by_loss_banding_value = average_total_incurred_by_loss_banding_keyValue[0].average_total_incurred;
@@ -102,12 +103,15 @@ export const averageTotalIncurredBy = async (req, res) => {
         res.status(error.statusCode || 500).json({ message: error.message });
     }
 };
+
 export const averageTotalIncurredByPolicyYear = async (req, res) => {
+    
     const loss_band = req.query.loss_banding;
     const year = parseInt(req.params.year)
+    
     try {
-        const db = mongoose.connection.db;
-        const average_total_incurred_by_loss_banding_keyValue = await db.collection('claim').aggregate([
+        
+        const average_total_incurred_by_loss_banding_keyValue = await Claim.aggregate([
             {
                 $match: {loss_banding : loss_band, cleansed_policyyear : year} 
             },
@@ -124,7 +128,7 @@ export const averageTotalIncurredByPolicyYear = async (req, res) => {
                     average_total_incurred: { $divide: ["$total_incurred_sum", "$count"] }
                 }
             }
-        ]).toArray();
+        ]);
 
         if (average_total_incurred_by_loss_banding_keyValue.length > 0) {
             const average_total_incurred_by_loss_banding_value = average_total_incurred_by_loss_banding_keyValue[0].average_total_incurred;
@@ -137,11 +141,13 @@ export const averageTotalIncurredByPolicyYear = async (req, res) => {
     }
 };  
 export const largestClaimByPolicyYear = async (req, res) => {
+    
     const loss_band = req.query.loss_banding;
     const year = parseInt(req.params.year)
+    
     try{
-        const db = mongoose.connection.db
-        const largest_claim_by_loss_banding_keyValue = await db.collection('claim').aggregate([
+       
+        const largest_claim_by_loss_banding_keyValue = await Claim.aggregate([
             {
                 $match: {loss_banding : loss_band, cleansed_policyyear: year} 
             },
@@ -158,7 +164,7 @@ export const largestClaimByPolicyYear = async (req, res) => {
                     largest_claim: 1
                 }
             }
-        ]).toArray();
+        ]);
         const largest_claim_by_loss_banding_value = largest_claim_by_loss_banding_keyValue[0].largest_claim;
         res.json(largest_claim_by_loss_banding_value)
     }catch(error){
@@ -170,8 +176,7 @@ export const distinctClaimNumbersByPolicyYear = async (req, res) => {
     const year = parseInt(req.params.year);
 
     try{
-        const db = mongoose.connection.db;
-        const distinct_loss_banding_values = await db.collection('claim').distinct('claim_number', { loss_banding: loss_band, cleansed_policyyear: year });
+        const distinct_loss_banding_values = await Claim.distinct('claim_number', { loss_banding: loss_band, cleansed_policyyear: year });
         const count = distinct_loss_banding_values.length;
         res.json(count)
     }catch(error){
@@ -183,8 +188,8 @@ export const totalIncurredByPolicyYear = async (req, res) => {
     const year = parseInt(req.params.year);
      
     try { 
-        const db = mongoose.connection.db;
-        const total_incurred_keyValue = await db.collection('claim').aggregate([
+    
+        const total_incurred_keyValue = await Claim.aggregate([
             {
                 $match: { loss_banding: loss_band, cleansed_policyyear : year }
             },
@@ -199,7 +204,7 @@ export const totalIncurredByPolicyYear = async (req, res) => {
                     total_incurred: 1
                 }
             }
-        ]).toArray();
+        ]);
         const total_incurred_value = total_incurred_keyValue[0].total_incurred;
         res.json(total_incurred_value);
     }catch (error){
