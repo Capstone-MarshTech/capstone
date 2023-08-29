@@ -78,7 +78,7 @@ const GraphsBox4 = () => {
     }
   }, [lossBandingData]);
 
-  console.log(dataWithMetrics);
+  // console.log(dataWithMetrics);
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
