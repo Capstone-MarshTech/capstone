@@ -18,42 +18,6 @@ import {
 function GraphsBox1() {
 	const [policyClaimsByYear, setPolicyClaimsByYear] = useState([]);
 
-	// Mock Data
-	const data = [
-		{
-			name: '2016',
-			Open: 0,
-			Closed: 630,
-			ZeroValue: 287,
-		},
-		{
-			name: '2017',
-			Open: 0,
-			Closed: 829,
-			ZeroValue: 454,
-		},
-		{
-			name: '2018',
-			Open: 6,
-			Closed: 592,
-			ZeroValue: 272,
-		},
-		{
-			name: '2019',
-			Open: 6,
-			Closed: 702,
-			ZeroValue: 358,
-		},
-		{
-			name: '2020',
-			Open: 78,
-			Closed: 278,
-			ZeroValue: 135,
-		},
-	];
-
-	// remove hardcode , use data from a data source ?
-
 	const fetchData = async (years) => {
 		const claimsData = [];
 		years.map((year) => {
@@ -86,8 +50,18 @@ function GraphsBox1() {
 	};
 
 	useEffect(() => {
-		const years = [2017, 2018, 2019, 2020, 2022];
-		fetchData(years);
+		let years = [];
+		fetch('http://localhost:1337/dropdown/years')
+			.then((response) => response.json())
+			.then((yearsArray) => {
+				years = yearsArray;
+				console.log(yearsArray);
+				fetchData(years); // Array of years [2017, 2018, 2019, 2020, 2021, 2022]
+			})
+			.catch((error) => {
+				console.error('Error fetching data:', error);
+			});
+
 		console.log(policyClaimsByYear);
 	}, []);
 
