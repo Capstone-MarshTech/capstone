@@ -1,5 +1,5 @@
 import DashboardBox from "@/components/DashboardBox";
-import { useGetLossBandingQuery } from "@/state/api";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 
@@ -16,34 +16,52 @@ import {
 } from 'recharts';
 
 const GraphsBox4 = () => {
-  const { data } = useGetLossBandingQuery();
+  const [lossBandingData, setLossBandingData] = useState([]);
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
 
   useEffect(() => {
-    if (data) {
+    const fetchLossBandingData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:1337/dropdown/loss_banding_values"
+        );
+        setLossBandingData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchLossBandingData();
+  }, []);
+
+  useEffect(() => {
+    if (lossBandingData.length > 0) {
       const fetchData = async () => {
         try {
-          const largestClaimsPromises = data.map(async (eachBanding) => {
-            const response = await axios.get(
-              `http://localhost:1337/loss_banding/largest_claim_by?loss_banding=${eachBanding}`
-            );
-            return response.data; // Extract the data from the response
-          });
+          const largestClaimsPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `http://localhost:1337/loss_banding/largest_claim_by?loss_banding=${eachBanding}`
+              );
+              return response.data;
+            }
+          );
 
-          const averageTotalIncurredPromises = data.map(async (eachBanding) => {
-            const response = await axios.get(
-              `http://localhost:1337/loss_banding/average_total_incurred_by/2017?loss_banding=${eachBanding}`
-            );
-            return response.data;
-          });
+          const averageTotalIncurredPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `http://localhost:1337/loss_banding/average_total_incurred_by/2017?loss_banding=${eachBanding}`
+              );
+              return response.data;
+            }
+          );
 
           const largestClaims = await Promise.all(largestClaimsPromises);
-
           const averageTotalIncurred = await Promise.all(
             averageTotalIncurredPromises
           );
 
-          const newData = data.map((eachBanding, index) => ({
+          const newData = lossBandingData.map((eachBanding, index) => ({
             "Loss Banding": eachBanding,
             "Average Total Incurred": averageTotalIncurred[index],
             "Largest Claim": largestClaims[index],
@@ -57,7 +75,7 @@ const GraphsBox4 = () => {
 
       fetchData();
     }
-  }, [data]);
+  }, [lossBandingData]);
 
   return (
     <>
@@ -82,7 +100,12 @@ const GraphsBox4 = () => {
             <Tooltip />
             <Legend />
             <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
-            <Line type="monotone" dataKey="Average Total Incurred" stroke="#76d3ff" />
+            {/* <Bar dataKey="amt" stackId="a" fill="#76d3ff" /> */}
+            <Line
+              type="monotone"
+              dataKey="Average Total Incurred"
+              stroke="#76d3ff"
+            />
           </ComposedChart>
         </ResponsiveContainer>
       </DashboardBox>
