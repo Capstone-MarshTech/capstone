@@ -1,9 +1,7 @@
 import DashboardBox from "@/components/DashboardBox";
-import {
-  useGetAverageTotalIncurredByLossBandingQuery,
-  useGetLargestClaimsByLossBandingQuery,
-  useGetLossBandingQuery,
-} from "@/state/api";
+import { useGetLossBandingQuery } from "@/state/api";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import {
   ComposedChart,
@@ -17,38 +15,50 @@ import {
   Line,
 } from "recharts";
 
-type Props = {};
-
-function GraphsBox4({}: Props) {
+const GraphsBox4 = () => {
   const { data } = useGetLossBandingQuery();
+  const [dataWithMetrics, setDataWithMetrics] = useState([]);
 
-  const largestClaims = data
-    ? data.map((eachBanding) => ({
-        lossBanding: eachBanding,
-        data: useGetLargestClaimsByLossBandingQuery({
-          lossBanding: eachBanding,
-        }).data,
-      }))
-    : [];
+  useEffect(() => {
+    if (data) {
+      const fetchData = async () => {
+        try {
+          const largestClaimsPromises = data.map(async (eachBanding) => {
+            const response = await axios.get(
+              `http://localhost:1337/loss_banding/largest_claim_by?loss_banding=${eachBanding}`
+            );
+            return response.data; // Extract the data from the response
+          });
 
-  const averageTotalIncurred = data
-    ? data.map((eachBanding) => ({
-        lossBanding: eachBanding,
-        data: useGetAverageTotalIncurredByLossBandingQuery({
-          lossBanding: eachBanding,
-        }).data,
-      }))
-    : [];
+          const averageTotalIncurredPromises = data.map(async (eachBanding) => {
+            const response = await axios.get(
+              `http://localhost:1337/loss_banding/average_total_incurred_by/2017?loss_banding=${eachBanding}`
+            );
+            return response.data;
+          });
 
-  const newData = data
-    ? data.map((eachBanding, index) => ({
-        "Loss Banding": eachBanding,
-        "Average Total Incurred": largestClaims[index]?.data,
-        "Largest Claim": averageTotalIncurred[index]?.data,
-      }))
-    : [];
+          const largestClaims = await Promise.all(largestClaimsPromises);
 
-  console.log(newData);
+          const averageTotalIncurred = await Promise.all(
+            averageTotalIncurredPromises
+          );
+
+          const newData = data.map((eachBanding, index) => ({
+            "Loss Banding": eachBanding,
+            "Average Total Incurred": averageTotalIncurred[index],
+            "Largest Claim": largestClaims[index],
+          }));
+
+          setDataWithMetrics(newData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+
+      fetchData();
+    }
+  }, [data]);
+
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
@@ -57,7 +67,7 @@ function GraphsBox4({}: Props) {
           <ComposedChart
             width={200}
             height={400}
-            data={newData}
+            data={dataWithMetrics}
             margin={{
               top: 20,
               right: 20,
@@ -83,6 +93,6 @@ function GraphsBox4({}: Props) {
       </DashboardBox>
     </>
   );
-}
+};
 
 export default GraphsBox4;
