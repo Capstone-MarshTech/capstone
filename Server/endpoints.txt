@@ -40,7 +40,7 @@ Largest Claims by Loss Banding
 http://localhost:1337/loss_banding/largest_claim_by?loss_banding=25,001 to 50,000
 
 Average Total Incurred by Loss Banding
-http://localhost:1337/loss_banding/average_total_incurred_by/2017?loss_banding=25,001 to 50,000
+http://localhost:1337/loss_banding/average_total_incurred_by?loss_banding=25,001 to 50,000
 
 Number of Claims by Loss Banding
 http://localhost:1337/loss_banding/distinct_claim_numbers_by?loss_banding=25,001 to 50,000
