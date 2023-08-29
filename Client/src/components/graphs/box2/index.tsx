@@ -64,52 +64,49 @@ import {
 type Props = {};
 
 function GraphsBox2({}: Props) {
+  const [policyYear, setPolicyYear] = useState([]);
 
-	const [policyYear, setPolicyYear] = useState([]);
+  const fetchData = async (years) => {
+    const claimsData = [];
+    years.map((year) => {
+      const endpoints = [
+        `http://localhost:1337/claims/total_outstanding/${year}`,
+        `http://localhost:1337/claims/total_net_paid/${year}`,
+        `http://localhost:1337/claims/largest/${year}`,
+      ];
 
-	const fetchData = async (years)=>{
-		const claimsData = [];
-		years.map((year)=>{
-			const endpoints = [
-				`http://localhost:1337/claims/total_outstanding/${year}`,
-				`http://localhost:1337/claims/total_net_paid/${year}`,
-				`http://localhost:1337/claims/largest/${year}`
-			]
+      Promise.all(
+        endpoints.map((endpoint) => {
+          return axios.get(endpoint);
+        })
+      ).then(
+        axios.spread((...allData) => {
+          let claim = {
+            name: year.toString(),
+            "Total Outstanding": allData[0].data,
+            "Total Paid": allData[1].data,
+            "Largest Claim": allData[2].data,
+          };
+          claimsData.push(claim);
+        })
+      );
+    });
+    setPolicyYear(claimsData);
+    console.log(claimsData);
+  };
 
-			Promise.all(
-				endpoints.map((endpoint)=>{
-					return axios.get(endpoint)
-				})
-			).then(
-				axios.spread((...allData)=>{
-					let claim = {
-						name: year.toString(),
-						"Total Outstanding": allData[0].data,
-						"Total Paid": allData[1].data,
-						"Largest Claim": allData[2].data
-					};
-					claimsData.push(claim)
-				})
-			)
-		})
-		setPolicyYear(claimsData)
-		console.log(claimsData)
-	}
-
-  useEffect(()=>{
-	let years = []
-	fetch('http://localhost:1337/dropdown/years')
-		.then((response)=> response.json())
-		.then((yearsArray)=>{
-			years = yearsArray;
-			fetchData(years)
-		})
-		.catch((error)=>{
-			console.error(error)
-		})
-  },[])
-
-
+  useEffect(() => {
+    let years = [];
+    fetch("http://localhost:1337/dropdown/years")
+      .then((response) => response.json())
+      .then((yearsArray) => {
+        years = yearsArray;
+        fetchData(years);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <>
