@@ -1,7 +1,6 @@
 import DashboardBox from "@/components/DashboardBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from 'react';
 
 import {
   ComposedChart,
@@ -13,7 +12,7 @@ import {
   Legend,
   ResponsiveContainer,
   Line,
-} from 'recharts';
+} from "recharts";
 
 const GraphsBox4 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
@@ -83,7 +82,7 @@ const GraphsBox4 = () => {
         Largest Claim Against Average Cost per Claim by Loss Band
         <ResponsiveContainer width="100%" height="90%">
           <ComposedChart
-            width={600}
+            width={200}
             height={400}
             data={dataWithMetrics}
             margin={{
@@ -95,12 +94,11 @@ const GraphsBox4 = () => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Loss Banding" />
-            <YAxis label={'Largest Claim'} />
+            <YAxis label={"Largest Claim"} />
 
             <Tooltip />
             <Legend />
             <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
-            {/* <Bar dataKey="amt" stackId="a" fill="#76d3ff" /> */}
             <Line
               type="monotone"
               dataKey="Average Total Incurred"
