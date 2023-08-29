@@ -1,11 +1,12 @@
 import DashboardBox from '@/components/DashboardBox';
-import React, { PureComponent } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+// import { useGetZeroValueClaimsCountQuery } from '@/state/api';
+
 import {
 	ComposedChart,
 	Line,
-	BarChart,
 	Bar,
-	Cell,
 	XAxis,
 	YAxis,
 	CartesianGrid,
@@ -14,43 +15,56 @@ import {
 	ResponsiveContainer,
 } from 'recharts';
 
-// Mock Data
-const data = [
-	{
-		name: '2016',
-		uv: 4000,
-		pv: 2400,
-		amt: 2400,
-	},
-	{
-		name: '2017',
-		uv: 3000,
-		pv: 1398,
-		amt: 2210,
-	},
-	{
-		name: '2018',
-		uv: 2000,
-		pv: 9800,
-		amt: 2290,
-	},
-	{
-		name: '2019',
-		uv: 2780,
-		pv: 3908,
-		amt: 2000,
-	},
-	{
-		name: '2020',
-		uv: 1890,
-		pv: 4800,
-		amt: 2181,
-	},
-];
+function GraphsBox1() {
+	const [policyClaimsByYear, setPolicyClaimsByYear] = useState([]);
 
-type Props = {};
+	const fetchData = async (years) => {
+		const claimsData = [];
+		years.map((year) => {
+			const endpoints = [
+				`http://localhost:1337/claims/open_count/${year}`,
+				`http://localhost:1337/claims/closed_count/${year}`,
+				`http://localhost:1337/claims/zero_value_count/${year}`,
+			];
 
-function GraphsBox1({}: Props) {
+			// Return our response in the allData variable as an array
+			Promise.all(
+				endpoints.map((endpoint) => {
+					return axios.get(endpoint);
+				})
+			).then(
+				axios.spread((...allData) => {
+					let claim = {
+						name: year.toString(),
+						Open: allData[0].data,
+						Closed: allData[1].data,
+						ZeroValue: allData[2].data,
+					};
+					claimsData.push(claim);
+				})
+			);
+		});
+
+		setPolicyClaimsByYear(claimsData);
+		console.log(claimsData);
+	};
+
+	useEffect(() => {
+		let years = [];
+		fetch('http://localhost:1337/dropdown/years')
+			.then((response) => response.json())
+			.then((yearsArray) => {
+				years = yearsArray;
+				console.log(yearsArray);
+				fetchData(years); // Array of years [2017, 2018, 2019, 2020, 2021, 2022]
+			})
+			.catch((error) => {
+				console.error('Error fetching data:', error);
+			});
+
+		console.log(policyClaimsByYear);
+	}, []);
+
 	return (
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b1'>
@@ -59,7 +73,7 @@ function GraphsBox1({}: Props) {
 					<ComposedChart
 						width={200}
 						height={400}
-						data={data}
+						data={policyClaimsByYear}
 						margin={{
 							top: 20,
 							right: 20,
@@ -72,9 +86,9 @@ function GraphsBox1({}: Props) {
 						<YAxis />
 						<Tooltip />
 						<Legend />
-						<Bar dataKey='pv' stackId='a' fill='#002c77' />
-						<Bar dataKey='amt' stackId='a' fill='#76d3ff' />
-						<Line type='monotone' dataKey='uv' stroke='#00968F' />
+						<Bar dataKey='Open' stackId='a' fill='#002c77' />
+						<Bar dataKey='Closed' stackId='a' fill='#76d3ff' />
+						<Line type='monotone' dataKey='ZeroValue' stroke='#00968F' />
 					</ComposedChart>
 				</ResponsiveContainer>
 			</DashboardBox>
