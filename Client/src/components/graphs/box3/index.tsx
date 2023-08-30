@@ -1,76 +1,87 @@
-import React from 'react';
-import DashboardBox from '@/components/DashboardBox';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import DashboardBox from "@/components/DashboardBox";
 import {
   ComposedChart,
-  Line,
-  Area,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  Scatter,
   ResponsiveContainer,
-} from 'recharts';
+  Line,
+} from "recharts";
 
-const data = [
-  {
-    name: 'Page A',
-    uv: 590,
-    pv: 800,
-    amt: 1400,
-    cnt: 490,
-  },
-  {
-    name: 'Page B',
-    uv: 868,
-    pv: 967,
-    amt: 1506,
-    cnt: 590,
-  },
-  {
-    name: 'Page C',
-    uv: 1397,
-    pv: 1098,
-    amt: 989,
-    cnt: 350,
-  },
-  {
-    name: 'Page D',
-    uv: 1480,
-    pv: 1200,
-    amt: 1228,
-    cnt: 480,
-  },
-  {
-    name: 'Page E',
-    uv: 1520,
-    pv: 1108,
-    amt: 1100,
-    cnt: 460,
-  },
-  {
-    name: 'Page F',
-    uv: 1400,
-    pv: 680,
-    amt: 1700,
-    cnt: 380,
-  },
-];
+const GraphsBox3 = () => {
+  const [lossBandingData, setLossBandingData] = useState([]);
+  const [dataWithMetrics, setDataWithMetrics] = useState([]);
 
-type Props = {};
+  useEffect(() => {
+    const fetchLossBandingData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:1337/dropdown/loss_banding_values"
+        );
+        setLossBandingData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-function GraphsBox3({}: Props) {
+    fetchLossBandingData();
+  }, []);
+
+  useEffect(() => {
+    if (lossBandingData.length > 0) {
+      const fetchData = async () => {
+        try {
+          const totalIncurredPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `http://localhost:1337/loss_banding/total_incurred_by?loss_banding=${eachBanding}`
+              );
+              return response.data; // Assuming this endpoint returns total incurred data
+            }
+          );
+
+          const numberOfClaimsPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `http://localhost:1337/loss_banding/distinct_claim_numbers_by?loss_banding=${eachBanding}`
+              );
+              return response.data; // Assuming this endpoint returns number of claims data
+            }
+          );
+
+          const numberOfClaimsData = await Promise.all(numberOfClaimsPromises);
+          const totalIncurredData = await Promise.all(totalIncurredPromises);
+
+          const newData = lossBandingData.map((eachBanding, index) => ({
+            "Loss Banding": eachBanding,
+            "Total Incurred": totalIncurredData[index],
+            "Number of Claims": numberOfClaimsData[index],
+          }));
+
+          setDataWithMetrics(newData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+
+      fetchData();
+    }
+  }, [lossBandingData]);
+
   return (
     <>
-      <DashboardBox bgcolor='#fff' gridArea='b3'>
+      <DashboardBox bgcolor="#fff" gridArea="b3">
         Total Incurred Against Number of Claims by Loss Band
         <ResponsiveContainer width="100%" height="90%">
           <ComposedChart
-            width={300}
+            width={600}
             height={400}
-            data={data}
+            data={dataWithMetrics}
             margin={{
               top: 20,
               right: 20,
@@ -78,21 +89,18 @@ function GraphsBox3({}: Props) {
               left: 20,
             }}
           >
-            <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="name" scale="band" />
-            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="Loss Banding" />
+            <YAxis label={"Value"} />
             <Tooltip />
             <Legend />
-            {/* <Area type="monotone" dataKey="amt" fill="#8884d8" stroke="#8884d8" /> */}
-            <Bar dataKey="pv" barSize={20} fill="#002c77" />
-            <Line type="monotone" dataKey="uv" stroke="#00968F" />
-            {/* <Scatter dataKey="cnt" fill="red" /> */}
+            <Bar dataKey="Total Incurred" stackId="a" fill="#002c77" />
+            <Line type="monotone" dataKey="Number of Claims" stroke="#76d3ff" />
           </ComposedChart>
         </ResponsiveContainer>
       </DashboardBox>
     </>
   );
-}
+};
 
 export default GraphsBox3;
-///////comments 

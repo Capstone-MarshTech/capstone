@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, useTheme } from '@mui/material';
-import FlexBetween from '@/components/FlexBetween';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import TableChartIcon from '@mui/icons-material/TableChart';
-import TuneIcon from '@mui/icons-material/Tune';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import Filter from '../modal/filter';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { Box, useTheme } from "@mui/material";
+import FlexBetween from "@/components/FlexBetween";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import TuneIcon from "@mui/icons-material/Tune";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { Filter } from "../modal/filter";
 
 type Props = {};
 
@@ -25,11 +25,11 @@ const NavBar = (props: Props) => {
   };
 
   return (
-    <FlexBetween mt='.25rem' p='.3rem 0rem' color={palette.primary[500]}>
-      <FlexBetween gap='2rem'>
-        <Box sx={{ '&:hover': { color: palette.primary[100] } }}>
+    <FlexBetween mt=".25rem" p=".3rem 0rem" color={palette.primary[500]}>
+      <FlexBetween gap="2rem">
+        <Box sx={{ "&:hover": { color: palette.primary[100] } }}>
           <FileDownloadIcon
-            sx={{ fontSize: '24px', verticalAlign: 'text-bottom' }}
+            sx={{ fontSize: "24px", verticalAlign: "text-bottom" }}
           />
           <span>Download</span>
         </Box>
@@ -37,38 +37,40 @@ const NavBar = (props: Props) => {
         {/* Filter */}
         <Box
           onClick={handleFilterClick}
-          sx={{ '&:hover': { color: palette.primary[100] } }}
+          sx={{ "&:hover": { color: palette.primary[100] } }}
         >
           {/* Link to open the filter pop-up */}
-          <TuneIcon sx={{ fontSize: '24px', verticalAlign: 'text-bottom' }} />
+          <TuneIcon sx={{ fontSize: "24px", verticalAlign: "text-bottom" }} />
           <span>Filters</span>
         </Box>
 
-        <Box sx={{ '&:hover': { color: palette.primary[100] } }}>
+        <Box sx={{ "&:hover": { color: palette.primary[100] } }}>
           <Link
-            to='/'
+            to="/"
             style={{
               color: palette.grey[700],
-              textDecoration: 'inherit',
+              textDecoration: "inherit",
             }}
           >
-            <BarChartIcon sx={{ fontSize: '24px' }} />
+            <BarChartIcon sx={{ fontSize: "24px" }} />
           </Link>
         </Box>
-        <Box sx={{ '&:hover': { color: palette.primary[100] } }}>
+        <Box sx={{ "&:hover": { color: palette.primary[100] } }}>
           <Link
-            to='/table-view'
+            to="/table-view"
             style={{
               color: palette.grey[700],
-              textDecoration: 'inherit',
+              textDecoration: "inherit",
             }}
           >
-            <TableChartIcon sx={{ fontSize: '24px' }} />
+            <TableChartIcon sx={{ fontSize: "24px" }} />
           </Link>
         </Box>
       </FlexBetween>
       {/* Render the Filter component as a pop-up */}
-      {isFilterOpen && <Filter isOpen={isFilterOpen} onClose={handleCloseFilter} />}
+      {isFilterOpen && (
+        <Filter isOpen={isFilterOpen} onClose={handleCloseFilter} />
+      )}
     </FlexBetween>
   );
 };

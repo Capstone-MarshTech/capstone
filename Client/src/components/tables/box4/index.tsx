@@ -1,76 +1,123 @@
-import DashboardBox from '@/components/DashboardBox';
+import DashboardBox from "@/components/DashboardBox";
 
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-// Mock Data
 const columns: GridColDef[] = [
-	{ field: 'id', headerName: 'ID', width: 90 },
-	{
-		field: 'firstName',
-		headerName: 'First name',
-		width: 150,
-		editable: true,
-	},
-	{
-		field: 'lastName',
-		headerName: 'Last name',
-		width: 150,
-		editable: true,
-	},
-	{
-		field: 'age',
-		headerName: 'Age',
-		type: 'number',
-		width: 110,
-		editable: true,
-	},
-	{
-		field: 'fullName',
-		headerName: 'Full name',
-		description: 'This column has a value getter and is not sortable.',
-		sortable: false,
-		width: 160,
-		valueGetter: (params: GridValueGetterParams) =>
-			`${params.row.firstName || ''} ${params.row.lastName || ''}`,
-	},
-];
-
-const rows = [
-	{ id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-	{ id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-	{ id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-	{ id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-	{ id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-	{ id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-	{ id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-	{ id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-	{ id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  {
+    field: "Loss Band",
+    headerName: "Loss Band",
+    type: "string",
+    width: 200,
+    editable: true,
+  },
+  {
+    field: "Largest Claim",
+    headerName: "Largest Claim",
+    type: "number",
+    width: 200,
+    editable: true,
+  },
+  {
+    field: "Average Cost of Claim",
+    headerName: "Average Cost of Claim",
+    type: "number",
+    width: 200,
+    editable: true,
+  },
 ];
 
 type Props = {};
 
 function TableBox4({}: Props) {
-	return (
-		<>
-			<DashboardBox bgcolor='#fff' gridArea='b4'>
-				Largest Claim Against Average Cost per Claim by Loss Band
-				<DataGrid
-					rows={rows}
-					columns={columns}
-					initialState={{
-						pagination: {
-							paginationModel: {
-								pageSize: 5,
-							},
-						},
-					}}
-					pageSizeOptions={[5]}
-					checkboxSelection
-					disableRowSelectionOnClick
-				/>
-			</DashboardBox>
-		</>
-	);
+  const [lossBandingData, setLossBandingData] = useState([]);
+  const [dataWithMetrics, setDataWithMetrics] = useState([]);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
+  useEffect(() => {
+    const fetchLossBandingData = async () => {
+      try {
+        // console.log(import.meta.env.VITE_BASE_URL);
+        const response = await axios.get(
+          `${baseUrl}/dropdown/loss_banding_values`
+        );
+        setLossBandingData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchLossBandingData();
+  }, []);
+
+  useEffect(() => {
+    if (lossBandingData.length > 0) {
+      const fetchData = async () => {
+        try {
+          const largestClaimsPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/loss_banding/largest_claim_by?loss_banding=${eachBanding}`
+              );
+              return response.data;
+            }
+          );
+
+          const averageTotalIncurredPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/loss_banding/average_total_incurred_by?loss_banding=${eachBanding}`
+              );
+              return response.data;
+            }
+          );
+
+          const largestClaims = await Promise.all(largestClaimsPromises);
+          const averageTotalIncurred = await Promise.all(
+            averageTotalIncurredPromises
+          );
+
+          const newData = lossBandingData.map((eachBanding, index) => ({
+            id: index,
+            "Loss Band": eachBanding,
+            "Average Cost of Claim": averageTotalIncurred[index],
+            "Largest Claim": largestClaims[index],
+          }));
+
+          setDataWithMetrics(newData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+
+      fetchData();
+    }
+  }, [lossBandingData]);
+
+  //   console.log(dataWithMetrics);
+
+  return (
+    <>
+      <DashboardBox bgcolor="#fff" gridArea="b4">
+        Largest Claim Against Average Cost per Claim by Loss Band
+        <DataGrid
+          rows={dataWithMetrics}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5]}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+      </DashboardBox>
+    </>
+  );
 }
 
 export default TableBox4;

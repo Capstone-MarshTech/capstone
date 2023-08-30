@@ -9,6 +9,8 @@ import GraphsBox1 from "@/components/graphs/box1";
 import GraphsBox2 from "@/components/graphs/box2";
 import GraphsBox3 from "@/components/graphs/box3";
 import GraphsBox4 from "@/components/graphs/box4";
+import { ClaimsBox } from "@/components/boxes/ClaimsBox";
+import { TotalIncurredBox } from "@/components/boxes/TotalIncurredBox";
 
 const gridTemplateLargeScreens = `
 't . . . . .'
@@ -102,13 +104,11 @@ const GraphsDashboard = () => {
       </Box>
       {/* Number of Claims Box */}
       <DashboardBox bgcolor="#fff" gridArea="b">
-        <h5>NUMBER OF CLAIMS </h5>
-        <p>90</p>
+        <ClaimsBox />
       </DashboardBox>
       {/* Total Incurred DashboardBox */}
       <DashboardBox bgcolor="#fff" gridArea="c">
-        <h5>TOTAL INCURRED </h5>
-        <p>$2,000,000</p>
+        <TotalIncurredBox />
       </DashboardBox>
       {/* Bar Charts */}
       <GraphsBox1 />

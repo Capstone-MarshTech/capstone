@@ -8,6 +8,10 @@ const ClaimSchema = new Schema(
       type: String,
       required: true,
     },
+    client_name: {
+      type: String,
+      required: true,
+    },
     effective_date: {
       type: String,
       required: true,
@@ -55,6 +59,7 @@ const ClaimSchema = new Schema(
   },
 );
 
-const Claim = mongoose.model("Claim", ClaimSchema, 'claim');
+
+const Claim = mongoose.model("Claim", ClaimSchema, "claim");
 
 export default Claim;
