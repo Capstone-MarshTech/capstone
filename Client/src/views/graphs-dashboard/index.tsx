@@ -74,7 +74,6 @@ const GraphsDashboard = () => {
     fetchCompanies();
   }, []);
 
-  console.log(menuItem);
   const isLargeScreen = useMediaQuery("(min-width: 1008px)");
   return (
     <Box
@@ -113,12 +112,11 @@ const GraphsDashboard = () => {
             label="Client Name"
             // onChange={handleChange}
           >
-            {menuItem.forEach((client) => {
-              <MenuItem>{client}</MenuItem>;
-            })}
-            <MenuItem value={1}>Client One</MenuItem>
-            <MenuItem value={2}>Client Two</MenuItem>
-            <MenuItem value={3}>Client Three</MenuItem>
+            {menuItem.map((client, idx) => (
+              <MenuItem key={idx} value={idx}>
+                {client}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Box>
