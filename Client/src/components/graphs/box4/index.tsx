@@ -58,16 +58,18 @@ const GraphsBox4 = () => {
     const fetchLossBandingDataByYear = async () => {
       try {
         const response = await axios.get(
-          `${baseUrl}/dropdowns/${selectedYear}`
+          `http://localhost:1337/statistics/loss_banding_values_by/${selectedYear}`
         );
         setLossBandingDataYear(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-    // Call the fetchLossBandingDataByYear function here
-    fetchLossBandingDataByYear();
-  }, []);
+
+    if (selectedYear) {
+      fetchLossBandingDataByYear();
+    }
+  }, [selectedYear]);
 
   //filter not applied
   useEffect(() => {
@@ -119,7 +121,7 @@ const GraphsBox4 = () => {
     if (lossBandingDataYear.length > 0 && selectedYear) {
       const fetchDataByYear = async () => {
         try {
-          const largestClaimsPromises = lossBandingData.map(
+          const largestClaimsPromises = lossBandingDataYear.map(
             async (eachBanding) => {
               const response = await axios.get(
                 `${baseUrl}/statistics/largest_claim_by/${selectedYear}?loss_banding=${eachBanding}`
@@ -128,7 +130,7 @@ const GraphsBox4 = () => {
             }
           );
 
-          const averageTotalIncurredPromises = lossBandingData.map(
+          const averageTotalIncurredPromises = lossBandingDataYear.map(
             async (eachBanding) => {
               const response = await axios.get(
                 `${baseUrl}/statistics/average_total_incurred_by/${selectedYear}?loss_banding=${eachBanding}`
@@ -142,7 +144,7 @@ const GraphsBox4 = () => {
             averageTotalIncurredPromises
           );
 
-          const newData = lossBandingData.map((eachBanding, index) => ({
+          const newData = lossBandingDataYear.map((eachBanding, index) => ({
             "Loss Banding": eachBanding,
             "Average Total Incurred": averageTotalIncurred[index].toFixed(2),
             "Largest Claim": largestClaims[index].toFixed(2),
@@ -155,9 +157,9 @@ const GraphsBox4 = () => {
       };
       fetchDataByYear();
     }
-  }, [lossBandingData, selectedYear]);
+  }, [lossBandingDataYear, selectedYear]);
 
-  console.log(dataWithMetricsYear);
+  // console.log(dataWithMetricsYear);
 
   return (
     <>
