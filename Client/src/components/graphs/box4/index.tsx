@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-
 import {
   ComposedChart,
   Bar,
@@ -31,7 +30,7 @@ const GraphsBox4 = () => {
       try {
         // console.log(import.meta.env.VITE_BASE_URL);
         const response = await axios.get(
-          `${baseUrl}/dropdown/loss_banding_values`
+          `${baseUrl}/dropdowns/loss_banding_values`
         );
         setLossBandingData(response.data);
       } catch (error) {
@@ -49,7 +48,7 @@ const GraphsBox4 = () => {
           const largestClaimsPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `${baseUrl}/loss_banding/largest_claim_by?loss_banding=${eachBanding}`
+                `${baseUrl}/statistics/largest_claim_by?loss_banding=${eachBanding}`
               );
               return response.data;
             }
@@ -58,7 +57,7 @@ const GraphsBox4 = () => {
           const averageTotalIncurredPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `${baseUrl}/loss_banding/average_total_incurred_by?loss_banding=${eachBanding}`
+                `${baseUrl}/statistics/average_total_incurred_by?loss_banding=${eachBanding}`
               );
               return response.data;
             }
