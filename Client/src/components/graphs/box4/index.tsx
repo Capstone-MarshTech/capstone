@@ -2,7 +2,6 @@ import DashboardBox from "@/components/DashboardBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-
 import {
   ComposedChart,
   Bar,
@@ -13,7 +12,7 @@ import {
   Legend,
   ResponsiveContainer,
   Line,
-} from 'recharts';
+} from "recharts";
 
 const GraphsBox4 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
@@ -65,8 +64,8 @@ const GraphsBox4 = () => {
 
           const newData = lossBandingData.map((eachBanding, index) => ({
             "Loss Banding": eachBanding,
-            "Average Total Incurred": averageTotalIncurred[index],
-            "Largest Claim": largestClaims[index],
+            "Average Total Incurred": averageTotalIncurred[index].toFixed(2),
+            "Largest Claim": largestClaims[index].toFixed(2),
           }));
 
           setDataWithMetrics(newData);
@@ -79,7 +78,7 @@ const GraphsBox4 = () => {
     }
   }, [lossBandingData]);
 
-  console.log(dataWithMetrics);
+  // console.log(dataWithMetrics);
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
@@ -98,7 +97,7 @@ const GraphsBox4 = () => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Loss Banding" />
-            <YAxis label={'Largest Claim'} />
+            <YAxis label={"Largest Claim"} />
 
             <Tooltip />
             <Legend />
