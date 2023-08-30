@@ -1,43 +1,7 @@
 import mongoose from 'mongoose';
 import Claim from '../models/ClaimModel.js';
 
-export const closedCount = async (req, res) => {
-    const  year  = parseInt(req.params.year)
-
-    try { 
-        
-        const claims_count = await Claim.countDocuments({ closed_claim: true, cleansed_policyyear: year }); 
-        res.json(claims_count);
-    } catch (error) {
-        res.status(error.statusCode || 500).json({ message: error.message });
-    }
-};
-
-export const openCount = async (req, res) => {
-    const  year  = parseInt(req.params.year)
-
-    try { 
-        
-        const claims_count = await Claim.countDocuments({ open_claim: true, cleansed_policyyear: year }); 
-        res.json(claims_count);
-    } catch (error) {
-        res.status(error.statusCode || 500).json({ message: error.message });
-    }
-};
-
-export const zeroValueCount = async (req, res) => {
-    const  year  = parseInt(req.params.year)
-
-    try { 
-        
-        const claims = await Claim.countDocuments({ zero_value_claim: true, cleansed_policyyear: year }) 
-        res.json(claims);
-    } catch (error) {
-        res.status(error.statusCode || 500).json({ message: error.message });
-    }
-};
-
-export const totalNetPaid = async (req, res) => {
+export const totalNetPaidByPolicyYear = async (req, res) => {
     const  year  = parseInt(req.params.year)
 
     try { 
@@ -67,7 +31,7 @@ export const totalNetPaid = async (req, res) => {
     }
 };
 
-export const largest = async (req, res) => {
+export const largestIncurredByPolicyYear = async (req, res) => {
     const  year  = parseInt(req.params.year)
 
     try { 
@@ -96,7 +60,7 @@ export const largest = async (req, res) => {
     }
 };
 
-export const totalOutstanding = async (req, res) => {
+export const totalOutstandingByPolicyYear = async (req, res) => {
 const  year  = parseInt(req.params.year)
 
     try { 
@@ -124,5 +88,62 @@ const  year  = parseInt(req.params.year)
 
     }
 };
+export const totalIncurred = async (req, res) => {
+        try { 
+            
+            const total_incurred_keyValue = await Claim.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        total_incurred: {$sum: "$total_net_incurred" } }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        total_incurred: 1
+                    }
+                }
+            ]);
+            const total_incurred_value = total_incurred_keyValue[0].total_incurred;
+            res.json(total_incurred_value);
+        }catch (error){
+            res.status(error.statusCode || 500).json({ message: error.message });
+    
+        }
+    };
+
+
+
+export const totalIncurredByPolicyYear = async (req, res) => {
+    const  year  = parseInt(req.params.year)
+    
+        try { 
+            
+            const total_incurred_keyValue = await Claim.aggregate([
+                {
+                    $match: { cleansed_policyyear: year }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        total_incurred: {$sum: "$total_net_incurred" } }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        total_incurred: 1
+                    }
+                }
+            ]);
+            const total_incurred_value = total_incurred_keyValue[0].total_incurred;
+            res.json(total_incurred_value);
+        }catch (error){
+            res.status(error.statusCode || 500).json({ message: error.message });
+    
+        }
+    };
+    
+    
+        
 
     

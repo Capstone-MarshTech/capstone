@@ -68,3 +68,12 @@ export const marshLineOfBusinesses2 = async (req, res) => {
             res.status(error.statusCode || 500).json({ message: error.message}) 
         }
 }; 
+export const clients = async (req, res) => {
+    try {
+        
+        const client_names = await Claim.distinct('client_name')
+        res.json(client_names)
+    }catch(error){
+            res.status(error.statusCode || 500).json({ message: error.message}) 
+        }
+}; 

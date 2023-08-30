@@ -1,76 +1,113 @@
+
 import DashboardBox from '@/components/DashboardBox';
+import { DataGrid, GridColDef,GridValueGetterParams } from '@mui/x-data-grid';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-
-// Mock Data
 const columns: GridColDef[] = [
-	{ field: 'id', headerName: 'ID', width: 90 },
-	{
-		field: 'firstName',
-		headerName: 'First name',
-		width: 150,
-		editable: true,
-	},
-	{
-		field: 'lastName',
-		headerName: 'Last name',
-		width: 150,
-		editable: true,
-	},
-	{
-		field: 'age',
-		headerName: 'Age',
-		type: 'number',
-		width: 110,
-		editable: true,
-	},
-	{
-		field: 'fullName',
-		headerName: 'Full name',
-		description: 'This column has a value getter and is not sortable.',
-		sortable: false,
-		width: 160,
-		valueGetter: (params: GridValueGetterParams) =>
-			`${params.row.firstName || ''} ${params.row.lastName || ''}`,
-	},
-];
+  
+  {
+    field: 'Loss Band',
+    headerName: 'Loss Band',
+    type: "string",
+    width: 200,
+    editable: true,
+  },
 
-const rows = [
-	{ id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-	{ id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-	{ id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-	{ id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-	{ id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-	{ id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-	{ id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-	{ id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-	{ id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+  {
+    field: 'Number of Claims',
+    headerName: 'Number of Claims',
+    type: "number",
+    width: 200,
+    editable: true,
+  },
 
+  {
+    field: 'Total Incurred',
+    headerName: 'Total Incurred',
+    type:"number",
+    width: 200,
+    editable: true,
+  },
+];
 type Props = {};
 
 function TableBox3({}: Props) {
-	return (
-		<>
-			<DashboardBox bgcolor='#fff' gridArea='b3'>
-				Total Incurred Against Number of Claims by Loss Band
-				<DataGrid
-					rows={rows}
-					columns={columns}
-					initialState={{
-						pagination: {
-							paginationModel: {
-								pageSize: 5,
-							},
-						},
-					}}
-					pageSizeOptions={[5]}
-					checkboxSelection
-					disableRowSelectionOnClick
-				/>
-			</DashboardBox>
-		</>
-	);
+  const [lossBandingData, setLossBandingData] = useState([]);
+  const [dataWithMetrics, setDataWithMetrics] = useState([]);
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
+  useEffect(() => {
+    const fetchLossBandingData = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/dropdown/loss_banding_values`);
+        setLossBandingData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchLossBandingData();
+  }, []);
+
+  useEffect(() => {
+    if (lossBandingData.length > 0) {
+      const fetchData = async () => {
+        try {
+          const totalIncurredPromises = lossBandingData.map(async (eachBanding) => {
+            const response = await axios.get(
+              `${baseUrl}/loss_banding/total_incurred_by?loss_banding=${eachBanding}`
+            );
+            return response.data;
+          });
+
+          const numberOfClaimsPromises = lossBandingData.map(async (eachBanding) => {
+            const response = await axios.get(
+              `${baseUrl}/loss_banding/distinct_claim_numbers_by?loss_banding=${eachBanding}`
+            );
+            return response.data;
+          });
+
+          const totalIncurred = await Promise.all(totalIncurredPromises);
+          const numberOfClaims = await Promise.all(numberOfClaimsPromises);
+
+          const newData = lossBandingData.map((eachBanding, index) => ({
+            id: index,
+            "Loss Band": eachBanding,
+            "Total Incurred": totalIncurred[index],
+            "Number of Claims": numberOfClaims[index],
+          }));
+
+          setDataWithMetrics(newData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchData();
+    }
+  }, [lossBandingData]);
+
+  return (
+    <>
+    <DashboardBox bgcolor='#fff' gridArea='b3'>
+      Total Incurred Against Number of Claims by Loss Band
+      <DataGrid
+		rows={dataWithMetrics}
+		columns={columns}
+		initialState={{
+		pagination: {
+		paginationModel: {
+		pageSize: 5,
+			},
+		},
+		}}
+		pageSizeOptions={[5]}
+		checkboxSelection
+		disableRowSelectionOnClick
+      />
+    </DashboardBox>
+    </>
+  );
 }
 
 export default TableBox3;

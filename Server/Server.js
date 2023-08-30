@@ -7,9 +7,10 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
 
-import claimsRoutes from './routes/claims.js';
-import lossBandingRoutes from './routes/lossBanding.js'
-import dropdownRoutes from './routes/dropDowns.js'
+import countRoute from './routes/counts.js';
+import statisticsRoute from './routes/statistics.js'
+import dropdownsRoute from './routes/dropDowns.js'
+import metricsRoute from './routes/metrics.js'
 
 dotenv.config();
 const app = express();
@@ -22,9 +23,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
-app.use('/claims', claimsRoutes)
-app.use('/loss_banding', lossBandingRoutes)
-app.use('/dropdown', dropdownRoutes)
+app.use('/counts', countRoute);
+app.use('/statistics', statisticsRoute);
+app.use('/dropdowns', dropdownsRoute);
+app.use('/metrics', metricsRoute);
 
 const PORT = process.env.PORT || 1337;
 
@@ -42,8 +44,5 @@ mongoose
 		console.error('Error connecting to MongoDB:', error);
 	});
     
-    
-
-
 
 
