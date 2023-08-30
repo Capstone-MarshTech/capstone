@@ -48,7 +48,7 @@ const GraphsBox3 = () => {
           const numberOfClaimsPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `http://localhost:1337/statistics/distinct_claim_numbers_by?loss_banding=${eachBanding}`
+                `http://localhost:1337/statistics/number_of_claims_by?loss_banding=${eachBanding}`
               );
               return response.data; // Assuming this endpoint returns number of claims data
             }
@@ -76,7 +76,7 @@ const GraphsBox3 = () => {
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b3">
-        Total Incurred Against Number of Claims by Loss Band
+        <h3>Total Incurred Against Number of Claims by Loss Band</h3>
         <ResponsiveContainer width="100%" height="90%">
           <ComposedChart
             width={600}

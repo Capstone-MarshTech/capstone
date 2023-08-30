@@ -3,19 +3,19 @@ COUNTS - Remember to replace year
 ----------------------------------------------------------------------------------------------------------------
 
 
-Number of Total Claims - All years
+1. Number of Total Claims - All years
 http://localhost:1337/counts/distinct_claims_count
 
-Number of Total Claims by Policy Year
+2. Number of Total Claims by Policy Year
 http://localhost:1337/counts/distinct_claims_count/2018
 
-Number of claims by Policy Year - Open
+3. Number of claims by Policy Year - Open
 http://localhost:1337/counts/open_count/2017
 
-Number of claims by Policy Year - Closed
+4. Number of claims by Policy Year - Closed
 http://localhost:1337/counts/closed_count/2018
 
-Number of Zero Value Claims by Policy Year
+5. Number of Zero Value Claims by Policy Year
 http://localhost:1337/counts/zero_value_count/2017
 
 
@@ -26,22 +26,22 @@ METRICS - Remember to replace year
 
 
 
-Total Paid by Policy Year
+1. Total Paid by Policy Year
 http://localhost:1337/metrics/total_net_paid/2017
 
 
-Largest Claim by Policy Year
+2. Largest Claim by Policy Year
 http://localhost:1337/metrics/largest_incurred/2017
 
 
-Total Outstanding by Policy Year
+3. Total Outstanding by Policy Year
 http://localhost:1337/metrics/total_outstanding/2017
 
 
-Total Incurred - All Years
+4. Total Incurred - All Years
 http://localhost:1337/metrics/total_incurred
 
-Total Incurred by Policy Years
+5. Total Incurred by Policy Years
 http://localhost:1337/metrics/total_incurred/2018
 
 
@@ -55,18 +55,32 @@ Statistics - Replace the range of amounts
 
 
 
-
-Largest Claims by Loss Banding 
+1. Largest Claims by Loss Banding 
 http://localhost:1337/statistics/largest_claim_by?loss_banding=25,001 to 50,000
 
-Average Total Incurred by Loss Banding
+2. Largest Claim By Year By Loss Banding
+http://localhost:1337/statistics/largest_claim_by/2017?loss_banding=25,001 to 50,000
+
+3. Average Total Incurred by Loss Banding
 http://localhost:1337/statistics/average_total_incurred_by?loss_banding=25,001 to 50,000
 
-Number of Claims by Loss Banding
-http://localhost:1337/statistics/distinct_claim_numbers_by?loss_banding=25,001 to 50,000
+4. Average Total Incurred By Policy Year By Loss Banding
+http://localhost:1337/statistics/average_total_incurred_by/2017?loss_banding=25,001 to 50,000
 
-Total Incurred By Loss Banding
+5. Number of Claims by Loss Banding
+http://localhost:1337/statistics/number_of_claims_by?loss_banding=25,001 to 50,000
+
+6. Number Of Claims by Year By Loss Banding
+http://localhost:1337/statistics/number_of_claims_by/2017?loss_banding=25,001 to 50,000
+
+7. Total Incurred By Loss Banding
 http://http://localhost:1337/statistics/total_incurred_by?loss_banding=100,001 to 250,000
+
+8. Total Incurred By Policy Year By Loss Banding
+http://localhost:1337/statistics/total_incurred_by/2017?loss_banding=100,001 to 250,000
+
+9. Loss Banding Values By Year
+http://localhost:1337/statistics/loss_banding_values_by/2018
 
 
 
@@ -91,12 +105,6 @@ http://localhost:1337/dropdowns/marsh_line_of_business_1
 
 Marsh Line Of Business 2 (Dropdown)
 http://localhost:1337/dropdowns/marsh_line_of_business_2
-
-
-
-
-
-
 
 
 

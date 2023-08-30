@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Select, MenuItem, Button } from "@mui/material";
+import { Dialog, Select, MenuItem, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import {
   setSelectedYear,
@@ -97,42 +97,42 @@ export function Filter({
 
     // Add your filtering code here, such as updating the state or sending a request to filter data.
 
-    // Close the modal
+    // Close the Dialog
     onClose();
   };
 
   return (
-    <Modal open={isOpen} onClose={onClose}>
-      <div style={{ padding: "20px", backgroundColor: "white" }}>
-        <h2>Filter by Year</h2>
-        <Select value={localSelectedYear} onChange={handleYearSelect}>
-          {years.map((year) => (
-            <MenuItem key={year} value={year}>
-              {year}
-            </MenuItem>
-          ))}
-        </Select>
+		<Dialog open={isOpen} onClose={onClose}>
+			<div style={{ padding: '20px', backgroundColor: 'white' }}>
+				<h2>Filter by Year</h2>
+				<Select fullWidth value={localSelectedYear} onChange={handleYearSelect}>
+					{years.map((year) => (
+						<MenuItem key={year} value={year}>
+							{year}
+						</MenuItem>
+					))}
+				</Select>
 
-        <h2>Filter by Marsh Business Line 1</h2>
-        <Select value={localSelectedMLB1} onChange={handleMLB1Select}>
-          {marshLineOfBusiness1.map((mlb1) => (
-            <MenuItem key={mlb1} value={mlb1}>
-              {mlb1}
-            </MenuItem>
-          ))}
-        </Select>
-        <h2>Filter by Marsh Business Line 2</h2>
-        <Select value={localSelectedMLB2} onChange={handleMLB2Select}>
-          {marshLineOfBusiness2.map((mlb2) => (
-            <MenuItem key={mlb2} value={mlb2}>
-              {mlb2}
-            </MenuItem>
-          ))}
-        </Select>
-        <Button variant="contained" color="primary" onClick={applyFilter}>
-          Apply Filter
-        </Button>
-      </div>
-    </Modal>
-  );
+				<h2>Filter by Marsh Business Line 1</h2>
+				<Select fullWidth value={localSelectedMLB1} onChange={handleMLB1Select}>
+					{marshLineOfBusiness1.map((mlb1) => (
+						<MenuItem key={mlb1} value={mlb1}>
+							{mlb1}
+						</MenuItem>
+					))}
+				</Select>
+				<h2>Filter by Marsh Business Line 2</h2>
+				<Select fullWidth value={localSelectedMLB2} onChange={handleMLB2Select}>
+					{marshLineOfBusiness2.map((mlb2) => (
+						<MenuItem key={mlb2} value={mlb2}>
+							{mlb2}
+						</MenuItem>
+					))}
+				</Select>
+				<Button variant='contained' color='primary' onClick={applyFilter}>
+					Apply Filter
+				</Button>
+			</div>
+		</Dialog>
+	);
 }
