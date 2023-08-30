@@ -92,7 +92,7 @@ function GraphsBox2({}: Props) {
       );
     });
     setPolicyYear(claimsData);
-    console.log(claimsData);
+    // console.log(claimsData);
   };
 
   useEffect(() => {

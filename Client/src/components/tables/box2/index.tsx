@@ -4,29 +4,29 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 // Mock Data
 const columns: GridColDef[] = [
-	{ field: 'id', headerName: 'ID', width: 90 },
+	{ field: 'year', headerName: 'Year', width: 90 },
 	{
-		field: 'firstName',
-		headerName: 'First name',
+		field: 'totalIncurred',
+		headerName: 'Total Incurred',
 		width: 150,
 		editable: true,
 	},
 	{
-		field: 'lastName',
-		headerName: 'Last name',
+		field: 'totalOutstanding',
+		headerName: 'Total Outstanding',
 		width: 150,
 		editable: true,
 	},
 	{
-		field: 'age',
-		headerName: 'Age',
+		field: 'totalPaid',
+		headerName: 'Total Paid',
 		type: 'number',
 		width: 110,
 		editable: true,
 	},
 	{
-		field: 'fullName',
-		headerName: 'Full name',
+		field: 'largestClaim',
+		headerName: 'Largest Claim',
 		description: 'This column has a value getter and is not sortable.',
 		sortable: false,
 		width: 160,
@@ -50,6 +50,27 @@ const rows = [
 type Props = {};
 
 function TableBox2({}: Props) {
+	const [policyYear, setPolicyYear] = useState([])
+
+	const fetchData = async (years)=>{
+		const claimsData = []
+		years.map((year)=>{
+			const endpoints = [
+				`http://localhost:1337/claims/total_outstanding/${year}`,
+				`http://localhost:1337/claims/total_net_paid/${year}`,
+				`http://localhost:1337/claims/largest/${year}`,
+			];
+			Promise.all(
+				endpoints.map((endpoint)=>{
+					return axios.get(endpoint)
+				})
+			).then(
+				axios.spread((...allData)=>{
+					const columns: GridColDef[] = []
+				})
+			)
+		})
+	}
 	return (
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b2'>
