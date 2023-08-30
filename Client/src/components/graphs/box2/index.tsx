@@ -1,5 +1,4 @@
 import DashboardBox from "@/components/DashboardBox";
-// import { useGetTotalOutstandingQuery, useGetTotalPaidQuery, useGetLargestClaimQuery } from '@/state/api';
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -21,29 +20,29 @@ function GraphsBox2() {
   const [policyYear, setPolicyYear] = useState([]);
 
   const fetchData = async (years) => {
-    const claimsData = await Promise.all(
-		years.map(async (year) => {
-			const endpoints = [
-				`http://localhost:1337/claims/total_outstanding/${year}`,
-				`http://localhost:1337/claims/total_net_paid/${year}`,
-				`http://localhost:1337/claims/largest/${year}`,
-			];
+	const claimsData = await Promise.all(
+			years.map(async (year) => {
+				const endpoints = [
+					`http://localhost:1337/claims/total_outstanding/${year}`,
+					`http://localhost:1337/claims/total_net_paid/${year}`,
+					`http://localhost:1337/claims/largest/${year}`,
+				];
 
-			const allData = await Promise.all(
-				endpoints.map((endpoint) => axios.get(endpoint))
-			);
+				const allData = await Promise.all(
+					endpoints.map((endpoint) => axios.get(endpoint))
+				);
 
-			return {
-				name: year.toString(),
-				"Total Outstanding": allData[0].data,
-				"Total Paid": allData[1].data,
-				"Largest Claim": allData[2].data,
-			};
-		})
-	)
-    
-    setPolicyYear(claimsData);
-    // console.log(claimsData);
+				return {
+					name: year.toString(),
+					"Total Outstanding": allData[0].data,
+					"Total Paid": allData[1].data,
+					"Largest Claim": allData[2].data,
+				};
+			})
+		)
+
+		setPolicyYear(claimsData);
+		// console.log(claimsData);
   };
 
   useEffect(() => {
