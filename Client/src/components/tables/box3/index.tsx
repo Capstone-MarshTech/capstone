@@ -1,31 +1,29 @@
-
-import DashboardBox from '@/components/DashboardBox';
-import { DataGrid, GridColDef,GridValueGetterParams } from '@mui/x-data-grid';
+import DashboardBox from "@/components/DashboardBox";
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 const columns: GridColDef[] = [
-  
   {
-    field: 'Loss Band',
-    headerName: 'Loss Band',
+    field: "Loss Band",
+    headerName: "Loss Band",
     type: "string",
     width: 200,
     editable: true,
   },
 
   {
-    field: 'Number of Claims',
-    headerName: 'Number of Claims',
+    field: "Number of Claims",
+    headerName: "Number of Claims",
     type: "number",
     width: 200,
     editable: true,
   },
 
   {
-    field: 'Total Incurred',
-    headerName: 'Total Incurred',
-    type:"number",
+    field: "Total Incurred",
+    headerName: "Total Incurred",
+    type: "number",
     width: 200,
     editable: true,
   },
@@ -40,7 +38,9 @@ function TableBox3({}: Props) {
   useEffect(() => {
     const fetchLossBandingData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/dropdowns/loss_banding_values`);
+        const response = await axios.get(
+          `${baseUrl}/dropdowns/loss_banding_values`
+        );
         setLossBandingData(response.data);
       } catch (error) {
         console.error(error);
@@ -54,19 +54,23 @@ function TableBox3({}: Props) {
     if (lossBandingData.length > 0) {
       const fetchData = async () => {
         try {
-          const totalIncurredPromises = lossBandingData.map(async (eachBanding) => {
-            const response = await axios.get(
-              `${baseUrl}/statistics/total_incurred_by?loss_banding=${eachBanding}`
-            );
-            return response.data;
-          });
+          const totalIncurredPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/statistics/total_incurred_by?loss_banding=${eachBanding}`
+              );
+              return response.data;
+            }
+          );
 
-          const numberOfClaimsPromises = lossBandingData.map(async (eachBanding) => {
-            const response = await axios.get(
-              `${baseUrl}/statistics/distinct_claim_numbers_by?loss_banding=${eachBanding}`
-            );
-            return response.data;
-          });
+          const numberOfClaimsPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/statistics/number_of_claims_by?loss_banding=${eachBanding}`
+              );
+              return response.data;
+            }
+          );
 
           const totalIncurred = await Promise.all(totalIncurredPromises);
           const numberOfClaims = await Promise.all(numberOfClaimsPromises);
@@ -89,23 +93,23 @@ function TableBox3({}: Props) {
 
   return (
     <>
-    <DashboardBox bgcolor='#fff' gridArea='b3'>
-      Total Incurred Against Number of Claims by Loss Band
-      <DataGrid
-		rows={dataWithMetrics}
-		columns={columns}
-		initialState={{
-		pagination: {
-		paginationModel: {
-		pageSize: 5,
-			},
-		},
-		}}
-		pageSizeOptions={[5]}
-		checkboxSelection
-		disableRowSelectionOnClick
-      />
-    </DashboardBox>
+      <DashboardBox bgcolor="#fff" gridArea="b3">
+        Total Incurred Against Number of Claims by Loss Band
+        <DataGrid
+          rows={dataWithMetrics}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5]}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
+      </DashboardBox>
     </>
   );
 }
