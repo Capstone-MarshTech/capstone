@@ -29,7 +29,7 @@ export const totalIncurredByLossBanding = async (req, res) => {
     }
 };
 
-export const distinctClaimNumbersByLossBanding = async (req, res) => {
+export const ClaimNumbersByLossBandingCount = async (req, res) => {
     const loss_band  = req.query.loss_banding;
     try{
         
@@ -171,7 +171,7 @@ export const largestClaimByPolicyYearByLossBanding = async (req, res) => {
         res.status(error.statusCode || 500).json({ message: error.message }) 
     }
 };
-export const distinctClaimNumbersByPolicyYearByLossBanding = async (req, res) => {
+export const ClaimNumbersByPolicyYearByLossBandingCount = async (req, res) => {
     const loss_band  = req.query.loss_banding;
     const year = parseInt(req.params.year);
 
@@ -212,4 +212,37 @@ export const totalIncurredByPolicyYearByLossBanding = async (req, res) => {
 
     }
 };
+export const lossBandingValuesByYear = async (req, res) => {
+    
+    const year = parseInt(req.params.year)
 
+    try {
+        const distinct_loss_banding_values = await Claim.distinct('loss_banding', {cleansed_policyyear: year});
+
+        
+        const distinct_loss_banding_values_ordered = distinct_loss_banding_values
+            .sort((bandingString1, bandingString2) => {
+                
+                if (bandingString1 === "zero") {
+                    return -1; 
+                } else if (bandingString2 === "zero") {
+                    return 1; 
+                }
+
+                const bandingStringArray1 = bandingString1.split(' ');
+                const bandingStringArray2 = bandingString2.split(' ');
+
+                if (bandingStringArray1.length >= 3 && bandingStringArray2.length >= 3) {
+                    const value1 = parseFloat(bandingStringArray1[2].replace(/,/g, ''));
+                    const value2 = parseFloat(bandingStringArray2[2].replace(/,/g, ''));
+                    return value1 - value2;
+                } else {
+                    return 0;
+                }
+            });
+
+        res.json(distinct_loss_banding_values_ordered);
+    } catch (error) {
+        res.status(error.statusCode || 500).json({ message: error.message });
+    }
+};

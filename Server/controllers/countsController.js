@@ -3,10 +3,11 @@ import Claim from '../models/ClaimModel.js';
 
 export const closedCount = async (req, res) => {
     const  year  = parseInt(req.params.year)
+    const company_name = req.params.client_name;
 
     try { 
         
-        const closed_claims_count = await Claim.countDocuments({ closed_claim: true, cleansed_policyyear: year }); 
+        const closed_claims_count = await Claim.countDocuments({ closed_claim: true, cleansed_policyyear: year, client_name: company_name }); 
         res.json(closed_claims_count);
     } catch (error) {
         res.status(error.statusCode || 500).json({ message: error.message });
@@ -30,8 +31,7 @@ export const zeroValueCount = async (req, res) => {
 
     try { 
         
-        const zero_value_claim_count = await Claim.countDocuments({ zero_value_claim: true, cleansed_policyyear: year })
-        console.log(zero_value_claim_count) 
+        const zero_value_claim_count = await Claim.countDocuments({ zero_value_claim: true, cleansed_policyyear: year });
         
         res.json(zero_value_claim_count);
     } catch (error) {
