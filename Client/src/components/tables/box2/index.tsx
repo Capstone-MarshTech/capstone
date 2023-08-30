@@ -6,10 +6,16 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 // Mock Data
 const columns: GridColDef[] = [
-	{ field: 'year', headerName: 'Year', width: 90 },
+	{ 
+		field: 'year', 
+		headerName: 'Year',
+		type: 'string',
+		width: 150 
+	},
 	{
 		field: 'totalOutstanding',
 		headerName: 'Total Outstanding',
+		type: "number",
 		width: 150,
 		editable: true,
 	},
