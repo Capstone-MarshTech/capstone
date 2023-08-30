@@ -1,61 +1,89 @@
 import DashboardBox from '@/components/DashboardBox';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 // Mock Data
 const columns: GridColDef[] = [
-	{ field: 'id', headerName: 'ID', width: 90 },
+	{ 
+		field: 'year', 
+		headerName: 'Year',
+		type: 'string',
+		width: 150 
+	},
 	{
-		field: 'firstName',
-		headerName: 'First name',
+		field: 'totalOutstanding',
+		headerName: 'Total Outstanding',
+		type: "number",
 		width: 150,
 		editable: true,
 	},
 	{
-		field: 'lastName',
-		headerName: 'Last name',
-		width: 150,
-		editable: true,
-	},
-	{
-		field: 'age',
-		headerName: 'Age',
+		field: 'totalPaid',
+		headerName: 'Total Paid',
 		type: 'number',
-		width: 110,
+		width: 150,
 		editable: true,
 	},
 	{
-		field: 'fullName',
-		headerName: 'Full name',
+		field: 'largestClaim',
+		headerName: 'Largest Claim',
 		description: 'This column has a value getter and is not sortable.',
-		sortable: false,
-		width: 160,
-		valueGetter: (params: GridValueGetterParams) =>
-			`${params.row.firstName || ''} ${params.row.lastName || ''}`,
+		editable: true,
+		width: 150,
 	},
 ];
 
-const rows = [
-	{ id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-	{ id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-	{ id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-	{ id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-	{ id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-	{ id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-	{ id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-	{ id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-	{ id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+function TableBox2() {
+	const [policyYear, setPolicyYear] = useState([])
 
-type Props = {};
+	const fetchData = async (years) => {
+		const claimsData = await Promise.all(
+			years.map(async (year) => {
+				const endpoints = [
+					`http://localhost:1337/claims/total_outstanding/${year}`,
+					`http://localhost:1337/claims/total_net_paid/${year}`,
+					`http://localhost:1337/claims/largest/${year}`,
+				];
 
-function TableBox2({}: Props) {
+				const allData = await Promise.all(
+					endpoints.map((endpoint) => axios.get(endpoint))
+				);
+
+				return {
+					id: year,
+					year: year.toString(),
+					totalOutstanding: allData[0].data,
+					totalPaid: allData[1].data,
+					largestClaim: allData[2].data,
+				};
+			})
+		)
+	
+		setPolicyYear(claimsData);
+		// console.log(claimsData);
+	};
+
+	useEffect(() => {
+		// let years = [];
+		fetch("http://localhost:1337/dropdown/years")
+			.then((response) => response.json())
+			.then((yearsArray) => {
+				fetchData(yearsArray);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}, []);
+
+
 	return (
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b2'>
 				Total Incurred by Policy Year
 				<DataGrid
-					rows={rows}
+					rows={policyYear}
 					columns={columns}
 					initialState={{
 						pagination: {

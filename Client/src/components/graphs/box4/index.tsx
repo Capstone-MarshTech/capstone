@@ -2,6 +2,8 @@ import DashboardBox from "@/components/DashboardBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+
+
 import {
   ComposedChart,
   Bar,
@@ -69,8 +71,8 @@ const GraphsBox4 = () => {
 
           const newData = lossBandingData.map((eachBanding, index) => ({
             "Loss Banding": eachBanding,
-            "Average Total Incurred": averageTotalIncurred[index],
-            "Largest Claim": largestClaims[index],
+            "Average Total Incurred": averageTotalIncurred[index].toFixed(2),
+            "Largest Claim": largestClaims[index].toFixed(2),
           }));
 
           setDataWithMetrics(newData);

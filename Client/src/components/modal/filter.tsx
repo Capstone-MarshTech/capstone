@@ -18,6 +18,12 @@ export function Filter({
   const [localSelectedMLB1, setLocalSelectedMLB1] = useState("");
   const [localSelectedMLB2, setLocalSelectedMLB2] = useState("");
 
+
+function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedMLB1, setSelectedMLB1] = useState("");
+  const [selectedMLB2, setSelectedMLB2] = useState("");
+
   const [years, setYears] = useState<string[]>([]);
   const [marshLineOfBusiness1, setMarshLineOfBusiness1] = useState<string[]>(
     []
@@ -42,6 +48,7 @@ export function Filter({
         })
         .catch((error) => {
           console.error("Error fetching years:", error);
+
         });
 
       // Fetch Marsh business line 1 values
@@ -78,8 +85,12 @@ export function Filter({
 
   const dispatch = useDispatch();
   const handleYearSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
+
     setLocalSelectedYear(event.target.value as string);
+
+    setSelectedYear(event.target.value as string);
   };
+
 
   const handleMLB1Select = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLocalSelectedMLB1(event.target.value as string);
@@ -91,9 +102,15 @@ export function Filter({
 
   const applyFilter = () => {
     // Implement your filtering logic here with the selected options
+
     dispatch(setSelectedYear(localSelectedYear));
     dispatch(setSelectedMLB1(localSelectedMLB1));
     dispatch(setSelectedMLB2(localSelectedMLB2));
+
+//     console.log("Selected Year:", selectedYear);
+//     console.log("Selected Marsh Business Line 1:", selectedMLB1);
+//     console.log("Selected Marsh Business Line 2:", selectedMLB2);
+
 
     // Add your filtering code here, such as updating the state or sending a request to filter data.
 
