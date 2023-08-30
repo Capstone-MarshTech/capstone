@@ -1,8 +1,7 @@
 import DashboardBox from "@/components/DashboardBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from 'react';
-
+import { useSelector } from "react-redux";
 import {
   ComposedChart,
   Bar,
@@ -13,12 +12,17 @@ import {
   Legend,
   ResponsiveContainer,
   Line,
-} from 'recharts';
+} from "recharts";
 
 const GraphsBox4 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const baseUrl = import.meta.env.VITE_BASE_URL;
+  const selectedYear = useSelector((state) => state.filter.selectedYear);
+  const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
+  const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+
+  console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   useEffect(() => {
     const fetchLossBandingData = async () => {
@@ -98,7 +102,7 @@ const GraphsBox4 = () => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Loss Banding" />
-            <YAxis label={'Largest Claim'} />
+            <YAxis label={"Largest Claim"} />
 
             <Tooltip />
             <Legend />
