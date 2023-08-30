@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-
 const ClaimSchema = new Schema({
   claim_number: {
     type: String,

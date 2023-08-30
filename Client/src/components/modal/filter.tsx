@@ -1,25 +1,26 @@
-
-import React, { useState, useEffect } from 'react';
-import { Modal, Select, MenuItem, Button } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { Modal, Select, MenuItem, Button } from "@mui/material";
 
 function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const [selectedYear, setSelectedYear] = useState('');
-  const [selectedLossBanding, setSelectedLossBanding] = useState('');
-  const [selectedMLB1, setSelectedMLB1] = useState('');
-  const [selectedMLB2, setSelectedMLB2] = useState('');
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedMLB1, setSelectedMLB1] = useState("");
+  const [selectedMLB2, setSelectedMLB2] = useState("");
   const [years, setYears] = useState<string[]>([]);
-  const [lossBandingValues, setLossBandingValues] = useState<string[]>([]);
-  const [marshLineOfBusiness1, setMarshLineOfBusiness1] = useState<string[]>([]);
-  const [marshLineOfBusiness2, setMarshLineOfBusiness2] = useState<string[]>([]);
+  const [marshLineOfBusiness1, setMarshLineOfBusiness1] = useState<string[]>(
+    []
+  );
+  const [marshLineOfBusiness2, setMarshLineOfBusiness2] = useState<string[]>(
+    []
+  );
 
   // Fetch all dropdown data when the filter pop-up is opened
   useEffect(() => {
     if (isOpen) {
       // Fetch years
-      fetch('http://localhost:1337/dropdown/years')
+      fetch("http://localhost:1337/dropdown/years")
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error("Network response was not ok");
           }
           return response.json();
         })
@@ -27,14 +28,14 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
           setYears(data);
         })
         .catch((error) => {
-          console.error('Error fetching years:', error);
+          console.error("Error fetching years:", error);
         });
 
       // Fetch loss banding values
-      fetch('http://localhost:1337/dropdown/loss_banding_values')
+      fetch("http://localhost:1337/dropdown/loss_banding_values")
         .then((response) => {
           if (!response.ok) {
-            throw Error('Network response was not ok')
+            throw Error("Network response was not ok");
           }
           return response.json();
         })
@@ -42,14 +43,14 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
           setLossBandingValues(data);
         })
         .catch((error) => {
-          console.error('Error fetching loss banding values:', error);
+          console.error("Error fetching loss banding values:", error);
         });
 
       // Fetch Marsh business line 1 values
-      fetch('http://localhost:1337/dropdown/marsh_line_of_business_1')
+      fetch("http://localhost:1337/dropdown/marsh_line_of_business_1")
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error("Network response was not ok");
           }
           return response.json();
         })
@@ -57,14 +58,14 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
           setMarshLineOfBusiness1(data);
         })
         .catch((error) => {
-          console.error('Error fetching Marsh business line 1:', error);
+          console.error("Error fetching Marsh business line 1:", error);
         });
 
       // Fetch Marsh business line 2 values
-      fetch('http://localhost:1337/dropdown/marsh_line_of_business_2')
+      fetch("http://localhost:1337/dropdown/marsh_line_of_business_2")
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error("Network response was not ok");
           }
           return response.json();
         })
@@ -72,7 +73,7 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
           setMarshLineOfBusiness2(data);
         })
         .catch((error) => {
-          console.error('Error fetching Marsh business line 2:', error);
+          console.error("Error fetching Marsh business line 2:", error);
         });
     }
   }, [isOpen]);
@@ -81,7 +82,9 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     setSelectedYear(event.target.value as string);
   };
 
-  const handleLossBandingSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleLossBandingSelect = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
     setSelectedLossBanding(event.target.value as string);
   };
 
@@ -95,10 +98,9 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
 
   const applyFilter = () => {
     // Implement your filtering logic here with the selected options
-    console.log('Selected Year:', selectedYear);
-    console.log('Selected Loss Banding:', selectedLossBanding);
-    console.log('Selected Marsh Business Line 1:', selectedMLB1);
-    console.log('Selected Marsh Business Line 2:', selectedMLB2);
+    console.log("Selected Year:", selectedYear);
+    console.log("Selected Marsh Business Line 1:", selectedMLB1);
+    console.log("Selected Marsh Business Line 2:", selectedMLB2);
 
     // Add your filtering code here, such as updating the state or sending a request to filter data.
 
@@ -108,20 +110,12 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
 
   return (
     <Modal open={isOpen} onClose={onClose}>
-      <div style={{ padding: '20px', backgroundColor: 'white' }}>
+      <div style={{ padding: "20px", backgroundColor: "white" }}>
         <h2>Filter by Year</h2>
         <Select value={selectedYear} onChange={handleYearSelect}>
           {years.map((year) => (
             <MenuItem key={year} value={year}>
               {year}
-            </MenuItem>
-          ))}
-        </Select>
-        <h2>Filter by Loss Banding</h2>
-        <Select value={selectedLossBanding} onChange={handleLossBandingSelect}>
-          {lossBandingValues.map((lossBanding) => (
-            <MenuItem key={lossBanding} value={lossBanding}>
-              {lossBanding}
             </MenuItem>
           ))}
         </Select>

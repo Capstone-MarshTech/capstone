@@ -1,7 +1,6 @@
-
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import DashboardBox from '@/components/DashboardBox';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import DashboardBox from "@/components/DashboardBox";
 import {
   ComposedChart,
   Bar,
@@ -12,7 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
   Line,
-} from 'recharts';
+} from "recharts";
 
 const GraphsBox3 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
@@ -22,7 +21,7 @@ const GraphsBox3 = () => {
     const fetchLossBandingData = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:1337/dropdown/loss_banding_values'
+          "http://localhost:1337/dropdown/loss_banding_values"
         );
         setLossBandingData(response.data);
       } catch (error) {
@@ -37,19 +36,23 @@ const GraphsBox3 = () => {
     if (lossBandingData.length > 0) {
       const fetchData = async () => {
         try {
-          const totalIncurredPromises = lossBandingData.map(async (eachBanding) => {
-            const response = await axios.get(
-              `http://localhost:1337/loss_banding/total_incurred_by?loss_banding=${eachBanding}`
-            );
-            return response.data; // Assuming this endpoint returns total incurred data
-          });
+          const totalIncurredPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `http://localhost:1337/loss_banding/total_incurred_by?loss_banding=${eachBanding}`
+              );
+              return response.data; // Assuming this endpoint returns total incurred data
+            }
+          );
 
-          const numberOfClaimsPromises = lossBandingData.map(async (eachBanding) => {
-            const response = await axios.get(
-              `http://localhost:1337/loss_banding/distinct_claim_numbers_by?loss_banding=${eachBanding}`
-            );
-            return response.data; // Assuming this endpoint returns number of claims data
-          });
+          const numberOfClaimsPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `http://localhost:1337/loss_banding/distinct_claim_numbers_by?loss_banding=${eachBanding}`
+              );
+              return response.data; // Assuming this endpoint returns number of claims data
+            }
+          );
 
           const numberOfClaimsData = await Promise.all(numberOfClaimsPromises);
           const totalIncurredData = await Promise.all(totalIncurredPromises);
@@ -72,7 +75,7 @@ const GraphsBox3 = () => {
 
   return (
     <>
-      <DashboardBox bgcolor='#fff' gridArea='b3'>
+      <DashboardBox bgcolor="#fff" gridArea="b3">
         Total Incurred Against Number of Claims by Loss Band
         <ResponsiveContainer width="100%" height="90%">
           <ComposedChart
@@ -88,15 +91,11 @@ const GraphsBox3 = () => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="Loss Banding" />
-            <YAxis label={'Value'} />
+            <YAxis label={"Value"} />
             <Tooltip />
             <Legend />
             <Bar dataKey="Total Incurred" stackId="a" fill="#002c77" />
-            <Line
-              type="monotone"
-              dataKey="Number of Claims"
-              stroke="#76d3ff"
-            />
+            <Line type="monotone" dataKey="Number of Claims" stroke="#76d3ff" />
           </ComposedChart>
         </ResponsiveContainer>
       </DashboardBox>
