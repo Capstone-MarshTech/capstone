@@ -1,10 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Select, MenuItem, Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import {
+  setSelectedYear,
+  setSelectedMLB1,
+  setSelectedMLB2,
+} from "@/slicer/FilterSlicer";
+
+export function Filter({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const [localSelectedYear, setLocalSelectedYear] = useState("");
+  const [localSelectedMLB1, setLocalSelectedMLB1] = useState("");
+  const [localSelectedMLB2, setLocalSelectedMLB2] = useState("");
+
 
 function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMLB1, setSelectedMLB1] = useState("");
   const [selectedMLB2, setSelectedMLB2] = useState("");
+
   const [years, setYears] = useState<string[]>([]);
   const [marshLineOfBusiness1, setMarshLineOfBusiness1] = useState<string[]>(
     []
@@ -29,21 +48,7 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
         })
         .catch((error) => {
           console.error("Error fetching years:", error);
-        });
 
-      // Fetch loss banding values
-      fetch("http://localhost:1337/dropdown/loss_banding_values")
-        .then((response) => {
-          if (!response.ok) {
-            throw Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setLossBandingValues(data);
-        })
-        .catch((error) => {
-          console.error("Error fetching loss banding values:", error);
         });
 
       // Fetch Marsh business line 1 values
@@ -78,29 +83,34 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     }
   }, [isOpen]);
 
+  const dispatch = useDispatch();
   const handleYearSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
+
+    setLocalSelectedYear(event.target.value as string);
+
     setSelectedYear(event.target.value as string);
   };
 
-  const handleLossBandingSelect = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    setSelectedLossBanding(event.target.value as string);
-  };
 
   const handleMLB1Select = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedMLB1(event.target.value as string);
+    setLocalSelectedMLB1(event.target.value as string);
   };
 
   const handleMLB2Select = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedMLB2(event.target.value as string);
+    setLocalSelectedMLB2(event.target.value as string);
   };
 
   const applyFilter = () => {
     // Implement your filtering logic here with the selected options
-    console.log("Selected Year:", selectedYear);
-    console.log("Selected Marsh Business Line 1:", selectedMLB1);
-    console.log("Selected Marsh Business Line 2:", selectedMLB2);
+
+    dispatch(setSelectedYear(localSelectedYear));
+    dispatch(setSelectedMLB1(localSelectedMLB1));
+    dispatch(setSelectedMLB2(localSelectedMLB2));
+
+//     console.log("Selected Year:", selectedYear);
+//     console.log("Selected Marsh Business Line 1:", selectedMLB1);
+//     console.log("Selected Marsh Business Line 2:", selectedMLB2);
+
 
     // Add your filtering code here, such as updating the state or sending a request to filter data.
 
@@ -112,15 +122,16 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     <Modal open={isOpen} onClose={onClose}>
       <div style={{ padding: "20px", backgroundColor: "white" }}>
         <h2>Filter by Year</h2>
-        <Select value={selectedYear} onChange={handleYearSelect}>
+        <Select value={localSelectedYear} onChange={handleYearSelect}>
           {years.map((year) => (
             <MenuItem key={year} value={year}>
               {year}
             </MenuItem>
           ))}
         </Select>
+
         <h2>Filter by Marsh Business Line 1</h2>
-        <Select value={selectedMLB1} onChange={handleMLB1Select}>
+        <Select value={localSelectedMLB1} onChange={handleMLB1Select}>
           {marshLineOfBusiness1.map((mlb1) => (
             <MenuItem key={mlb1} value={mlb1}>
               {mlb1}
@@ -128,7 +139,7 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
           ))}
         </Select>
         <h2>Filter by Marsh Business Line 2</h2>
-        <Select value={selectedMLB2} onChange={handleMLB2Select}>
+        <Select value={localSelectedMLB2} onChange={handleMLB2Select}>
           {marshLineOfBusiness2.map((mlb2) => (
             <MenuItem key={mlb2} value={mlb2}>
               {mlb2}
@@ -142,5 +153,3 @@ function Filter({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     </Modal>
   );
 }
-
-export default Filter;

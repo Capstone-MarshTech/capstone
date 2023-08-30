@@ -1,6 +1,8 @@
 import DashboardBox from "@/components/DashboardBox";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+
 
 import {
   ComposedChart,
@@ -18,6 +20,11 @@ const GraphsBox4 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const baseUrl = import.meta.env.VITE_BASE_URL;
+  const selectedYear = useSelector((state) => state.filter.selectedYear);
+  const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
+  const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+
+  console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   useEffect(() => {
     const fetchLossBandingData = async () => {
