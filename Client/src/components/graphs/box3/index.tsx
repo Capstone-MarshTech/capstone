@@ -74,33 +74,33 @@ const GraphsBox3 = () => {
   }, [lossBandingData]);
 
   return (
-    <>
-      <DashboardBox bgcolor="#fff" gridArea="b3">
-        Total Incurred Against Number of Claims by Loss Band
-        <ResponsiveContainer width="100%" height="90%">
-          <ComposedChart
-            width={600}
-            height={400}
-            data={dataWithMetrics}
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="Loss Banding" />
-            <YAxis label={"Value"} />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="Total Incurred" stackId="a" fill="#002c77" />
-            <Line type="monotone" dataKey="Number of Claims" stroke="#76d3ff" />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </DashboardBox>
-    </>
-  );
+		<>
+			<DashboardBox bgcolor='#fff' gridArea='b3'>
+				<h3>Total Incurred Against Number of Claims by Loss Band</h3>
+				<ResponsiveContainer width='100%' height='90%'>
+					<ComposedChart
+						width={600}
+						height={400}
+						data={dataWithMetrics}
+						margin={{
+							top: 20,
+							right: 20,
+							bottom: 20,
+							left: 20,
+						}}
+					>
+						<CartesianGrid strokeDasharray='3 3' />
+						<XAxis dataKey='Loss Banding' />
+						<YAxis label={'Value'} />
+						<Tooltip />
+						<Legend />
+						<Bar dataKey='Total Incurred' stackId='a' fill='#002c77' />
+						<Line type='monotone' dataKey='Number of Claims' stroke='#76d3ff' />
+					</ComposedChart>
+				</ResponsiveContainer>
+			</DashboardBox>
+		</>
+	);
 };
 
 export default GraphsBox3;

@@ -1,26 +1,26 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 export const ClaimsBox = () => {
-  const [claims, setClaims] = useState(0);
-  useEffect(() => {
-    const fetchClaims = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:1337/counts/distinct_claims_count"
-        );
-        setClaims(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchClaims();
-  }, []);
+	const [claims, setClaims] = useState(0);
+	useEffect(() => {
+		const fetchClaims = async () => {
+			try {
+				const response = await axios.get(
+					'http://localhost:1337/counts/distinct_claims_count'
+				);
+				setClaims(response.data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		fetchClaims();
+	}, []);
 
-  return (
-    <>
-      <h5>NUMBER OF CLAIMS </h5>
-      <p>{claims}</p>
-    </>
-  );
+	return (
+		<>
+			<h6>NUMBER OF CLAIMS</h6>
+			<h4>{claims}</h4>
+		</>
+	);
 };
