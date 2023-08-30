@@ -1,6 +1,7 @@
 import DashboardBox from '@/components/DashboardBox';
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux"
 
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
@@ -36,7 +37,12 @@ const columns: GridColDef[] = [
 ];
 
 function TableBox2() {
-	const [policyYear, setPolicyYear] = useState([])
+	const [policyYear, setPolicyYear] = useState([]);
+	const selectedYear = useSelector((state) => state.filter.selectedYear);
+	const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
+	const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+
+	console.log(selectedYear, selectedMLB1, selectedMLB2);
 
 	const fetchData = async (years) => {
 		const claimsData = await Promise.all(
