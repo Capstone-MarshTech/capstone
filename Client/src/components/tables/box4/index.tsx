@@ -40,7 +40,7 @@ function TableBox4({}: Props) {
       try {
         // console.log(import.meta.env.VITE_BASE_URL);
         const response = await axios.get(
-          `${baseUrl}/dropdown/loss_banding_values`
+          `${baseUrl}/dropdowns/loss_banding_values`
         );
         setLossBandingData(response.data);
       } catch (error) {
@@ -58,7 +58,7 @@ function TableBox4({}: Props) {
           const largestClaimsPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `${baseUrl}/loss_banding/largest_claim_by?loss_banding=${eachBanding}`
+                `${baseUrl}/statistics/largest_claim_by?loss_banding=${eachBanding}`
               );
               return response.data;
             }
@@ -67,7 +67,7 @@ function TableBox4({}: Props) {
           const averageTotalIncurredPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `${baseUrl}/loss_banding/average_total_incurred_by?loss_banding=${eachBanding}`
+                `${baseUrl}/statistics/average_total_incurred_by?loss_banding=${eachBanding}`
               );
               return response.data;
             }

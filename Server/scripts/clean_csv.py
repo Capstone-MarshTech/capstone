@@ -32,9 +32,9 @@ selected_data = data[columns_to_keep]
 
 # convert types
 # selected_data.loc[:, "effective_date"] = pd.to_datetime(selected_data["effective_date"])
-# selected_data.loc[:, "open_claim"] = selected_data["open_claim"].astype(bool)
-# selected_data.loc[:, "closed_claim"] = selected_data["closed_claim"].astype(bool)
-# selected_data.loc[:, "zero_value_claim"] = selected_data["zero_value_claim"].astype(bool)
+selected_data.loc[:, "open_claim"] = selected_data["open_claim"].astype(bool)
+selected_data.loc[:, "closed_claim"] = selected_data["closed_claim"].astype(bool)
+selected_data.loc[:, "zero_value_claim"] = selected_data["zero_value_claim"].astype(bool)
 
 # selected_data.loc[:, "total_net_paid"] = selected_data["total_net_paid"].astype(float).apply(lambda x: f"{x:.2f}")
 # selected_data.loc[:, "total_net_incurred"] = selected_data["total_net_incurred"].astype(float).apply(lambda x: f"{x:.2f}")
