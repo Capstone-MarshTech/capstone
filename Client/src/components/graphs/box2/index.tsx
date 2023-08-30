@@ -1,5 +1,4 @@
 import DashboardBox from "@/components/DashboardBox";
-// import { useGetTotalOutstandingQuery, useGetTotalPaidQuery, useGetLargestClaimQuery } from '@/state/api';
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -15,97 +14,47 @@ import {
   Line,
 } from "recharts";
 
-// Mock data
-//   const data = [
-// 	{
-// 	  name: "Page A",
-// 	  uv: 4000,
-// 	  pv: 2400,
-// 	  amt: 2400
-// 	},
-// 	{
-// 	  name: "Page B",
-// 	  uv: 3000,
-// 	  pv: 1398,
-// 	  amt: 2210
-// 	},
-// 	{
-// 	  name: "Page C",
-// 	  uv: 2000,
-// 	  pv: 9800,
-// 	  amt: 2290
-// 	},
-// 	{
-// 	  name: "Page D",
-// 	  uv: 2780,
-// 	  pv: 3908,
-// 	  amt: 2000
-// 	},
-// 	{
-// 	  name: "Page E",
-// 	  uv: 1890,
-// 	  pv: 4800,
-// 	  amt: 2181
-// 	},
-// 	{
-// 	  name: "Page F",
-// 	  uv: 2390,
-// 	  pv: 3800,
-// 	  amt: 2500
-// 	},
-// 	{
-// 	  name: "Page G",
-// 	  uv: 3490,
-// 	  pv: 4300,
-// 	  amt: 2100
-// 	}
-//   ];
 
-type Props = {};
 
-function GraphsBox2({}: Props) {
+function GraphsBox2() {
   const [policyYear, setPolicyYear] = useState([]);
 
   const fetchData = async (years) => {
-    const claimsData = [];
-    years.map((year) => {
-      const endpoints = [
-        `http://localhost:1337/claims/total_outstanding/${year}`,
-        `http://localhost:1337/claims/total_net_paid/${year}`,
-        `http://localhost:1337/claims/largest/${year}`,
-      ];
+	const claimsData = await Promise.all(
+			years.map(async (year) => {
+				const endpoints = [
+					`http://localhost:1337/claims/total_outstanding/${year}`,
+					`http://localhost:1337/claims/total_net_paid/${year}`,
+					`http://localhost:1337/claims/largest/${year}`,
+				];
 
-      Promise.all(
-        endpoints.map((endpoint) => {
-          return axios.get(endpoint);
-        })
-      ).then(
-        axios.spread((...allData) => {
-          let claim = {
-            name: year.toString(),
-            "Total Outstanding": allData[0].data,
-            "Total Paid": allData[1].data,
-            "Largest Claim": allData[2].data,
-          };
-          claimsData.push(claim);
-        })
-      );
-    });
-    setPolicyYear(claimsData);
-    console.log(claimsData);
+				const allData = await Promise.all(
+					endpoints.map((endpoint) => axios.get(endpoint))
+				);
+
+				return {
+					name: year.toString(),
+					"Total Outstanding": allData[0].data,
+					"Total Paid": allData[1].data,
+					"Largest Claim": allData[2].data,
+				};
+			})
+		)
+
+		setPolicyYear(claimsData);
+		// console.log(claimsData);
   };
 
   useEffect(() => {
-    let years = [];
+    // let years = [];
     fetch("http://localhost:1337/dropdown/years")
-      .then((response) => response.json())
-      .then((yearsArray) => {
-        years = yearsArray;
-        fetchData(years);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+		.then((response) => response.json())
+		.then((yearsArray) => {
+			fetchData(yearsArray);
+		})
+		.catch((error) => {
+			console.error(error);
+		});
   }, []);
 
   return (
