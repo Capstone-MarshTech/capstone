@@ -1,6 +1,7 @@
 import DashboardBox from "@/components/DashboardBox";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux"
 
 import {
   ComposedChart,
@@ -14,18 +15,23 @@ import {
   Line,
 } from "recharts";
 
-
+ 
 
 function GraphsBox2() {
   const [policyYear, setPolicyYear] = useState([]);
+  const selectedYear = useSelector((state) => state.filter.selectedYear);
+  const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
+  const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+
+  console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   const fetchData = async (years) => {
 	const claimsData = await Promise.all(
 			years.map(async (year) => {
 				const endpoints = [
-					`http://localhost:1337/claims/total_outstanding/${year}`,
-					`http://localhost:1337/claims/total_net_paid/${year}`,
-					`http://localhost:1337/claims/largest/${year}`,
+					`http://localhost:1337/metrics/total_outstanding/${year}`,
+					`http://localhost:1337/metrics/total_net_paid/${year}`,
+					`http://localhost:1337/metrics/largest_incurred/${year}`,
 				];
 
 				const allData = await Promise.all(
@@ -47,7 +53,7 @@ function GraphsBox2() {
 
   useEffect(() => {
     // let years = [];
-    fetch("http://localhost:1337/dropdown/years")
+    fetch("http://localhost:1337/dropdowns/years")
 		.then((response) => response.json())
 		.then((yearsArray) => {
 			fetchData(yearsArray);
