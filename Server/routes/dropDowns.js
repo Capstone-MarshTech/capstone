@@ -4,7 +4,8 @@ import {
   years,
   marshLineOfBusinesses1,
   marshLineOfBusinesses2,
-} from '../controllers/dropDownController.js';
+  clients,
+} from '../controllers/dropDownsController.js';
 
 const router = express.Router();
 
@@ -12,5 +13,5 @@ router.get('/loss_banding_values', lossBandingValues);
 router.get('/years', years);
 router.get('/marsh_line_of_business_1', marshLineOfBusinesses1);
 router.get('/marsh_line_of_business_2', marshLineOfBusinesses2);
-
+router.get('/clients', clients)
 export default router;

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import Claim from '../models/ClaimModel.js'
 
-export const totalIncurredBy = async (req, res) => {
+export const totalIncurredByLossBanding = async (req, res) => {
     const loss_band  = req.query.loss_banding;   
     try { 
 
@@ -29,7 +29,7 @@ export const totalIncurredBy = async (req, res) => {
     }
 };
 
-export const distinctClaimNumbersBy = async (req, res) => {
+export const distinctClaimNumbersByLossBanding = async (req, res) => {
     const loss_band  = req.query.loss_banding;
     try{
         
@@ -41,7 +41,7 @@ export const distinctClaimNumbersBy = async (req, res) => {
     }   
 };
 
-export const largestClaimBy = async (req, res) => {
+export const largestClaimByLossBanding = async (req, res) => {
     const loss_band = req.query.loss_banding;
     try{
        
@@ -70,7 +70,7 @@ export const largestClaimBy = async (req, res) => {
     }
 };
 
-export const averageTotalIncurredBy = async (req, res) => {
+export const averageTotalIncurredByLossBanding = async (req, res) => {
     const loss_band = req.query.loss_banding;
     try {
 
@@ -104,7 +104,7 @@ export const averageTotalIncurredBy = async (req, res) => {
     }
 };
 
-export const averageTotalIncurredByPolicyYear = async (req, res) => {
+export const averageTotalIncurredByPolicyYearbyLossBanding = async (req, res) => {
     
     const loss_band = req.query.loss_banding;
     const year = parseInt(req.params.year)
@@ -140,7 +140,7 @@ export const averageTotalIncurredByPolicyYear = async (req, res) => {
         res.status(error.statusCode || 500).json({ message: error.message });
     }
 };  
-export const largestClaimByPolicyYear = async (req, res) => {
+export const largestClaimByPolicyYearByLossBanding = async (req, res) => {
     
     const loss_band = req.query.loss_banding;
     const year = parseInt(req.params.year)
@@ -171,7 +171,7 @@ export const largestClaimByPolicyYear = async (req, res) => {
         res.status(error.statusCode || 500).json({ message: error.message }) 
     }
 };
-export const distinctClaimNumbersByPolicyYear = async (req, res) => {
+export const distinctClaimNumbersByPolicyYearByLossBanding = async (req, res) => {
     const loss_band  = req.query.loss_banding;
     const year = parseInt(req.params.year);
 
@@ -183,7 +183,7 @@ export const distinctClaimNumbersByPolicyYear = async (req, res) => {
         res.status(error.statusCode || 500).json({ message: error.message}) 
     }   
 };
-export const totalIncurredByPolicyYear = async (req, res) => {
+export const totalIncurredByPolicyYearByLossBanding = async (req, res) => {
     const loss_band  = req.query.loss_banding; 
     const year = parseInt(req.params.year);
      
