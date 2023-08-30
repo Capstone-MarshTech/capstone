@@ -66,7 +66,7 @@ function GraphsBox1() {
 	return (
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b1'>
-				Number of Claims by Policy Year
+				<h3>Number of Claims by Policy Year</h3>
 				{policyClaimsByYear.length > 0 ? (
 					<ResponsiveContainer width='90%' height='90%'>
 						<ComposedChart

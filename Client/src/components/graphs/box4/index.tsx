@@ -88,7 +88,7 @@ const GraphsBox4 = () => {
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
-        Largest Claim Against Average Cost per Claim by Loss Band
+       <h3>Largest Claim Against Average Cost per Claim by Loss Band</h3> 
         <ResponsiveContainer width="100%" height="90%">
           <ComposedChart
             width={600}
