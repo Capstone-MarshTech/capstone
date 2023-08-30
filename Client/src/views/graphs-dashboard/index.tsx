@@ -11,6 +11,9 @@ import GraphsBox3 from "@/components/graphs/box3";
 import GraphsBox4 from "@/components/graphs/box4";
 import { ClaimsBox } from "@/components/boxes/ClaimsBox";
 import { TotalIncurredBox } from "@/components/boxes/TotalIncurredBox";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { resolvePath } from "react-router-dom";
 
 const gridTemplateLargeScreens = `
 't . . . . .'
@@ -55,6 +58,23 @@ const gridTemplateSmallScreens = `
 `;
 
 const GraphsDashboard = () => {
+  const [menuItem, setMenuItem] = useState([]);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:1337/dropdowns/clients`
+        );
+        setMenuItem(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCompanies();
+  }, []);
+
+  console.log(menuItem);
   const isLargeScreen = useMediaQuery("(min-width: 1008px)");
   return (
     <Box
@@ -93,6 +113,9 @@ const GraphsDashboard = () => {
             label="Client Name"
             // onChange={handleChange}
           >
+            {menuItem.forEach((client) => {
+              <MenuItem>{client}</MenuItem>;
+            })}
             <MenuItem value={1}>Client One</MenuItem>
             <MenuItem value={2}>Client Two</MenuItem>
             <MenuItem value={3}>Client Three</MenuItem>
