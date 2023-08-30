@@ -40,7 +40,7 @@ function TableBox3({}: Props) {
   useEffect(() => {
     const fetchLossBandingData = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/dropdown/loss_banding_values`);
+        const response = await axios.get(`${baseUrl}/dropdowns/loss_banding_values`);
         setLossBandingData(response.data);
       } catch (error) {
         console.error(error);
@@ -56,14 +56,14 @@ function TableBox3({}: Props) {
         try {
           const totalIncurredPromises = lossBandingData.map(async (eachBanding) => {
             const response = await axios.get(
-              `${baseUrl}/loss_banding/total_incurred_by?loss_banding=${eachBanding}`
+              `${baseUrl}/statistics/total_incurred_by?loss_banding=${eachBanding}`
             );
             return response.data;
           });
 
           const numberOfClaimsPromises = lossBandingData.map(async (eachBanding) => {
             const response = await axios.get(
-              `${baseUrl}/loss_banding/distinct_claim_numbers_by?loss_banding=${eachBanding}`
+              `${baseUrl}/statistics/distinct_claim_numbers_by?loss_banding=${eachBanding}`
             );
             return response.data;
           });
