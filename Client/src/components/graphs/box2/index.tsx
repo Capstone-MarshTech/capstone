@@ -29,9 +29,9 @@ function GraphsBox2() {
 	const claimsData = await Promise.all(
 			years.map(async (year) => {
 				const endpoints = [
-					`http://localhost:1337/claims/total_outstanding/${year}`,
-					`http://localhost:1337/claims/total_net_paid/${year}`,
-					`http://localhost:1337/claims/largest/${year}`,
+					`http://localhost:1337/metrics/total_outstanding/${year}`,
+					`http://localhost:1337/metrics/total_net_paid/${year}`,
+					`http://localhost:1337/metrics/largest_incurred/${year}`,
 				];
 
 				const allData = await Promise.all(
@@ -53,7 +53,7 @@ function GraphsBox2() {
 
   useEffect(() => {
     // let years = [];
-    fetch("http://localhost:1337/dropdown/years")
+    fetch("http://localhost:1337/dropdowns/years")
 		.then((response) => response.json())
 		.then((yearsArray) => {
 			fetchData(yearsArray);
