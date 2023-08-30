@@ -17,14 +17,26 @@ import {
 
 const GraphsBox4 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
+  const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
+  const [dataWithMetricsYear, setDataWithMetricsYear] = useState([]);
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const selectedYear = useSelector((state) => state.filter.selectedYear);
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+  const showTitle =
+    !selectedYear && !selectedMLB1 && !selectedMLB2
+      ? "Largest Claim Against Average Cost per Claim by Loss Band by All Years"
+      : `Largest Claim Against Average Cost per Claim by Loss Band ${
+          selectedYear ? `(${selectedYear}` : ""
+        } ${selectedMLB1 ? `${selectedMLB1}` : ""} ${
+          selectedMLB2 ? `and ${selectedMLB2})` : ")"
+        }`;
 
   console.log(selectedYear, selectedMLB1, selectedMLB2);
 
+  // useEffect for the case when there is no filter applied
+  //fetch the loss bandings
   useEffect(() => {
     const fetchLossBandingData = async () => {
       try {
@@ -41,6 +53,23 @@ const GraphsBox4 = () => {
     fetchLossBandingData();
   }, []);
 
+  //fetch the loss bandings based on the year
+  useEffect(() => {
+    const fetchLossBandingDataByYear = async () => {
+      try {
+        const response = await axios.get(
+          `${baseUrl}/dropdowns/${selectedYear}`
+        );
+        setLossBandingDataYear(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    // Call the fetchLossBandingDataByYear function here
+    fetchLossBandingDataByYear();
+  }, []);
+
+  //filter not applied
   useEffect(() => {
     if (lossBandingData.length > 0) {
       const fetchData = async () => {
@@ -84,37 +113,110 @@ const GraphsBox4 = () => {
     }
   }, [lossBandingData]);
 
-  // console.log(dataWithMetrics);
+  // if the filter is applied
+  useEffect(() => {
+    /*change here */
+    if (lossBandingDataYear.length > 0 && selectedYear) {
+      const fetchDataByYear = async () => {
+        try {
+          const largestClaimsPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/statistics/largest_claim_by/${selectedYear}?loss_banding=${eachBanding}`
+              );
+              return response.data;
+            }
+          );
+
+          const averageTotalIncurredPromises = lossBandingData.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/statistics/average_total_incurred_by/${selectedYear}?loss_banding=${eachBanding}`
+              );
+              return response.data;
+            }
+          );
+
+          const largestClaims = await Promise.all(largestClaimsPromises);
+          const averageTotalIncurred = await Promise.all(
+            averageTotalIncurredPromises
+          );
+
+          const newData = lossBandingData.map((eachBanding, index) => ({
+            "Loss Banding": eachBanding,
+            "Average Total Incurred": averageTotalIncurred[index].toFixed(2),
+            "Largest Claim": largestClaims[index].toFixed(2),
+          }));
+
+          setDataWithMetricsYear(newData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchDataByYear();
+    }
+  }, [lossBandingData, selectedYear]);
+
+  console.log(dataWithMetricsYear);
+
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
-        Largest Claim Against Average Cost per Claim by Loss Band
+        {showTitle}
         <ResponsiveContainer width="100%" height="90%">
-          <ComposedChart
-            width={600}
-            height={400}
-            data={dataWithMetrics}
-            margin={{
-              top: 20,
-              right: 20,
-              left: 20,
-              bottom: 20,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="Loss Banding" />
-            <YAxis label={"Largest Claim"} />
+          {selectedYear ? (
+            <ComposedChart
+              width={600}
+              height={400}
+              data={dataWithMetricsYear}
+              margin={{
+                top: 20,
+                right: 20,
+                left: 20,
+                bottom: 20,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="Loss Banding" />
+              <YAxis label={"Largest Claim"} />
 
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
-            {/* <Bar dataKey="amt" stackId="a" fill="#76d3ff" /> */}
-            <Line
-              type="monotone"
-              dataKey="Average Total Incurred"
-              stroke="#76d3ff"
-            />
-          </ComposedChart>
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
+              {/* <Bar dataKey="amt" stackId="a" fill="#76d3ff" /> */}
+              <Line
+                type="monotone"
+                dataKey="Average Total Incurred"
+                stroke="#76d3ff"
+              />
+            </ComposedChart>
+          ) : (
+            <ComposedChart
+              width={600}
+              height={400}
+              data={dataWithMetrics}
+              margin={{
+                top: 20,
+                right: 20,
+                left: 20,
+                bottom: 20,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="Loss Banding" />
+              <YAxis label={"Largest Claim"} />
+
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
+              {/* <Bar dataKey="amt" stackId="a" fill="#76d3ff" /> */}
+              <Line
+                type="monotone"
+                dataKey="Average Total Incurred"
+                stroke="#76d3ff"
+              />
+            </ComposedChart>
+          )}
         </ResponsiveContainer>
       </DashboardBox>
     </>
