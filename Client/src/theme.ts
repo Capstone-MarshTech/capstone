@@ -39,7 +39,7 @@ export const tokens = {
 	},
 
 	green: {
-		// marh-green
+		// marsh-green
 		100: '#cceae9',
 		200: '#99d5d2',
 		300: '#66c0bc',
@@ -142,7 +142,7 @@ export const themeSettings = {
 		h6: {
 			fontFamily: ['Noto Sans', 'sans-serif'].join(','),
 			fontSize: 10,
-			color: tokens.grey[700],
+			color: tokens.grey[100],
 		},
 	},
 };
