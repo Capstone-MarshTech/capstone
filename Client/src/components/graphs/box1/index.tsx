@@ -21,9 +21,9 @@ function GraphsBox1() {
 		const claimsData = await Promise.all(
 			years.map(async (year) => {
 				const endpoints = [
-					`http://localhost:1337/claims/open_count/${year}`,
-					`http://localhost:1337/claims/closed_count/${year}`,
-					`http://localhost:1337/claims/zero_value_count/${year}`,
+					`http://localhost:1337/counts/open_count/${year}`,
+					`http://localhost:1337/counts/closed_count/${year}`,
+					`http://localhost:1337/counts/zero_value_count/${year}`,
 				];
 
 				const allData = await Promise.all(
@@ -45,7 +45,7 @@ function GraphsBox1() {
 	};
 
 	useEffect(() => {
-		fetch('http://localhost:1337/dropdown/years')
+		fetch('http://localhost:1337/dropdowns/years')
 			.then((response) => response.json())
 			.then((yearsArray) => {
 				fetchData(yearsArray); // Array of years [2017, 2018, 2019, 2020, 2021, 2022]
