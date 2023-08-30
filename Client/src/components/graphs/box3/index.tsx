@@ -21,7 +21,7 @@ const GraphsBox3 = () => {
     const fetchLossBandingData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:1337/dropdown/loss_banding_values"
+          "http://localhost:1337/dropdowns/loss_banding_values"
         );
         setLossBandingData(response.data);
       } catch (error) {
@@ -39,7 +39,7 @@ const GraphsBox3 = () => {
           const totalIncurredPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `http://localhost:1337/loss_banding/total_incurred_by?loss_banding=${eachBanding}`
+                `http://localhost:1337/statistics/total_incurred_by?loss_banding=${eachBanding}`
               );
               return response.data; // Assuming this endpoint returns total incurred data
             }
@@ -48,7 +48,7 @@ const GraphsBox3 = () => {
           const numberOfClaimsPromises = lossBandingData.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `http://localhost:1337/loss_banding/distinct_claim_numbers_by?loss_banding=${eachBanding}`
+                `http://localhost:1337/statistics/distinct_claim_numbers_by?loss_banding=${eachBanding}`
               );
               return response.data; // Assuming this endpoint returns number of claims data
             }
