@@ -30,7 +30,7 @@ export function Filter({
   useEffect(() => {
     if (isOpen) {
       // Fetch years
-      fetch("http://localhost:1337/dropdown/years")
+      fetch("http://localhost:1337/dropdowns/years")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -45,7 +45,7 @@ export function Filter({
         });
 
       // Fetch Marsh business line 1 values
-      fetch("http://localhost:1337/dropdown/marsh_line_of_business_1")
+      fetch("http://localhost:1337/dropdowns/marsh_line_of_business_1")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -60,7 +60,7 @@ export function Filter({
         });
 
       // Fetch Marsh business line 2 values
-      fetch("http://localhost:1337/dropdown/marsh_line_of_business_2")
+      fetch("http://localhost:1337/dropdowns/marsh_line_of_business_2")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network response was not ok");
