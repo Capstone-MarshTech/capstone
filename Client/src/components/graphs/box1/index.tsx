@@ -1,7 +1,6 @@
 import DashboardBox from '@/components/DashboardBox';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-// import { useGetZeroValueClaimsCountQuery } from '@/state/api';
 
 import {
 	ComposedChart,
@@ -55,14 +54,14 @@ function GraphsBox1() {
 			.then((response) => response.json())
 			.then((yearsArray) => {
 				years = yearsArray;
-				console.log(yearsArray);
+				// console.log(yearsArray);
 				fetchData(years); // Array of years [2017, 2018, 2019, 2020, 2021, 2022]
 			})
 			.catch((error) => {
 				console.error('Error fetching data:', error);
 			});
 
-		console.log(policyClaimsByYear);
+		// console.log(policyClaimsByYear)
 	}, []);
 
 	return (
