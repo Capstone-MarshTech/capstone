@@ -1,7 +1,7 @@
 import DashboardBox from "@/components/DashboardBox";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
 
 import {
   ComposedChart,
@@ -14,8 +14,13 @@ import {
   ResponsiveContainer,
   Line,
 } from "recharts";
+import CustomTooltip from "./CustomTooltip";
 
- 
+const styles = {
+  backgroundColor: 'white',
+  padding: "8px",
+  border: "1px solid #ccc",
+}
 
 function GraphsBox2() {
   const [policyYear, setPolicyYear] = useState([]);
@@ -26,41 +31,41 @@ function GraphsBox2() {
   console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   const fetchData = async (years) => {
-	const claimsData = await Promise.all(
-			years.map(async (year) => {
-				const endpoints = [
-					`http://localhost:1337/metrics/total_outstanding/${year}`,
-					`http://localhost:1337/metrics/total_net_paid/${year}`,
-					`http://localhost:1337/metrics/largest_incurred/${year}`,
-				];
+    const claimsData = await Promise.all(
+      years.map(async (year) => {
+        const endpoints = [
+          `http://localhost:1337/metrics/total_outstanding/${year}`,
+          `http://localhost:1337/metrics/total_net_paid/${year}`,
+          `http://localhost:1337/metrics/largest_incurred/${year}`,
+        ];
 
-				const allData = await Promise.all(
-					endpoints.map((endpoint) => axios.get(endpoint))
-				);
+        const allData = await Promise.all(
+          endpoints.map((endpoint) => axios.get(endpoint))
+        );
 
-				return {
-					name: year.toString(),
-					"Total Outstanding": allData[0].data,
-					"Total Paid": allData[1].data,
-					"Largest Claim": allData[2].data,
-				};
-			})
-		)
+        return {
+          name: year.toString(),
+          "Total Outstanding": allData[0].data,
+          "Total Paid": allData[1].data,
+          "Largest Claim": allData[2].data,
+        };
+      })
+    );
 
-		setPolicyYear(claimsData);
-		// console.log(claimsData);
+    setPolicyYear(claimsData);
+    console.log("line 51: ", claimsData);
   };
 
   useEffect(() => {
     // let years = [];
     fetch("http://localhost:1337/dropdowns/years")
-		.then((response) => response.json())
-		.then((yearsArray) => {
-			fetchData(yearsArray);
-		})
-		.catch((error) => {
-			console.error(error);
-		});
+      .then((response) => response.json())
+      .then((yearsArray) => {
+        fetchData(yearsArray);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   return (
@@ -82,9 +87,9 @@ function GraphsBox2() {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
             <Legend />
-            <Bar dataKey="Total Outstanding" stackId="a" fill="#002c77" />
+            <Bar dataKey="Total Outstanding" stackId="a" fill="#002c77"/>
             <Bar dataKey="Total Paid" stackId="a" fill="#76d3ff" />
             <Line type="monotone" dataKey="Largest Claim" stroke="#00968F" />
           </ComposedChart>
