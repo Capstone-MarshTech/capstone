@@ -4,16 +4,16 @@ import axios from "axios";
 import { useSelector } from "react-redux"
 
 import {
-  ComposedChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  Line,
-} from "recharts";
+	ComposedChart,
+	Line,
+	Bar,
+	XAxis,
+	YAxis,
+	Tooltip,
+	Legend,
+	Label,
+	ResponsiveContainer,
+} from 'recharts';
 
  
 
@@ -48,7 +48,6 @@ function GraphsBox2() {
 		)
 
 		setPolicyYear(claimsData);
-		// console.log(claimsData);
   };
 
   useEffect(() => {
@@ -64,34 +63,46 @@ function GraphsBox2() {
   }, []);
 
   return (
-    <>
-      <DashboardBox bgcolor="#fff" gridArea="b2">
-        <h3>Total Incurred by Policy Year</h3>
-        <ResponsiveContainer width="100%" height="90%">
-          <ComposedChart
-            width={200}
-            height={400}
-            data={policyYear}
-            margin={{
-              top: 20,
-              right: 20,
-              left: 20,
-              bottom: 20,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="Total Outstanding" stackId="a" fill="#002c77" />
-            <Bar dataKey="Total Paid" stackId="a" fill="#76d3ff" />
-            <Line type="monotone" dataKey="Largest Claim" stroke="#00968F" />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </DashboardBox>
-    </>
-  );
+		<>
+			<DashboardBox bgcolor='#fff' gridArea='b2'>
+				<h3>Total Incurred by Policy Year</h3>
+				<ResponsiveContainer width='100%' height='90%'>
+					<ComposedChart
+						width={200}
+						height={400}
+						data={policyYear}
+						margin={{
+							top: 20,
+							right: 20,
+							left: 20,
+							bottom: 20,
+						}}
+					>
+						<XAxis dataKey='name' />
+						<YAxis>
+							<Label
+								value={'Total Incurred'}
+								angle={-90}
+								offset={-15}
+								position='insideLeft'
+								style={{ textAnchor: 'middle' }}
+							/>
+						</YAxis>
+						<Tooltip />
+						<Legend />
+						<Bar dataKey='Total Outstanding' stackId='a' fill='#002c77' />
+						<Bar dataKey='Total Paid' stackId='a' fill='#76d3ff' />
+						<Line
+							type='monotone'
+							dataKey='Largest Claim'
+							strokeWidth='2.5'
+							stroke='#00968F'
+						/>
+					</ComposedChart>
+				</ResponsiveContainer>
+			</DashboardBox>
+		</>
+	);
 }
 
 export default GraphsBox2;
