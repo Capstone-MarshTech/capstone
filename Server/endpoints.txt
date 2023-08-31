@@ -18,6 +18,21 @@ http://localhost:1337/counts/closed_count/2018
 5. Number of Zero Value Claims by Policy Year
 http://localhost:1337/counts/zero_value_count/2017
 
+6. Number of Zero Value Claims By Line Of Busines By Year
+http://localhost:1337/counts/zero_value_count_by_line_of_business/2017?marsh_line_of_business_1=Casualty
+
+7. Number of Claims By Line Of Business By Year
+http://localhost:1337/counts/distinct_claims_count_by_line_of_business/2018?marsh_line_of_business_1=Casualty
+
+8. Number of Claims By Line Of Business
+http://localhost:1337/counts/distinct_claims_count_by_line_of_business?=Casualty&marsh_line_of_business_1=Property
+
+9. Number of Open Claims By Line of Business By Year
+http://localhost:1337/counts/open_count_by_line_of_business/2018?marsh_line_of_business_1=Casualty
+
+10. Number of Closed Claims By Line Of Business By Year
+http://localhost:1337/counts/closed_count_by_line_of_business/2018?marsh_line_of_business_1=Casualty
+
 
 
 ----------------------------------------------------------------------------------------------------------------
