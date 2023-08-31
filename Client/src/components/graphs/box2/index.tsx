@@ -23,7 +23,7 @@ function GraphsBox2() {
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
 
-  console.log(selectedYear, selectedMLB1, selectedMLB2);
+//   console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   const fetchData = async (years) => {
 	const claimsData = await Promise.all(

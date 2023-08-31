@@ -54,6 +54,7 @@ const NavBar = (props: Props) => {
 					<BarChartIcon
 						sx={{
 							fontSize: '24px',
+							color: palette.primary[500],
 							verticalAlign: 'text-bottom',
 							'&:hover': { color: palette.primary[100] },
 						}}
@@ -62,11 +63,12 @@ const NavBar = (props: Props) => {
 			</Box>
 
 			{/* Table View */}
-			<Box >
+			<Box>
 				<Link to='/table-view'>
 					<TableChartIcon
 						sx={{
 							fontSize: '24px',
+							color: palette.primary[500],
 							verticalAlign: 'text-bottom',
 							'&:hover': { color: palette.primary[100] },
 						}}
