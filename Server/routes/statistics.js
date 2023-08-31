@@ -10,7 +10,12 @@ import {
   averageTotalIncurredByPolicyYearbyLossBanding,
   largestClaimByPolicyYearByLossBanding,
   lossBandingValuesByYear,
-} from "../controllers/statisticsController.js";
+  largestClaimByLossBandingByProductLine,
+  averageTotalIncurredByLossBandingByProductLine,
+  ClaimNumbersByLossBandingCountByProductLine,
+  totalIncurredByLossBandingByProductLine,
+} from '../controllers/statisticsController.js';
+
 
 const router = express.Router();
 // All Years
@@ -33,16 +38,11 @@ router.get("/largest_claim_by/:year", largestClaimByPolicyYearByLossBanding);
 router.get("/loss_banding_values_by/:year", lossBandingValuesByYear);
 
 // By Product Line
-/*Largest Claims by Loss Banding by Product line
+router.get('/largest_claim_by_loss_banding_by_product_line', largestClaimByLossBandingByProductLine);
+router.get('/average_total_incurred_by_loss_banding_by_product_line', averageTotalIncurredByLossBandingByProductLine);
+router.get('/number_of_claims_by_loss_banding_by_product_line', ClaimNumbersByLossBandingCountByProductLine);
+router.get('/total_incurred_by_loss_banding_by_product_line', totalIncurredByLossBandingByProductLine);
 
-Average Total Incurred by Loss Banding by Product Line
 
-Number of Claims by Loss Banding by Product Line
-
-Total Incurred by Loss Banding by Product Line */
-router.get("total_incurred_by_line_of_business");
-router.get("number_of_claims_by_line_of_business");
-router.get("average_total_incurred_by_line_of_business");
-router.get("largest_claim_by_line_of_business");
 
 export default router;
