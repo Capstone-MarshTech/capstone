@@ -9,9 +9,9 @@ import {
 	Bar,
 	XAxis,
 	YAxis,
-	CartesianGrid,
 	Tooltip,
 	Legend,
+	Label,
 	ResponsiveContainer,
 } from 'recharts';
 
@@ -22,7 +22,7 @@ function GraphsBox1() {
 	const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
 	const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
 
-	console.log('XG', selectedYear, selectedMLB1, selectedMLB2);
+	// console.log('XG', selectedYear, selectedMLB1, selectedMLB2);
 
 	const fetchData = async (years) => {
 		const claimsData = await Promise.all(
@@ -48,7 +48,7 @@ function GraphsBox1() {
 		);
 
 		setPolicyClaimsByYear(claimsData);
-		console.log(claimsData);
+		// console.log(claimsData);
 	};
 
 	useEffect(() => {
@@ -80,14 +80,26 @@ function GraphsBox1() {
 								left: 20,
 							}}
 						>
-							<CartesianGrid strokeDasharray='3 3' />
 							<XAxis dataKey='name' />
-							<YAxis />
+							<YAxis>
+								<Label
+									value={'Number of Claims'}
+									angle={-90}
+									offset={-15}
+									position='insideLeft'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
 							<Tooltip />
 							<Legend />
 							<Bar dataKey='Open' stackId='a' fill='#002c77' />
-							<Bar dataKey='Closed' stackId='a' fill='#76d3ff' />
-							<Line type='monotone' dataKey='ZeroValue' stroke='#00968F' />
+							<Bar dataKey='Closed' stackId='a' fill='#65cdff' />
+							<Line
+								type='monotone'
+								dataKey='ZeroValue'
+								strokeWidth='2.5'
+								stroke='#00968F'
+							/>
 						</ComposedChart>
 					</ResponsiveContainer>
 				) : (

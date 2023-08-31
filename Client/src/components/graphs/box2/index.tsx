@@ -28,7 +28,7 @@ function GraphsBox2() {
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
 
-  console.log(selectedYear, selectedMLB1, selectedMLB2);
+//   console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   const fetchData = async (years) => {
     const claimsData = await Promise.all(
@@ -52,8 +52,7 @@ function GraphsBox2() {
       })
     );
 
-    setPolicyYear(claimsData);
-    console.log("line 51: ", claimsData);
+		setPolicyYear(claimsData);
   };
 
   useEffect(() => {
@@ -69,34 +68,46 @@ function GraphsBox2() {
   }, []);
 
   return (
-    <>
-      <DashboardBox bgcolor="#fff" gridArea="b2">
-        <h3>Total Incurred by Policy Year</h3>
-        <ResponsiveContainer width="100%" height="90%">
-          <ComposedChart
-            width={200}
-            height={400}
-            data={policyYear}
-            margin={{
-              top: 20,
-              right: 20,
-              left: 20,
-              bottom: 20,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
-            <Legend />
-            <Bar dataKey="Total Outstanding" stackId="a" fill="#002c77"/>
-            <Bar dataKey="Total Paid" stackId="a" fill="#76d3ff" />
-            <Line type="monotone" dataKey="Largest Claim" stroke="#00968F" />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </DashboardBox>
-    </>
-  );
+		<>
+			<DashboardBox bgcolor='#fff' gridArea='b2'>
+				<h3>Total Incurred by Policy Year</h3>
+				<ResponsiveContainer width='100%' height='90%'>
+					<ComposedChart
+						width={200}
+						height={400}
+						data={policyYear}
+						margin={{
+							top: 20,
+							right: 20,
+							left: 20,
+							bottom: 20,
+						}}
+					>
+						<XAxis dataKey='name' />
+						<YAxis>
+							<Label
+								value={'Total Incurred'}
+								angle={-90}
+								offset={-15}
+								position='insideLeft'
+								style={{ textAnchor: 'middle' }}
+							/>
+						</YAxis>
+						<Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
+						<Legend />
+						<Bar dataKey='Total Outstanding' stackId='a' fill='#002c77'/>
+						<Bar dataKey='Total Paid' stackId='a' fill='#76d3ff' />
+						<Line
+							type='monotone'
+							dataKey='Largest Claim'
+							strokeWidth='2.5'
+							stroke='#00968F'
+						/>
+					</ComposedChart>
+				</ResponsiveContainer>
+			</DashboardBox>
+		</>
+	);
 }
 
 export default GraphsBox2;

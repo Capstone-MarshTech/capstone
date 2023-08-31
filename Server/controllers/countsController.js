@@ -1,19 +1,17 @@
-import mongoose from "mongoose";
-import Claim from "../models/ClaimModel.js";
+
+import Claim from '../models/ClaimModel.js';
 
 export const closedCount = async (req, res) => {
-  const year = parseInt(req.params.year);
-  //   const company_name = req.params.client_name;
+    const  year  = parseInt(req.params.year)
 
-  try {
-    const closed_claims_count = await Claim.countDocuments({
-      closed_claim: true,
-      cleansed_policyyear: year,
-    });
-    res.json(closed_claims_count);
-  } catch (error) {
-    res.status(error.statusCode || 500).json({ message: error.message });
-  }
+    try { 
+        
+        const closed_claims_count = await Claim.countDocuments({ closed_claim: true, cleansed_policyyear: year}); 
+        res.json(closed_claims_count);
+    } catch (error) {
+        res.status(error.statusCode || 500).json({ message: error.message });
+    }
+
 };
 
 export const openCount = async (req, res) => {
