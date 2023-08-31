@@ -1,38 +1,52 @@
 import DashboardBox from '@/components/DashboardBox';
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux"
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 // Mock Data
 const columns: GridColDef[] = [
-	{ 
-		field: 'year', 
+	{
+		field: 'year',
 		headerName: 'Year',
+		headerClassName: 'su-header',
 		type: 'string',
-		width: 150 
+		minWidth: 20,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
 	},
 	{
 		field: 'totalOutstanding',
 		headerName: 'Total Outstanding',
-		type: "number",
-		width: 150,
-		editable: true,
+		headerClassName: 'su-header',
+		type: 'number',
+		minWidth: 50,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
 	},
 	{
 		field: 'totalPaid',
 		headerName: 'Total Paid',
+		headerClassName: 'su-header',
 		type: 'number',
-		width: 150,
-		editable: true,
+		minWidth: 50,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
 	},
 	{
 		field: 'largestClaim',
 		headerName: 'Largest Claim',
 		description: 'This column has a value getter and is not sortable.',
-		editable: true,
-		width: 150,
+		headerClassName: 'su-header',
+		type: 'number',
+		minWidth: 100,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
 	},
 ];
 
@@ -65,15 +79,15 @@ function TableBox2() {
 					largestClaim: allData[2].data,
 				};
 			})
-		)
-	
+		);
+
 		setPolicyYear(claimsData);
 		// console.log(claimsData);
 	};
 
 	useEffect(() => {
 		// let years = [];
-		fetch("http://localhost:1337/dropdowns/years")
+		fetch('http://localhost:1337/dropdowns/years')
 			.then((response) => response.json())
 			.then((yearsArray) => {
 				fetchData(yearsArray);
@@ -83,14 +97,14 @@ function TableBox2() {
 			});
 	}, []);
 
-
 	return (
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b2'>
-				Total Incurred by Policy Year
+				<h3>Total Incurred by Policy Year</h3>
 				<DataGrid
 					rows={policyYear}
 					columns={columns}
+					autoHeight={true}
 					initialState={{
 						pagination: {
 							paginationModel: {
@@ -99,8 +113,15 @@ function TableBox2() {
 						},
 					}}
 					pageSizeOptions={[5]}
-					checkboxSelection
 					disableRowSelectionOnClick
+					sx={{
+						m: 2,
+						mb: 2,
+						border: 0,
+						'& .su-header': {
+							backgroundColor: 'rgba(118, 211, 255, 0.25)',
+						},
+					}}
 				/>
 			</DashboardBox>
 		</>

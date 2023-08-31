@@ -1,37 +1,49 @@
-import DashboardBox from "@/components/DashboardBox";
+import DashboardBox from '@/components/DashboardBox';
+
 
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
+
 const columns: GridColDef[] = [
-  {
-    field: "Loss Band",
-    headerName: "Loss Band",
-    type: "string",
-    width: 200,
-    editable: true,
-  },
-  {
-    field: "Largest Claim",
-    headerName: "Largest Claim",
-    type: "number",
-    width: 200,
-    editable: true,
-  },
-  {
-    field: "Average Cost of Claim",
-    headerName: "Average Cost of Claim",
-    type: "number",
-    width: 200,
-    editable: true,
-  },
+	{
+		field: 'Loss Band',
+		headerName: 'Loss Band',
+		headerClassName: 'su-header',
+		type: 'string',
+		minWidth: 20,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
+	},
+	{
+		field: 'Largest Claim',
+		headerName: 'Largest Claim',
+		headerClassName: 'su-header',
+		type: 'number',
+		minWidth: 50,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
+	},
+	{
+		field: 'Average Cost of Claim',
+		headerName: 'Average Cost of Claim',
+		headerClassName: 'su-header',
+		type: 'number',
+		minWidth: 50,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
+	},
 ];
 
 type Props = {};
 
 function TableBox4({}: Props) {
+
   const [lossBandingData, setLossBandingData] = useState([]);
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
@@ -63,8 +75,9 @@ function TableBox4({}: Props) {
       }
     };
 
-    fetchLossBandingData();
-  }, []);
+		fetchLossBandingData();
+	}, []);
+
 
   useEffect(() => {
     const fetchLossBandingDataByYear = async () => {
@@ -96,38 +109,39 @@ function TableBox4({}: Props) {
             }
           );
 
-          const averageTotalIncurredPromises = lossBandingData.map(
-            async (eachBanding) => {
-              const response = await axios.get(
-                `${baseUrl}/statistics/average_total_incurred_by?loss_banding=${eachBanding}`
-              );
-              return response.data;
-            }
-          );
+					const averageTotalIncurredPromises = lossBandingData.map(
+						async (eachBanding) => {
+							const response = await axios.get(
+								`${baseUrl}/statistics/average_total_incurred_by?loss_banding=${eachBanding}`
+							);
+							return response.data;
+						}
+					);
 
-          const largestClaims = await Promise.all(largestClaimsPromises);
-          const averageTotalIncurred = await Promise.all(
-            averageTotalIncurredPromises
-          );
+					const largestClaims = await Promise.all(largestClaimsPromises);
+					const averageTotalIncurred = await Promise.all(
+						averageTotalIncurredPromises
+					);
 
-          const newData = lossBandingData.map((eachBanding, index) => ({
-            id: index,
-            "Loss Band": eachBanding,
-            "Average Cost of Claim": averageTotalIncurred[index],
-            "Largest Claim": largestClaims[index],
-          }));
+					const newData = lossBandingData.map((eachBanding, index) => ({
+						id: index,
+						'Loss Band': eachBanding,
+						'Average Cost of Claim': averageTotalIncurred[index],
+						'Largest Claim': largestClaims[index],
+					}));
 
-          setDataWithMetrics(newData);
-        } catch (err) {
-          console.error(err);
-        }
-      };
+					setDataWithMetrics(newData);
+				} catch (err) {
+					console.error(err);
+				}
+			};
 
-      fetchData();
-    }
-  }, [lossBandingData]);
+			fetchData();
+		}
+	}, [lossBandingData]);
 
-  //   console.log(dataWithMetrics);
+	//   console.log(dataWithMetrics);
+
 
   // if the YEAR filter is applied
   useEffect(() => {
@@ -212,6 +226,7 @@ function TableBox4({}: Props) {
       </DashboardBox>
     </>
   );
+
 }
 
 export default TableBox4;
