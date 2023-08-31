@@ -101,38 +101,60 @@ export function Filter({
     onClose();
   };
 
-  return (
-		<Dialog open={isOpen} onClose={onClose}>
-			<div style={{ padding: '20px', backgroundColor: 'white' }}>
-				<h2>Filter by Year</h2>
-				<Select fullWidth value={localSelectedYear} onChange={handleYearSelect}>
-					{years.map((year) => (
-						<MenuItem key={year} value={year}>
-							{year}
-						</MenuItem>
-					))}
-				</Select>
+  const clearFilter = () => {
+    dispatch(setSelectedYear(""));
+    dispatch(setSelectedMLB1(""));
 
-				<h2>Filter by Marsh Business Line 1</h2>
-				<Select fullWidth value={localSelectedMLB1} onChange={handleMLB1Select}>
-					{marshLineOfBusiness1.map((mlb1) => (
-						<MenuItem key={mlb1} value={mlb1}>
-							{mlb1}
-						</MenuItem>
-					))}
-				</Select>
-				<h2>Filter by Marsh Business Line 2</h2>
-				<Select fullWidth value={localSelectedMLB2} onChange={handleMLB2Select}>
-					{marshLineOfBusiness2.map((mlb2) => (
-						<MenuItem key={mlb2} value={mlb2}>
-							{mlb2}
-						</MenuItem>
-					))}
-				</Select>
-				<Button variant='contained' color='primary' onClick={applyFilter}>
-					Apply Filter
-				</Button>
-			</div>
-		</Dialog>
-	);
+    onClose();
+  };
+
+  return (
+    <Dialog open={isOpen} onClose={onClose}>
+      <div
+        style={{
+          padding: "20px",
+          paddingBottom: "20px",
+          backgroundColor: "white",
+        }}
+      >
+        <h2>Filter by Year</h2>
+        <Select
+          fullWidth
+          value={localSelectedYear}
+          onChange={handleYearSelect}
+          disabled={localSelectedMLB1 !== ""}
+        >
+          {years.map((year) => (
+            <MenuItem key={year} value={year}>
+              {year}
+            </MenuItem>
+          ))}
+        </Select>
+
+        <h2>Filter by Marsh Business Line</h2>
+        <Select
+          fullWidth
+          value={localSelectedMLB1}
+          onChange={handleMLB1Select}
+          disabled={localSelectedYear !== ""}
+        >
+          {marshLineOfBusiness1.map((mlb1) => (
+            <MenuItem key={mlb1} value={mlb1}>
+              {mlb1}
+            </MenuItem>
+          ))}
+        </Select>
+        <div style={{ marginTop: "20px" }}>
+          <Button variant="contained" color="primary" onClick={clearFilter}>
+            Clear Filter
+          </Button>
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <Button variant="contained" color="primary" onClick={applyFilter}>
+            Apply Filter
+          </Button>
+        </div>
+      </div>
+    </Dialog>
+  );
 }
