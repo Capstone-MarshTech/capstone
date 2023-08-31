@@ -11,6 +11,7 @@ import countRoute from './routes/counts.js';
 import statisticsRoute from './routes/statistics.js'
 import dropdownsRoute from './routes/dropDowns.js'
 import metricsRoute from './routes/metrics.js'
+import dashboardRoute from './routes/dashboard.js'
 
 dotenv.config();
 const app = express();
@@ -27,6 +28,7 @@ app.use('/counts', countRoute);
 app.use('/statistics', statisticsRoute);
 app.use('/dropdowns', dropdownsRoute);
 app.use('/metrics', metricsRoute);
+app.use('/dashboard', dashboardRoute);
 
 const PORT = process.env.PORT || 1337;
 

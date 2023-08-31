@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Claim from '../models/ClaimModel.js'
 
 export const totalIncurredByLossBanding = async (req, res) => {
