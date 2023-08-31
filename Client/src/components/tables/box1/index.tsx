@@ -3,41 +3,49 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-import {
-	DataGrid,
-	GridColDef,
-	GridValueGetterParams,
-	GridCellParams,
-} from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 // Mock Data
 const columns: GridColDef[] = [
 	{
 		field: 'year',
 		headerName: 'Year',
+		headerClassName: 'su-header',
 		type: 'string',
-		width: 150,
+		minWidth: 20,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
 	},
 	{
 		field: 'open',
 		headerName: 'Open',
+		headerClassName: 'su-header',
 		type: 'number',
-		width: 150,
-		editable: true,
+		minWidth: 50,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
 	},
 	{
 		field: 'closed',
 		headerName: 'Closed',
+		headerClassName: 'su-header',
 		type: 'number',
-		width: 150,
-		editable: true,
+		minWidth: 50,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
 	},
 	{
 		field: 'zeroValueClaims',
 		headerName: 'Zero Value Claims',
+		headerClassName: 'su-header',
 		type: 'number',
-		width: 150,
-		editable: true,
+		minWidth: 100,
+		flex: 1,
+		align: 'center',
+		headerAlign: 'center',
 	},
 ];
 
@@ -46,11 +54,11 @@ type Props = {};
 function TableBox1({}: Props) {
 	const [policyClaimsByYear, setPolicyClaimsByYear] = useState([]);
 
-		const selectedYear = useSelector((state) => state.filter.selectedYear);
-		const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
-		const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+	const selectedYear = useSelector((state) => state.filter.selectedYear);
+	const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
+	const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
 
-		console.log('From XG-Table', selectedYear, selectedMLB1, selectedMLB2);
+	console.log('From XG-Table', selectedYear, selectedMLB1, selectedMLB2);
 
 	const fetchData = async (years) => {
 		const claimsData = await Promise.all(
@@ -97,10 +105,11 @@ function TableBox1({}: Props) {
 	return (
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b1'>
-				Number of Claims by Policy Year
+				<h3>Number of Claims by Policy Year</h3>
 				<DataGrid
 					rows={policyClaimsByYear}
 					columns={columns}
+					autoHeight={true}
 					initialState={{
 						pagination: {
 							paginationModel: {
@@ -109,8 +118,15 @@ function TableBox1({}: Props) {
 						},
 					}}
 					pageSizeOptions={[5]}
-					checkboxSelection
 					disableRowSelectionOnClick
+					sx={{
+						m: 2,
+						mb: 2,
+						border: 0,
+						'& .su-header': {
+							backgroundColor: 'rgba(118, 211, 255, 0.25)',
+						},
+					}}
 				/>
 			</DashboardBox>
 		</>
