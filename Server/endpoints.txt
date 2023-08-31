@@ -59,14 +59,25 @@ http://localhost:1337/metrics/total_incurred
 5. Total Incurred by Policy Years
 http://localhost:1337/metrics/total_incurred/2018
 
+6. Total Net Paid By Line Of Business By Year
+http://localhost:1337/metrics/total_net_paid_by_line_of_business/2018?marsh_line_of_business_1=Casualty
 
+7. Total Outstanding By Line Of Business By Year
+http://localhost:1337/metrics/total_outstanding_by_line_of_business/2018?marsh_line_of_business_1=Casualty
 
+8. Total Incurred By Line Of Business
+http://localhost:1337/metrics/total_incurred_by_line_of_business?marsh_line_of_business_1=Casualty
+
+9. Total Incurred By Line Of Business By Year
+http://localhost:1337/metrics/total_incurred_by_line_of_business?marsh_line_of_business_1=Casualty
+
+10. Largest Incurred by Line Of Business By Year
+http://localhost:1337/metrics/largest_incurred_by_line_of_business/2018?marsh_line_of_business_1=Casualty
 
 
 ---------------------------------------------------------------------------------------------------------------
 Statistics - Replace the range of amounts
 ---------------------------------------------------------------------------------------------------------------
-
 
 
 
@@ -97,8 +108,17 @@ http://localhost:1337/statistics/total_incurred_by/2017?loss_banding=100,001 to 
 9. Loss Banding Values By Year
 http://localhost:1337/statistics/loss_banding_values_by/2018
 
+10. Largest Claim by Loss Banding By Product Line
+http://localhost:1337/statistics/largest_claim_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
 
+11. Total Incurred By Loss Banding By Product Line
+http://localhost:1337/statistics/total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
 
+12. Number Of Claims By Loss Banding By Product Line
+http://localhost:1337/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
+
+13. Average Total Incurred By Loss Banding By Product Line
+http://localhost:1337/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
 
 
 ---------------------------------------------------------------------------------------------------------------
