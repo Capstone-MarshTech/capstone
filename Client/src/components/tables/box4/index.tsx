@@ -1,10 +1,9 @@
 import DashboardBox from '@/components/DashboardBox';
 
-
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 
 const columns: GridColDef[] = [
@@ -44,6 +43,7 @@ type Props = {};
 
 function TableBox4({}: Props) {
 
+
   const [lossBandingData, setLossBandingData] = useState([]);
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
@@ -74,6 +74,7 @@ function TableBox4({}: Props) {
         console.error(error);
       }
     };
+
 
 		fetchLossBandingData();
 	}, []);
@@ -141,6 +142,7 @@ function TableBox4({}: Props) {
 	}, [lossBandingData]);
 
 	//   console.log(dataWithMetrics);
+
 
 
   // if the YEAR filter is applied
