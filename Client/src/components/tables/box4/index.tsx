@@ -145,8 +145,8 @@ function TableBox4({}: Props) {
           const newData = lossBandingData.map((eachBanding, index) => ({
             id: index,
             "Loss Band": eachBanding,
-            "Average Cost of Claim": averageTotalIncurred[index],
-            "Largest Claim": largestClaims[index],
+            "Average Cost of Claim": averageTotalIncurred[index].toFixed(2),
+            "Largest Claim": largestClaims[index].toFixed(2),
           }));
 
           setDataWithMetrics(newData);
@@ -193,8 +193,8 @@ function TableBox4({}: Props) {
           const newData = lossBandingDataYear.map((eachBanding, index) => ({
             id: index,
             "Loss Band": eachBanding,
-            "Average Cost of Claim": averageTotalIncurred[index],
-            "Largest Claim": largestClaims[index],
+            "Average Cost of Claim": averageTotalIncurred[index].toFixed(2),
+            "Largest Claim": largestClaims[index].toFixed(2),
           }));
 
           setDataWithMetricsYear(newData);
