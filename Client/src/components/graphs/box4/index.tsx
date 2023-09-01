@@ -29,6 +29,7 @@ const GraphsBox4 = () => {
   );
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
+
   const selectedYear = useSelector((state) => state.filter.selectedYear);
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
@@ -234,7 +235,7 @@ const GraphsBox4 = () => {
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
         <h3>{showTitle}</h3>
-        <ResponsiveContainer width="100%" height="90%">
+        <ResponsiveContainer width="90%" height="90%">
           {selectedYear ? (
             <ComposedChart
               width={200}
