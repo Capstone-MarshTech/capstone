@@ -17,19 +17,25 @@ import {
 import CustomTooltip from "./CustomTooltip";
 
 const styles = {
-  backgroundColor: 'white',
+  backgroundColor: "white",
   padding: "8px",
   border: "1px solid #ccc",
-}
+};
 
 function GraphsBox2() {
   const [policyYear, setPolicyYear] = useState([]);
+  const [policyYearFilter, setPolicyYearFilter] = useState([]);
+
   const selectedYear = useSelector((state) => state.filter.selectedYear);
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
-
   //   console.log(selectedYear, selectedMLB1, selectedMLB2);
 
+  const showTitle = !selectedMLB1
+    ? "Total Incurred by Policy Year"
+    : `Total Incurred by Policy Year ${selectedMLB1 ? `${selectedMLB1}` : ""}`;
+
+  // No filter
   const fetchData = async (years) => {
     const claimsData = await Promise.all(
       years.map(async (year) => {
@@ -51,12 +57,10 @@ function GraphsBox2() {
         };
       })
     );
-
     setPolicyYear(claimsData);
   };
 
   useEffect(() => {
-    // let years = [];
     fetch("http://localhost:1337/dropdowns/years")
       .then((response) => response.json())
       .then((yearsArray) => {
@@ -67,15 +71,60 @@ function GraphsBox2() {
       });
   }, []);
 
+
+  // Fetch data with filter
+  const fetchBusiness = async (years, businesses) => {
+    const businessData = await Promise.all(
+      years.map(async (year) => {
+        // console.log(business)
+        const endpoints = [
+          `http://localhost:1337/metrics/total_outstanding_by_line_of_business/${year}?marsh_line_of_business_1=${businesses}`,
+          `http://localhost:1337/metrics/total_net_paid_by_line_of_business/${year}?marsh_line_of_business_1=${businesses}`,
+          `http://localhost:1337/metrics/largest_incurred_by_line_of_business/${year}?marsh_line_of_business_1=${businesses}`,
+        ];
+
+        const allBusinessData = await Promise.all(
+          endpoints.map((endpoint) => axios.get(endpoint))
+        );
+        // console.log(allBusinessData)
+
+        return {
+          name: year.toString(),
+          "Total Outstanding": allBusinessData[0].data,
+          "Total Paid": allBusinessData[1].data,
+          "Largest Claim": allBusinessData[2].data,
+        };
+      })
+    );
+    setPolicyYearFilter(businessData);
+  };
+
+  useEffect(() => {
+    const selectFilter = () => {
+      fetch("http://localhost:1337/dropdowns/years")
+        .then((response) => response.json())
+        .then((yearsArray) => {
+          fetchBusiness(yearsArray, selectedMLB1);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      // console.log(selectedMLB1)
+    };
+    if (selectedMLB1) {
+      selectFilter();
+    }
+  }, [selectedMLB1]);
+
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b2">
-        <h3>Total Incurred by Policy Year</h3>
+        <h3>{showTitle}</h3>
         <ResponsiveContainer width="90%" height="90%">
           <ComposedChart
             width={200}
             height={400}
-            data={policyYear}
+            data={selectedMLB1 ? policyYearFilter : policyYear}
             margin={{
               top: 20,
               right: 20,
