@@ -20,20 +20,23 @@ const GraphsBox4 = () => {
   const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const [dataWithMetricsYear, setDataWithMetricsYear] = useState([]);
+
   const baseUrl = import.meta.env.VITE_BASE_URL;
+
   const selectedYear = useSelector((state) => state.filter.selectedYear);
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+
   const showTitle =
     !selectedYear && !selectedMLB1 && !selectedMLB2
       ? "Largest Claim Against Average Cost per Claim by Loss Band by All Years"
       : `Largest Claim Against Average Cost per Claim by Loss Band ${
           selectedYear ? `(${selectedYear}` : ""
         } ${selectedMLB1 ? `${selectedMLB1}` : ""} ${
-          selectedMLB2 ? `and ${selectedMLB2})` : ")"
+          selectedMLB2 ? `and ${selectedMLB2})` : ""
         }`;
 
-  console.log(selectedYear, selectedMLB1, selectedMLB2);
+  // console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   // useEffect for the case when there is no filter applied
   //fetch the loss bandings
@@ -165,7 +168,7 @@ const GraphsBox4 = () => {
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
         <h3>{showTitle}</h3>
-        <ResponsiveContainer width="100%" height="90%">
+        <ResponsiveContainer width="90%" height="90%">
           {selectedYear ? (
             <ComposedChart
               width={200}

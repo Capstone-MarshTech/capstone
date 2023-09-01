@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-// Mock Data
+// Data
 const columns: GridColDef[] = [
 	{
 		field: 'year',
@@ -53,26 +53,35 @@ type Props = {};
 
 function TableBox1({}: Props) {
 	const [policyClaimsByYear, setPolicyClaimsByYear] = useState([]);
+	const [policyClaimsByYearMLB, setPolicyClaimsByYearMLB] = useState([]);
 
 	const selectedYear = useSelector((state) => state.filter.selectedYear);
 	const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
-	const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
 
-	console.log('From XG-Table', selectedYear, selectedMLB1, selectedMLB2);
+	const baseUrl = import.meta.env.VITE_BASE_URL;
 
+	const showTitle = !selectedMLB1
+		? 'Number of Claims by Policy Year'
+		: `Number of Claims by Policy Year by Business Line: ${
+				selectedMLB1 ? `${selectedMLB1}` : ''
+		  }`;
+
+	console.log('From XG-Table', selectedYear, selectedMLB1);
+
+	// No Filter Applied:
 	const fetchData = async (years) => {
 		const claimsData = await Promise.all(
 			years.map(async (year) => {
 				const endpoints = [
-					`http://localhost:1337/counts/open_count/${year}`,
-					`http://localhost:1337/counts/closed_count/${year}`,
-					`http://localhost:1337/counts/zero_value_count/${year}`,
+					`${baseUrl}/counts/open_count/${year}`,
+					`${baseUrl}/counts/closed_count/${year}`,
+					`${baseUrl}/counts/zero_value_count/${year}`,
 				];
 
 				const allData = await Promise.all(
 					endpoints.map((endpoint) => axios.get(endpoint))
 				);
-
+				// Return our response in the allData variable as an array, setting ID to year
 				return {
 					id: year,
 					year: year.toString(),
@@ -83,31 +92,82 @@ function TableBox1({}: Props) {
 			})
 		);
 		setPolicyClaimsByYear(claimsData);
-		console.log('claims', claimsData);
+		console.log('claimsData', claimsData);
+	};
+
+	// MLB Filter Applied
+	// Number of Claims By Line Of Business By Year
+	// const MLBendpoint = `${baseUrl}/counts/distinct_claims_count_by_line_of_business/${year}?marsh_line_of_business_1=Casualty`;
+	const fetchDataMLB = async (years, mlbFilter) => {
+		const claimsDataMLB = await Promise.all(
+			years.map(async (year) => {
+				const endpointsMLB = [
+					`${baseUrl}/counts/open_count_by_line_of_business/${year}?marsh_line_of_business_1=${mlbFilter}`,
+					`${baseUrl}/counts/closed_count_by_line_of_business/${year}?marsh_line_of_business_1=${mlbFilter}`,
+					`${baseUrl}/counts/zero_value_count_by_line_of_business/${year}?marsh_line_of_business_1=${mlbFilter}`,
+				];
+
+				const allData = await Promise.all(
+					endpointsMLB.map((endpoint) => axios.get(endpoint))
+				);
+
+				// Return our response in the allData variable as an array
+				return {
+					id: year,
+					year: year.toString(),
+					open: allData[0].data,
+					closed: allData[1].data,
+					zeroValueClaims: allData[2].data,
+				};
+			})
+		);
+
+		console.log('claimsDataMLB', claimsDataMLB);
+
+		setPolicyClaimsByYearMLB(claimsDataMLB);
 	};
 
 	useEffect(() => {
-		let years = [];
 		fetch('http://localhost:1337/dropdowns/years')
 			.then((response) => response.json())
 			.then((yearsArray) => {
-				years = yearsArray;
-				console.log('years', yearsArray);
-				fetchData(years); // Array of years [2017, 2018, 2019, 2020, 2021, 2022]
+				// Array of years [2017, 2018, 2019, 2020, 2021, 2022]
+				fetchData(yearsArray);
 			})
 			.catch((error) => {
 				console.error('Error fetching data:', error);
 			});
-
 		console.log(policyClaimsByYear);
 	}, []);
+
+	useEffect(() => {
+		const selectMLBFilter = () => {
+			fetch('http://localhost:1337/dropdowns/years')
+				.then((response) => response.json())
+				.then((yearsArray) => {
+					// Array of years [2017, 2018, 2019, 2020, 2021, 2022]
+					fetchDataMLB(yearsArray, selectedMLB1);
+				})
+				.catch((error) => {
+					console.error('Error fetching data:', error);
+				});
+			console.log(policyClaimsByYearMLB);
+		};
+
+		if (selectedMLB1) {
+			selectMLBFilter();
+		}
+	}, [selectedMLB1]);
+
+	console.log('policyClaimsByYear', policyClaimsByYear);
+	console.log('policyClaimsByYearMLB', policyClaimsByYearMLB);
 
 	return (
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b1'>
-				<h3>Number of Claims by Policy Year</h3>
+				<h3>{showTitle}</h3>
 				<DataGrid
-					rows={policyClaimsByYear}
+					rows={selectedMLB1 ? policyClaimsByYearMLB : policyClaimsByYear}
 					columns={columns}
 					autoHeight={true}
 					initialState={{

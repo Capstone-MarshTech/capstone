@@ -71,7 +71,7 @@ function GraphsBox2() {
     <>
       <DashboardBox bgcolor="#fff" gridArea="b2">
         <h3>Total Incurred by Policy Year</h3>
-        <ResponsiveContainer width="100%" height="90%">
+        <ResponsiveContainer width="90%" height="90%">
           <ComposedChart
             width={200}
             height={400}

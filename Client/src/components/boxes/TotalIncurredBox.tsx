@@ -19,7 +19,7 @@ export const TotalIncurredBox = () => {
 	return (
 		<>
 			<h6>TOTAL INCURRED</h6>
-			<h4>£{totalIncurred.toFixed(2)}</h4>
+			<h4>{totalIncurred.toLocaleString("en-GB", { style: "currency", currency: "GBP" })}</h4>
 		</>
 	);
 };

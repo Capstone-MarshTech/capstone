@@ -77,7 +77,7 @@ const GraphsBox3 = () => {
 		<>
 			<DashboardBox bgcolor='#fff' gridArea='b3'>
 				<h3>Total Incurred Against Number of Claims by Loss Band</h3>
-				<ResponsiveContainer width='100%' height='90%'>
+				<ResponsiveContainer width='90%' height='90%'>
 					<ComposedChart
 						width={200}
 						height={400}
