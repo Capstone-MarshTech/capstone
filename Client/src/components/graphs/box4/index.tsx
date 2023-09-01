@@ -18,25 +18,26 @@ import {
 const GraphsBox4 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
   const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
+  const [lossBandingDataProductLine, setLossBandingDataProductLine] = useState(
+    []
+  );
+
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const [dataWithMetricsYear, setDataWithMetricsYear] = useState([]);
+  const [dataWithMetricsProductLine, setDataWithMetricsProductLine] = useState(
+    []
+  );
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
   const selectedYear = useSelector((state) => state.filter.selectedYear);
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
-
-  const showTitle =
-    !selectedYear && !selectedMLB1 && !selectedMLB2
-      ? "Largest Claim Against Average Cost per Claim by Loss Band by All Years"
-      : `Largest Claim Against Average Cost per Claim by Loss Band ${
-          selectedYear ? `(${selectedYear}` : ""
-        } ${selectedMLB1 ? `${selectedMLB1}` : ""} ${
-          selectedMLB2 ? `and ${selectedMLB2})` : ""
-        }`;
-
-  // console.log(selectedYear, selectedMLB1, selectedMLB2);
+  const showTitle = selectedYear
+    ? `Largest Claim Against Average Cost per Claim by Loss Band by ${selectedYear}`
+    : selectedMLB1
+    ? `Largest Claim Against Average Cost per Claim by Loss Band by ${selectedMLB1}`
+    : "Largest Claim Against Average Cost per Claim by Loss Band by All Years";
 
   // useEffect for the case when there is no filter applied
   //fetch the loss bandings
@@ -73,6 +74,26 @@ const GraphsBox4 = () => {
       fetchLossBandingDataByYear();
     }
   }, [selectedYear]);
+
+  //fetch the loss bandings based on the product line
+  /* Change the URL based on new end point */
+  useEffect(() => {
+    const fetchLossBandingDataByProductLine = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:1337/dropdowns/loss_banding_values_by_product_line?marsh_line_of_business_1=${selectedMLB1}
+        `
+        );
+        setLossBandingDataProductLine(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (selectedMLB1) {
+      fetchLossBandingDataByProductLine();
+    }
+  }, [selectedMLB1]);
 
   //filter not applied
   useEffect(() => {
@@ -162,7 +183,53 @@ const GraphsBox4 = () => {
     }
   }, [lossBandingDataYear, selectedYear]);
 
-  // console.log(dataWithMetricsYear);
+  // If the PRODUCT LINE filter is applied
+
+  useEffect(() => {
+    if (lossBandingDataProductLine.length > 0 && selectedMLB1) {
+      const fetchDataByProductLine = async () => {
+        try {
+          const largestClaimsPromises = lossBandingDataProductLine.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/statistics/largest_claim_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
+              );
+              //http://localhost:1337/statistics/largest_claim_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
+              return response.data;
+            }
+          );
+
+          const averageTotalIncurredPromises = lossBandingDataProductLine.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/statistics/average_total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
+              );
+              //http://localhost:1337/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
+              return response.data;
+            }
+          );
+
+          const largestClaims = await Promise.all(largestClaimsPromises);
+          const averageTotalIncurred = await Promise.all(
+            averageTotalIncurredPromises
+          );
+
+          const newData = lossBandingDataProductLine.map(
+            (eachBanding, index) => ({
+              "Loss Banding": eachBanding,
+              "Average Total Incurred": averageTotalIncurred[index].toFixed(2),
+              "Largest Claim": largestClaims[index].toFixed(2),
+            })
+          );
+
+          setDataWithMetricsProductLine(newData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchDataByProductLine();
+    }
+  }, [lossBandingDataProductLine, selectedMLB1]);
 
   return (
     <>
@@ -174,6 +241,39 @@ const GraphsBox4 = () => {
               width={200}
               height={400}
               data={dataWithMetricsYear}
+              margin={{
+                top: 20,
+                right: 20,
+                left: 20,
+                bottom: 20,
+              }}
+            >
+              <XAxis dataKey="Loss Banding" />
+              <YAxis>
+                <Label
+                  value={"Largest Claim"}
+                  angle={-90}
+                  offset={-15}
+                  position="insideLeft"
+                  style={{ textAnchor: "middle" }}
+                />
+              </YAxis>
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
+
+              <Line
+                type="monotone"
+                dataKey="Average Total Incurred"
+                strokeWidth="2.5"
+                stroke="#65cdff"
+              />
+            </ComposedChart>
+          ) : selectedMLB1 ? (
+            <ComposedChart
+              width={200}
+              height={400}
+              data={dataWithMetricsProductLine}
               margin={{
                 top: 20,
                 right: 20,

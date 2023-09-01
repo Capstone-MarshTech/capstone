@@ -118,7 +118,7 @@ http://localhost:1337/statistics/total_incurred_by_loss_banding_by_product_line?
 http://localhost:1337/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
 
 13. Average Total Incurred By Loss Banding By Product Line
-http://localhost:1337/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
+http://localhost:1337/statistics/average_total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
 
 
 ---------------------------------------------------------------------------------------------------------------
@@ -126,20 +126,20 @@ Dropdowns
 ---------------------------------------------------------------------------------------------------------------
 
 
-Clients (Dropdown)
+1. lients (Dropdown)
 http://localhost:1337/dropdowns/clients
 
-Years (Dropdown)
+2. Years (Dropdown)
 http://localhost:1337/dropdowns/years
 
-Loss Banding Values (Dropdown)
+3. Loss Banding Values (Dropdown)
 http://localhost:1337/dropdowns/loss_banding_values
 
-Marsh Line Of Business 1 (Dropdown)
+4. Marsh Line Of Business 1 (Dropdown)
 http://localhost:1337/dropdowns/marsh_line_of_business_1
 
-Marsh Line Of Business 2 (Dropdown)
+5. Marsh Line Of Business 2 (Dropdown)
 http://localhost:1337/dropdowns/marsh_line_of_business_2
 
-
-
+6. Loss Banding Values By Property Line
+http://localhost:1337/dropdowns/loss_banding_values_by_product_line?marsh_line_of_business_1=Motor

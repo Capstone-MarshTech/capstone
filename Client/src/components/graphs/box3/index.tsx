@@ -1,18 +1,19 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import DashboardBox from '@/components/DashboardBox';
 import {
-	ComposedChart,
-	Bar,
-	XAxis,
-	YAxis,
-	Label,
-	Tooltip,
-	Legend,
-	ResponsiveContainer,
-	Line,
+  ComposedChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Label,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Line,
 } from 'recharts';
-
 const GraphsBox3 = () => {
 	const [lossBandingData, setLossBandingData] = useState([]);
 	const [dataWithMetrics, setDataWithMetrics] = useState([]);
@@ -116,5 +117,4 @@ const GraphsBox3 = () => {
 		</>
 	);
 };
-
 export default GraphsBox3;
