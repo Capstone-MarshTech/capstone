@@ -38,8 +38,6 @@ const GraphsBox4 = () => {
     ? `Largest Claim Against Average Cost per Claim by Loss Band by ${selectedMLB1}`
     : "Largest Claim Against Average Cost per Claim by Loss Band by All Years";
 
-  console.log(selectedYear, selectedMLB1, selectedMLB2);
-
   // useEffect for the case when there is no filter applied
   //fetch the loss bandings
   useEffect(() => {
@@ -75,6 +73,26 @@ const GraphsBox4 = () => {
       fetchLossBandingDataByYear();
     }
   }, [selectedYear]);
+
+  //fetch the loss bandings based on the product line
+  /* Change the URL based on new end point */
+  useEffect(() => {
+    const fetchLossBandingDataByProductLine = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:1337/dropdowns/loss_banding_values_by_product_line?marsh_line_of_business_1=${selectedMLB1}
+        `
+        );
+        setLossBandingDataProductLine(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (selectedMLB1) {
+      fetchLossBandingDataByProductLine();
+    }
+  }, [selectedMLB1]);
 
   //filter not applied
   useEffect(() => {
@@ -167,10 +185,10 @@ const GraphsBox4 = () => {
   // If the PRODUCT LINE filter is applied
 
   useEffect(() => {
-    if (lossBandingData.length > 0 && selectedMLB1) {
+    if (lossBandingDataProductLine.length > 0 && selectedMLB1) {
       const fetchDataByProductLine = async () => {
         try {
-          const largestClaimsPromises = lossBandingData.map(
+          const largestClaimsPromises = lossBandingDataProductLine.map(
             async (eachBanding) => {
               const response = await axios.get(
                 `${baseUrl}/statistics/largest_claim_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
@@ -180,10 +198,10 @@ const GraphsBox4 = () => {
             }
           );
 
-          const averageTotalIncurredPromises = lossBandingData.map(
+          const averageTotalIncurredPromises = lossBandingDataProductLine.map(
             async (eachBanding) => {
               const response = await axios.get(
-                `${baseUrl}/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
+                `${baseUrl}/statistics/average_total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
               );
               //http://localhost:1337/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
               return response.data;
@@ -195,11 +213,13 @@ const GraphsBox4 = () => {
             averageTotalIncurredPromises
           );
 
-          const newData = lossBandingData.map((eachBanding, index) => ({
-            "Loss Banding": eachBanding,
-            "Average Total Incurred": averageTotalIncurred[index].toFixed(2),
-            "Largest Claim": largestClaims[index].toFixed(2),
-          }));
+          const newData = lossBandingDataProductLine.map(
+            (eachBanding, index) => ({
+              "Loss Banding": eachBanding,
+              "Average Total Incurred": averageTotalIncurred[index].toFixed(2),
+              "Largest Claim": largestClaims[index].toFixed(2),
+            })
+          );
 
           setDataWithMetricsProductLine(newData);
         } catch (err) {
@@ -208,9 +228,7 @@ const GraphsBox4 = () => {
       };
       fetchDataByProductLine();
     }
-  }, [lossBandingData, selectedMLB1]);
-
-  console.log(dataWithMetricsProductLine);
+  }, [lossBandingDataProductLine, selectedMLB1]);
 
   return (
     <>

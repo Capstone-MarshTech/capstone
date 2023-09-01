@@ -42,9 +42,17 @@ type Props = {};
 
 function TableBox4({}: Props) {
   const [lossBandingData, setLossBandingData] = useState([]);
-  const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
+  const [lossBandingDataProductLine, setLossBandingDataProductLine] = useState(
+    []
+  );
+
+  const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const [dataWithMetricsYear, setDataWithMetricsYear] = useState([]);
+  const [dataWithMetricsProductLine, setDataWithMetricsProductLine] = useState(
+    []
+  );
+
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
   const selectedYear = useSelector((state) => state.filter.selectedYear);
@@ -88,6 +96,24 @@ function TableBox4({}: Props) {
       fetchLossBandingDataByYear();
     }
   }, [selectedYear]);
+
+  useEffect(() => {
+    const fetchLossBandingDataByProductLine = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:1337/dropdowns/loss_banding_values_by_product_line?marsh_line_of_business_1=${selectedMLB1}
+        `
+        );
+        setLossBandingDataProductLine(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (selectedMLB1) {
+      fetchLossBandingDataByProductLine();
+    }
+  }, [selectedMLB1]);
 
   useEffect(() => {
     if (lossBandingData.length > 0) {
@@ -180,6 +206,53 @@ function TableBox4({}: Props) {
     }
   }, [lossBandingDataYear, selectedYear]);
 
+  useEffect(() => {
+    if (lossBandingDataProductLine.length > 0 && selectedMLB1) {
+      const fetchDataByProductLine = async () => {
+        try {
+          const largestClaimsPromises = lossBandingDataProductLine.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/statistics/largest_claim_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
+              );
+
+              return response.data;
+            }
+          );
+
+          const averageTotalIncurredPromises = lossBandingDataProductLine.map(
+            async (eachBanding) => {
+              const response = await axios.get(
+                `${baseUrl}/statistics/average_total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
+              );
+
+              return response.data;
+            }
+          );
+
+          const largestClaims = await Promise.all(largestClaimsPromises);
+          const averageTotalIncurred = await Promise.all(
+            averageTotalIncurredPromises
+          );
+
+          const newData = lossBandingDataProductLine.map(
+            (eachBanding, index) => ({
+              id: index,
+              "Loss Band": eachBanding,
+              "Average Cost of Claim": averageTotalIncurred[index].toFixed(2),
+              "Largest Claim": largestClaims[index].toFixed(2),
+            })
+          );
+
+          setDataWithMetricsProductLine(newData);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchDataByProductLine();
+    }
+  }, [lossBandingDataProductLine, selectedMLB1]);
+
   return (
     <>
       <DashboardBox bgcolor="#fff" gridArea="b4">
@@ -187,6 +260,29 @@ function TableBox4({}: Props) {
         {selectedYear ? (
           <DataGrid
             rows={dataWithMetricsYear}
+            columns={columns}
+            autoHeight={true}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
+            pageSizeOptions={[5]}
+            disableRowSelectionOnClick
+            sx={{
+              m: 2,
+              mb: 2,
+              border: 0,
+              "& .su-header": {
+                backgroundColor: "rgba(118, 211, 255, 0.25)",
+              },
+            }}
+          />
+        ) : selectedMLB1 ? (
+          <DataGrid
+            rows={dataWithMetricsProductLine}
             columns={columns}
             autoHeight={true}
             initialState={{
