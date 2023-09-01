@@ -14,7 +14,6 @@ import {
   ResponsiveContainer,
   Line,
 } from 'recharts';
-
 const GraphsBox3 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
   const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
@@ -24,7 +23,6 @@ const GraphsBox3 = () => {
   const selectedYear = useSelector((state) => state.filter.selectedYear);
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
-
   const showTitle = !selectedYear && !selectedMLB1 && !selectedMLB2
     ? 'Number of Claim Against Total Cost per Claim by Loss Band by All Years'
     : `Number of Claim Against Total Cost per Claim by Loss Band ${
@@ -32,7 +30,6 @@ const GraphsBox3 = () => {
     } ${selectedMLB1 ? `${selectedMLB1}` : ''} ${
       selectedMLB2 ? `and ${selectedMLB2})` : ''
     }`;
-
   useEffect(() => {
     const fetchLossBandingData = async () => {
       try {
@@ -44,10 +41,8 @@ const GraphsBox3 = () => {
         console.error(error);
       }
     };
-
     fetchLossBandingData();
   }, [baseUrl]);
-
   useEffect(() => {
     if (selectedYear) {
       const fetchLossBandingDataByYear = async () => {
@@ -60,11 +55,9 @@ const GraphsBox3 = () => {
           console.error(error);
         }
       };
-
       fetchLossBandingDataByYear();
     }
   }, [baseUrl, selectedYear]);
-
   useEffect(() => {
     if (lossBandingData.length > 0) {
       const fetchData = async () => {
@@ -78,7 +71,6 @@ const GraphsBox3 = () => {
               'Total Incurred': response.data, // Assuming this endpoint returns total incurred data
             };
           });
-
           const numberOfClaimsPromises = lossBandingData.map(async (eachBanding) => {
             const response = await axios.get(
               `${baseUrl}/statistics/number_of_claims_by?loss_banding=${eachBanding}`
@@ -88,26 +80,21 @@ const GraphsBox3 = () => {
               'Number of Claims': response.data, // Assuming this endpoint returns number of claims data
             };
           });
-
           const totalIncurredData = await Promise.all(totalIncurredPromises);
           const numberOfClaimsData = await Promise.all(numberOfClaimsPromises);
-
           // Merge the data based on 'Loss Banding'
           const mergedData = totalIncurredData.map((item) => ({
             ...item,
             ...numberOfClaimsData.find((entry) => entry['Loss Banding'] === item['Loss Banding']),
           }));
-
           setDataWithMetrics(mergedData);
         } catch (err) {
           console.error(err);
         }
       };
-
       fetchData();
     }
   }, [baseUrl, lossBandingData]);
-
   useEffect(() => {
     if (lossBandingDataYear.length > 0 && selectedYear) {
       const fetchDataByYear = async () => {
@@ -120,7 +107,6 @@ const GraphsBox3 = () => {
               return response.data;
             }
           );
-
           const totalIncurredPromises = lossBandingDataYear.map(
             async (eachBanding) => {
               const response = await axios.get(
@@ -129,26 +115,21 @@ const GraphsBox3 = () => {
               return response.data;
             }
           );
-
           const numberOfClaims = await Promise.all(numberOfClaimsPromises);
           const totalIncurred = await Promise.all(totalIncurredPromises);
-
           const newData = lossBandingDataYear.map((eachBanding, index) => ({
             'Loss Banding': eachBanding,
             'Total Incurred': totalIncurred[index].toFixed(2),
             'Number of Claims': numberOfClaims[index].toFixed(2),
           }));
-
           setDataWithMetricsYear(newData);
         } catch (err) {
           console.error(err);
         }
       };
-
       fetchDataByYear();
     }
   }, [baseUrl, lossBandingDataYear, selectedYear]);
-
   return (
     <>
       <DashboardBox bgcolor='#fff' gridArea='b3'>
@@ -162,9 +143,22 @@ const GraphsBox3 = () => {
               margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
             >
               <XAxis dataKey='Loss Banding' />
-              <YAxis yAxisId='left' orientation='left' label={{ value: 'Total Incurred', angle: -90, position: 'insideLeft', offset: -15 }} />
-              <YAxis yAxisId='right' orientation='right' label={{ value: 'Number of Claims', angle: 90, position: 'insideRight' }} />
-
+              {/* <YAxis yAxisId='left' orientation='left' label={{ value: 'Total Incurred', angle: -90, position: 'insideLeft', offset: -15 }} /> */}
+              {/* <YAxis yAxisId='right' orientation='right' label={{ value: 'Number of Claims', angle: 90, position: 'insideRight',}} /> */}
+             
+             
+              <YAxis
+  yAxisId='left'
+  orientation='left'
+  label={{ value: 'Total Incurred', angle: 90, position: 'insideleft' }}
+  domain={[0, 10000]} // Set the domain directly here, 
+      />      
+  <YAxis
+  yAxisId='right'
+  orientation='right'
+  label={{ value: 'Number of Claims', angle: 90, position: 'insideRight' }}
+  domain={[0, 1800]} // Set the domain directly here, 
+/>
               <Tooltip />
               <Legend />
               <Bar dataKey='Total Incurred' stackId='a' fill='#002c77' yAxisId='left' />
@@ -186,7 +180,6 @@ const GraphsBox3 = () => {
               <XAxis dataKey='Loss Banding' />
               <YAxis yAxisId='left' orientation='left' label={{ value: 'Total Incurred', angle: -90, position: 'insideLeft', offset: -15 }} />
               <YAxis yAxisId='right' orientation='right' label={{ value: 'Number of Claims', angle: 90, position: 'insideRight' }} />
-
               <Tooltip />
               <Legend />
               <Bar dataKey='Total Incurred' stackId='a' fill='#002c77' yAxisId='left' />
@@ -204,5 +197,4 @@ const GraphsBox3 = () => {
     </>
   );
 };
-
 export default GraphsBox3;
