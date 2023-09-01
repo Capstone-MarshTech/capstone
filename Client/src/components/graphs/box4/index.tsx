@@ -14,6 +14,13 @@ import {
   ResponsiveContainer,
   Line,
 } from "recharts";
+import CustomTooltip from "./CustomTooltip";
+
+const styles = {
+  backgroundColor: "white",
+  padding: "8px",
+  border: "1px solid #ccc",
+};
 
 const GraphsBox4 = () => {
   const [lossBandingData, setLossBandingData] = useState([]);
@@ -258,7 +265,7 @@ const GraphsBox4 = () => {
                   style={{ textAnchor: "middle" }}
                 />
               </YAxis>
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
               <Legend />
               <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
 
@@ -291,7 +298,7 @@ const GraphsBox4 = () => {
                   style={{ textAnchor: "middle" }}
                 />
               </YAxis>
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
               <Legend />
               <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
 
@@ -325,7 +332,7 @@ const GraphsBox4 = () => {
                 />
               </YAxis>
 
-              <Tooltip />
+              <Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
               <Legend />
               <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
               <Line
