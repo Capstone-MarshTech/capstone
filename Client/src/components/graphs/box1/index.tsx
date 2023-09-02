@@ -30,7 +30,7 @@ function GraphsBox1() {
 				selectedMLB1 ? `${selectedMLB1}` : ''
 		  }`;
 
-	console.log('From XG-BarChart', selectedYear, selectedMLB1);
+	// console.log('From XG-BarChart', selectedYear, selectedMLB1);
 
 	// No Filter Applied:
 	const fetchData = async (years) => {
@@ -85,7 +85,7 @@ function GraphsBox1() {
 			})
 		);
 
-		console.log('claimsDataMLB', claimsDataMLB);
+		// console.log('claimsDataMLB', claimsDataMLB);
 
 		setPolicyClaimsByYearMLB(claimsDataMLB);
 	};
@@ -100,7 +100,7 @@ function GraphsBox1() {
 			.catch((error) => {
 				console.error('Error fetching data:', error);
 			});
-		console.log(policyClaimsByYearMLB);
+		// console.log(policyClaimsByYearMLB);
 	}, []);
 
 	useEffect(() => {
@@ -114,7 +114,7 @@ function GraphsBox1() {
 				.catch((error) => {
 					console.error('Error fetching data:', error);
 				});
-			console.log(policyClaimsByYearMLB);
+			// console.log(policyClaimsByYearMLB);
 		};
 
 		if (selectedMLB1) {
