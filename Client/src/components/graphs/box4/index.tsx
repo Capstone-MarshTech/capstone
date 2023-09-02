@@ -239,114 +239,159 @@ const GraphsBox4 = () => {
   }, [lossBandingDataProductLine, selectedMLB1]);
 
   return (
-    <>
-      <DashboardBox bgcolor="#fff" gridArea="b4">
-        <h3>{showTitle}</h3>
-        <ResponsiveContainer width="90%" height="90%">
-          {selectedYear ? (
-            <ComposedChart
-              width={200}
-              height={400}
-              data={dataWithMetricsYear}
-              margin={{
-                top: 20,
-                right: 20,
-                left: 20,
-                bottom: 20,
-              }}
-            >
-              <XAxis dataKey="Loss Banding" />
-              <YAxis>
-                <Label
-                  value={"Largest Claim"}
-                  angle={-90}
-                  offset={-15}
-                  position="insideLeft"
-                  style={{ textAnchor: "middle" }}
-                />
-              </YAxis>
-              <Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
-              <Legend />
-              <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
+		<>
+			<DashboardBox bgcolor='#fff' gridArea='b4'>
+				<h3>{showTitle}</h3>
+				<ResponsiveContainer width='90%' height='90%'>
+					{selectedYear ? (
+						<ComposedChart
+							width={200}
+							height={400}
+							data={dataWithMetricsYear}
+							margin={{
+								top: 20,
+								right: 20,
+								left: 20,
+								bottom: 20,
+							}}
+						>
+							<XAxis dataKey='Loss Banding' />
+							<YAxis yAxisId='left' orientation='left'>
+								<Label
+									value={'Largest Claim'}
+									angle={-90}
+									offset={-15}
+									position='insideLeft'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
+							<YAxis yAxisId='right' orientation='right' domain={[0, 550000]}>
+								<Label
+									value={'Average Total Incurred'}
+									angle={-90}
+									offset={-15}
+									position='insideRight'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
 
-              <Line
-                type="monotone"
-                dataKey="Average Total Incurred"
-                strokeWidth="2.5"
-                stroke="#65cdff"
-              />
-            </ComposedChart>
-          ) : selectedMLB1 ? (
-            <ComposedChart
-              width={200}
-              height={400}
-              data={dataWithMetricsProductLine}
-              margin={{
-                top: 20,
-                right: 20,
-                left: 20,
-                bottom: 20,
-              }}
-            >
-              <XAxis dataKey="Loss Banding" />
-              <YAxis>
-                <Label
-                  value={"Largest Claim"}
-                  angle={-90}
-                  offset={-15}
-                  position="insideLeft"
-                  style={{ textAnchor: "middle" }}
-                />
-              </YAxis>
-              <Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
-              <Legend />
-              <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
+							<Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
+							<Legend />
+							<Bar
+								dataKey='Largest Claim'
+								stackId='a'
+								fill='#002c77'
+								yAxisId={'left'}
+							/>
+							<Line
+								type='monotone'
+								dataKey='Average Total Incurred'
+								strokeWidth='2.5'
+								stroke='#65cdff'
+								yAxisId={'right'}
+							/>
+						</ComposedChart>
+					) : selectedMLB1 ? (
+						<ComposedChart
+							width={200}
+							height={400}
+							data={dataWithMetricsProductLine}
+							margin={{
+								top: 20,
+								right: 20,
+								left: 20,
+								bottom: 20,
+							}}
+						>
+							<XAxis dataKey='Loss Banding' />
+							<YAxis yAxisId='left' orientation='left'>
+								<Label
+									value={'Largest Claim'}
+									angle={-90}
+									offset={-15}
+									position='insideLeft'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
+							<YAxis yAxisId='right' orientation='right' domain={[0, 550000]}>
+								<Label
+									value={'Average Total Incurred'}
+									angle={-90}
+									offset={-15}
+									position='insideRight'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
 
-              <Line
-                type="monotone"
-                dataKey="Average Total Incurred"
-                strokeWidth="2.5"
-                stroke="#65cdff"
-              />
-            </ComposedChart>
-          ) : (
-            <ComposedChart
-              width={200}
-              height={400}
-              data={dataWithMetrics}
-              margin={{
-                top: 20,
-                right: 20,
-                left: 20,
-                bottom: 20,
-              }}
-            >
-              <XAxis dataKey="Loss Banding" />
-              <YAxis>
-                <Label
-                  value={"Largest Claim"}
-                  angle={-90}
-                  offset={-15}
-                  position="insideLeft"
-                  style={{ textAnchor: "middle" }}
-                />
-              </YAxis>
+							<Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
+							<Legend />
+							<Bar
+								dataKey='Largest Claim'
+								stackId='a'
+								fill='#002c77'
+								yAxisId={'left'}
+							/>
+							<Line
+								type='monotone'
+								dataKey='Average Total Incurred'
+								strokeWidth='2.5'
+								stroke='#65cdff'
+								yAxisId={'right'}
+							/>
+						</ComposedChart>
+					) : (
+						<ComposedChart
+							width={200}
+							height={400}
+							data={dataWithMetrics}
+							margin={{
+								top: 20,
+								right: 20,
+								left: 20,
+								bottom: 20,
+							}}
+						>
+							<XAxis dataKey='Loss Banding' />
+							<YAxis yAxisId='left' orientation='left'>
+								<Label
+									value={'Largest Claim'}
+									angle={-90}
+									offset={-15}
+									position='insideLeft'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
+							<YAxis yAxisId='right' orientation='right' domain={[0, 550000]}>
+								<Label
+									value={'Average Total Incurred'}
+									angle={-90}
+									offset={-15}
+									position='insideRight'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
 
-              <Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
-              <Legend />
-              <Bar dataKey="Largest Claim" stackId="a" fill="#002c77" />
-              <Line
-                type="monotone"
-                dataKey="Average Total Incurred"
-                strokeWidth="2.5"
-                stroke="#65cdff"
-              />
-            </ComposedChart>
-          )}
-        </ResponsiveContainer>
-      </DashboardBox>
-    </>
-  );
+							<Tooltip content={<CustomTooltip />} wrapperStyle={styles} />
+							<Legend />
+							<Bar
+								dataKey='Largest Claim'
+								stackId='a'
+								fill='#002c77'
+								yAxisId={'left'}
+							/>
+							<Line
+								type='monotone'
+								dataKey='Average Total Incurred'
+								strokeWidth='2.5'
+								stroke='#65cdff'
+								yAxisId={'right'}
+							/>
+						</ComposedChart>
+					)}
+				</ResponsiveContainer>
+			</DashboardBox>
+		</>
+	);
 };
 
 export default GraphsBox4;
