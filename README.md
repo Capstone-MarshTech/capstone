@@ -18,6 +18,9 @@ Frontend:
 
 - React.js / Vite
 - Recharts
+- Material-UI: Data Grid
+- State Management: Redux
+- Axios
 
 Backend:
 
@@ -87,9 +90,11 @@ npm run dev
 
 After running the above command, use the local URL provided in your browser to see the React app.
 
-## Screenshots/Gifs
+## Screenshots
 
-![Gif]()
+![Graph Screenshot](/Client/src/assets/graphScreenShot.png)
+
+![Table Screenshot](/Client/src/assets/tableScreenShot.png)
 
 ## Project Link
 
