@@ -53,14 +53,13 @@ function TableBox2() {
   const [policyYear, setPolicyYear] = useState([]);
   const [policyYearFilter, setPolicyYearFilter] = useState([]);
 
-  const selectedYear = useSelector((state) => state.filter.selectedYear);
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
-  const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+ 
 //   console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   const showTitle = !selectedMLB1
     ? "Total Incurred by Policy Year"
-    : `Total Incurred by Policy Year ${selectedMLB1 ? `${selectedMLB1}` : ""}`;
+    : `Total Incurred by Policy Year by Business Line: ${selectedMLB1 ? `${selectedMLB1}` : ""}`;
 
   // No filter
   const fetchData = async (years) => {
