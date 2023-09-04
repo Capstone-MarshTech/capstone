@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -17,30 +16,29 @@ import {
 } from 'recharts';
 const GraphsBox3 = () => {
 	const [lossBandingData, setLossBandingData] = useState([]);
-  const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
-  const [lossBandingDataProductLine, setLossBandingDataProductLine] = useState(
-    []
-  );
-  const [dataWithMetrics, setDataWithMetrics] = useState([]);
-  const [dataWithMetricsYear, setDataWithMetricsYear] = useState([]);
-  const [dataWithMetricsProductLine, setDataWithMetricsProductLine] = useState(
-    []
-  );
+	const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
+	const [lossBandingDataProductLine, setLossBandingDataProductLine] = useState(
+		[]
+	);
+	const [dataWithMetrics, setDataWithMetrics] = useState([]);
+	const [dataWithMetricsYear, setDataWithMetricsYear] = useState([]);
+	const [dataWithMetricsProductLine, setDataWithMetricsProductLine] = useState(
+		[]
+	);
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 
 	const selectedYear = useSelector((state) => state.filter.selectedYear);
 	const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
-	const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
+
 	const showTitle = selectedYear
-    ? `Number of Claim Against Total Cost per Claim by Loss Band by ${selectedYear}`
-    : selectedMLB1
-    ? `Number of Claim Against Total Cost per Claim by Loss Band by ${selectedMLB1}`
-    : "Number of Claim Against Total Cost per Claim by Loss Band by All Years";
-	
+		? `Number of Claim Against Total Cost per Claim by Loss Band by ${selectedYear}`
+		: selectedMLB1
+		? `Number of Claim Against Total Cost per Claim by Loss Band by ${selectedMLB1}`
+		: 'Number of Claim Against Total Cost per Claim by Loss Band by All Years';
+
 	// useEffect for the case when there is no filter applied
-  //fetch the loss bandings
-	
-	
+	//fetch the loss bandings
+
 	useEffect(() => {
 		const fetchLossBandingData = async () => {
 			try {
@@ -53,7 +51,7 @@ const GraphsBox3 = () => {
 			}
 		};
 		fetchLossBandingData();
-	}, [baseUrl]);
+	}, []);
 	//fetch the loss bandings based on the year
 
 	useEffect(() => {
@@ -70,31 +68,30 @@ const GraphsBox3 = () => {
 			};
 			fetchLossBandingDataByYear();
 		}
-	}, [baseUrl, selectedYear]);
+	}, [selectedYear]);
 
-//fetch the loss bandings based on the product line
-  /* Change the URL based on new end point */
+	//fetch the loss bandings based on the product line
+	/* Change the URL based on new end point */
 
-  useEffect(() => {
-    const fetchLossBandingDataByProductLine = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:1337/dropdowns/loss_banding_values_by_product_line?marsh_line_of_business_1=${selectedMLB1}
+	useEffect(() => {
+		const fetchLossBandingDataByProductLine = async () => {
+			try {
+				const response = await axios.get(
+					`http://localhost:1337/dropdowns/loss_banding_values_by_product_line?marsh_line_of_business_1=${selectedMLB1}
         `
-        );
-        setLossBandingDataProductLine(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+				);
+				setLossBandingDataProductLine(response.data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
 
-    if (selectedMLB1) {
-      fetchLossBandingDataByProductLine();
-    }
-  }, [selectedMLB1]);
+		if (selectedMLB1) {
+			fetchLossBandingDataByProductLine();
+		}
+	}, [selectedMLB1]);
 
-
-//Filter not applied 
+	//Filter not applied
 
 	useEffect(() => {
 		if (lossBandingData.length > 0) {
@@ -140,7 +137,7 @@ const GraphsBox3 = () => {
 		}
 	}, [baseUrl, lossBandingData]);
 
-	//if the year filter applied 
+	//if the year filter applied
 	useEffect(() => {
 		if (lossBandingDataYear.length > 0 && selectedYear) {
 			const fetchDataByYear = async () => {
@@ -175,60 +172,55 @@ const GraphsBox3 = () => {
 			};
 			fetchDataByYear();
 		}
-	}, [baseUrl, lossBandingDataYear, selectedYear]);
+	}, [lossBandingDataYear, selectedYear]);
 
-//if the product line  filter is applied 
+	//if the product line  filter is applied
 
+	useEffect(() => {
+		if (lossBandingDataProductLine.length > 0 && selectedMLB1) {
+			const fetchDataByProductLine = async () => {
+				try {
+					const numberOfClaimsPromises = lossBandingDataProductLine.map(
+						async (eachBanding) => {
+							const response = await axios.get(
+								`${baseUrl}/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
+							);
+							//http://localhost:1337/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
 
-useEffect(() => {
-    if (lossBandingDataProductLine.length > 0 && selectedMLB1) {
-      const fetchDataByProductLine = async () => {
-        try {
-          const numberOfClaimsPromises = lossBandingDataProductLine.map(
-            async (eachBanding) => {
-              const response = await axios.get(
-                `${baseUrl}/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
-              );
-              //http://localhost:1337/statistics/number_of_claims_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
+							return response.data;
+						}
+					);
 
-              return response.data;
-            }
-          );
+					const totalIncurredPromises = lossBandingDataProductLine.map(
+						async (eachBanding) => {
+							const response = await axios.get(
+								`${baseUrl}/statistics/total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
+							);
+							//http://localhost:1337/statistics/total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
 
-          const totalIncurredPromises = lossBandingDataProductLine.map(
-            async (eachBanding) => {
-              const response = await axios.get(
-                `${baseUrl}/statistics/total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=${selectedMLB1}&loss_banding=${eachBanding}`
-              );
-              //http://localhost:1337/statistics/total_incurred_by_loss_banding_by_product_line?marsh_line_of_business_1=Casualty&loss_banding=50,001 to 100,000
+							return response.data;
+						}
+					);
 
+					const totalnumberofclaim = await Promise.all(numberOfClaimsPromises);
+					const TotalIncurred = await Promise.all(totalIncurredPromises);
 
-              return response.data;
-            }
-          );
+					const newData = lossBandingDataProductLine.map(
+						(eachBanding, index) => ({
+							'Loss Banding': eachBanding,
+							'Total Incurred': TotalIncurred[index].toFixed(2),
+							'Number of Claims': totalnumberofclaim[index].toFixed(2),
+						})
+					);
 
-          const totalnumberofclaim = await Promise.all(numberOfClaimsPromises);
-          const TotalIncurred = await Promise.all(
-            totalIncurredPromises
-          );
-
-          const newData = lossBandingDataProductLine.map(
-            (eachBanding, index) => ({
-              "Loss Banding": eachBanding,
-              "Total Incurred": TotalIncurred[index].toFixed(2),
-              "Number of Claims": totalnumberofclaim [index].toFixed(2),
-            })
-          );
-
-          setDataWithMetricsProductLine(newData);
-        } catch (err) {
-          console.error(err);
-        }
-      };
-      fetchDataByProductLine();
-    }
-  }, [lossBandingDataProductLine, selectedMLB1]);
-
+					setDataWithMetricsProductLine(newData);
+				} catch (err) {
+					console.error(err);
+				}
+			};
+			fetchDataByProductLine();
+		}
+	}, [lossBandingDataProductLine, selectedMLB1]);
 
 	return (
 		<>
@@ -240,32 +232,80 @@ useEffect(() => {
 							width={200}
 							height={400}
 							data={dataWithMetricsYear}
-							margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+							margin={{
+								top: 20,
+								right: 20,
+								left: 20,
+								bottom: 20,
+							}}
 						>
 							<XAxis dataKey='Loss Banding' />
-							{/* <YAxis yAxisId='left' orientation='left' label={{ value: 'Total Incurred', angle: -90, position: 'insideLeft', offset: -15 }} /> */}
-							{/* <YAxis yAxisId='right' orientation='right' label={{ value: 'Number of Claims', angle: 90, position: 'insideRight',}} /> */}
+							<YAxis yAxisId='left' orientation='left' domain={[0, 10000]}>
+								<Label
+									value={'Total Incurred'}
+									angle={-90}
+									offset={-15}
+									position='insideLeft'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
+							<YAxis yAxisId='right' orientation='right' domain={[0, 1800]}>
+								<Label
+									value={'Number of Claims'}
+									angle={-90}
+									offset={-15}
+									position='insideRight'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
 
-							<YAxis
-								yAxisId='left'
-								orientation='left'
-								label={{
-									value: 'Total Incurred',
-									angle: 90,
-									position: 'insideleft',
-								}}
-								domain={[0, 10000]} // Set the domain directly here,
+							<Tooltip />
+							<Legend />
+							<Bar
+								dataKey='Total Incurred'
+								stackId='a'
+								fill='#002c77'
+								yAxisId={'left'}
 							/>
-							<YAxis
-								yAxisId='right'
-								orientation='right'
-								label={{
-									value: 'Number of Claims',
-									angle: 90,
-									position: 'insideRight',
-								}}
-								domain={[0, 1800]} // Set the domain directly here,
+							<Line
+								type='monotone'
+								dataKey='Number of Claims'
+								strokeWidth={2.5}
+								stroke='#65cdff'
+								yAxisId={'right'}
 							/>
+						</ComposedChart>
+					) : selectedMLB1 ? (
+						<ComposedChart
+							width={200}
+							height={400}
+							data={dataWithMetricsProductLine}
+							margin={{
+								top: 20,
+								right: 20,
+								left: 20,
+								bottom: 20,
+							}}
+						>
+							<XAxis dataKey='Loss Banding' />
+							<YAxis yAxisId='left' orientation='left' domain={[0, 10000]}>
+								<Label
+									value={'Total Incurred'}
+									angle={-90}
+									offset={-15}
+									position='insideLeft'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
+							<YAxis yAxisId='right' orientation='right' domain={[0, 1800]}>
+								<Label
+									value={'Number of Claims'}
+									angle={-90}
+									offset={-15}
+									position='insideRight'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
 							<Tooltip />
 							<Legend />
 							<Bar
@@ -282,100 +322,37 @@ useEffect(() => {
 								yAxisId='right'
 							/>
 						</ComposedChart>
-						) : selectedMLB1 ? (
-							<ComposedChart
-								width={200}
-								height={400}
-								data={dataWithMetricsProductLine}
-								margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-							>
-								{/* <XAxis dataKey='Loss Banding' />
-								<YAxis
-									yAxisId='left'
-									orientation='left'
-									label={{
-										value: 'Total Incurred',
-										angle: -90,
-										position: 'insideLeft',
-										offset: -15,
-									}}
-								/> */}
-								{/* <YAxis
-									yAxisId='right'
-									orientation='right'
-									label={{
-										value: 'Number of Claims',
-										angle: 90,
-										position: 'insideRight',
-									}}
-								/> */}
-
-
-                               <YAxis
-								yAxisId='left'
-								orientation='left'
-								label={{
-									value: 'Total Incurred',
-									angle: 90,
-									position: 'insideleft',
-								}}
-								domain={[0, 10000]} // Set the domain directly here,
-							/>
-
-                                  <YAxis
-								yAxisId='right'
-								orientation='right'
-								label={{
-									value: 'Number of Claims',
-									angle: 90,
-									position: 'insideRight',
-								}}
-								domain={[0, 1800]} // Set the domain directly here,
-							/>
-								<Tooltip />
-								<Legend />
-								<Bar
-									dataKey='Total Incurred'
-									stackId='a'
-									fill='#002c77'
-									yAxisId='left'
-								/>
-								<Line
-									type='monotone'
-									dataKey='Number of Claims'
-									strokeWidth={2.5}
-									stroke='#65cdff'
-									yAxisId='right'
-								/>
-							</ComposedChart>
-            
 					) : (
 						<ComposedChart
 							width={200}
 							height={400}
 							data={dataWithMetrics}
-							margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+							margin={{
+								top: 20,
+								right: 20,
+								left: 20,
+								bottom: 20,
+							}}
 						>
 							<XAxis dataKey='Loss Banding' />
-							<YAxis
-								yAxisId='left'
-								orientation='left'
-								label={{
-									value: 'Total Incurred',
-									angle: -90,
-									position: 'insideLeft',
-									offset: -15,
-								}}
-							/>
-							<YAxis
-								yAxisId='right'
-								orientation='right'
-								label={{
-									value: 'Number of Claims',
-									angle: 90,
-									position: 'insideRight',
-								}}
-							/>
+							<YAxis yAxisId='left' orientation='left' domain={[0, 10000]}>
+								<Label
+									value={'Total Incurred'}
+									angle={-90}
+									offset={-15}
+									position='insideLeft'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
+							<YAxis yAxisId='right' orientation='right' domain={[0, 1800]}>
+								<Label
+									value={'Number of Claims'}
+									angle={-90}
+									offset={-15}
+									position='insideRight'
+									style={{ textAnchor: 'middle' }}
+								/>
+							</YAxis>
 							<Tooltip />
 							<Legend />
 							<Bar

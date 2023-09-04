@@ -19,7 +19,6 @@ function GraphsBox1() {
 	const [policyClaimsByYear, setPolicyClaimsByYear] = useState([]);
 	const [policyClaimsByYearMLB, setPolicyClaimsByYearMLB] = useState([]);
 
-	const selectedYear = useSelector((state) => state.filter.selectedYear);
 	const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
 
 	const baseUrl = import.meta.env.VITE_BASE_URL;
