@@ -78,9 +78,9 @@ function TableBox2() {
         return {
           id: year,
           year: year.toString(),
-          totalOutstanding: allData[0].data,
-          totalPaid: allData[1].data,
-          largestClaim: allData[2].data,
+          totalOutstanding: allData[0].data.toFixed(2),
+          totalPaid: allData[1].data.toFixed(2),
+          largestClaim: allData[2].data.toFixed(2),
         };
       })
     );
@@ -119,9 +119,9 @@ function TableBox2() {
         return {
           id: year,
           year: year.toString(),
-          totalOutstanding: allBusinessData[0].data,
-          totalPaid: allBusinessData[1].data,
-          largestClaim: allBusinessData[2].data,
+          totalOutstanding: allBusinessData[0].data.toFixed(2),
+          totalPaid: allBusinessData[1].data.toFixed(2),
+          largestClaim: allBusinessData[2].data.toFixed(2),
         };
       })
     );
