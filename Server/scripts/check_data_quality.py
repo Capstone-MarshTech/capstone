@@ -24,6 +24,7 @@ for col in clean_data.select_dtypes(include=['object']).columns:
 # check for duplicates
 duplicate_rows = clean_data[clean_data.duplicated()]
 print(f'Duplicate rows:\n{duplicate_rows}')
+# pd.drop_duplicates()
 
 # data summary
 print("Data sumary: ")

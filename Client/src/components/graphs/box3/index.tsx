@@ -123,13 +123,20 @@ const GraphsBox3 = () => {
           const totalIncurredData = await Promise.all(totalIncurredPromises);
           const numberOfClaimsData = await Promise.all(numberOfClaimsPromises);
           // Merge the data based on 'Loss Banding'
+
           const mergedData = totalIncurredData.map((item) => ({
             ...item,
             ...numberOfClaimsData.find(
               (entry) => entry["Loss Banding"] === item["Loss Banding"]
             ),
           }));
-          setDataWithMetrics(mergedData);
+
+          const newMergedData = mergedData.map((item) => {
+            const newLossBanding = formatLossbanding(item["Loss Banding"]);
+            return { ...item, "Loss Banding": newLossBanding };
+          });
+
+          setDataWithMetrics(newMergedData);
         } catch (err) {
           console.error(err);
         }
@@ -162,7 +169,7 @@ const GraphsBox3 = () => {
           const numberOfClaims = await Promise.all(numberOfClaimsPromises);
           const totalIncurred = await Promise.all(totalIncurredPromises);
           const newData = lossBandingDataYear.map((eachBanding, index) => ({
-            "Loss Banding": eachBanding,
+            "Loss Banding": formatLossbanding(eachBanding),
             "Total Incurred": totalIncurred[index].toFixed(2),
             "Number of Claims": numberOfClaims[index].toFixed(2),
           }));
@@ -208,7 +215,7 @@ const GraphsBox3 = () => {
 
           const newData = lossBandingDataProductLine.map(
             (eachBanding, index) => ({
-              "Loss Banding": eachBanding,
+              "Loss Banding": formatLossbanding(eachBanding),
               "Total Incurred": TotalIncurred[index].toFixed(2),
               "Number of Claims": totalnumberofclaim[index].toFixed(2),
             })
