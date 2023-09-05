@@ -54,12 +54,14 @@ function TableBox2() {
   const [policyYearFilter, setPolicyYearFilter] = useState([]);
 
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
- 
-//   console.log(selectedYear, selectedMLB1, selectedMLB2);
+
+  //   console.log(selectedYear, selectedMLB1, selectedMLB2);
 
   const showTitle = !selectedMLB1
     ? "Total Incurred by Policy Year"
-    : `Total Incurred by Policy Year by Business Line: ${selectedMLB1 ? `${selectedMLB1}` : ""}`;
+    : `Total Incurred by Policy Year by Business Line: ${
+        selectedMLB1 ? `${selectedMLB1}` : ""
+      }`;
 
   // No filter
   const fetchData = async (years) => {
@@ -78,9 +80,18 @@ function TableBox2() {
         return {
           id: year,
           year: year.toString(),
-          totalOutstanding: allData[0].data.toFixed(2),
-          totalPaid: allData[1].data.toFixed(2),
-          largestClaim: allData[2].data.toFixed(2),
+          totalOutstanding: allData[0].data.toLocaleString("en-GB", {
+            style: "currency",
+            currency: "GBP",
+          }),
+          totalPaid: allData[1].data.toLocaleString("en-GB", {
+            style: "currency",
+            currency: "GBP",
+          }),
+          largestClaim: allData[2].data.toLocaleString("en-GB", {
+            style: "currency",
+            currency: "GBP",
+          }),
         };
       })
     );
@@ -98,7 +109,6 @@ function TableBox2() {
         console.error(error);
       });
   }, []);
-
 
   // Fetch data with filter
   const fetchBusiness = async (years, businesses) => {
