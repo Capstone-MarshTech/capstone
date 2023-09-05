@@ -19,18 +19,9 @@ const gridTemplateLargeScreens = `
 'a a . . nav nav'
 'b c . . . .'
 'b1 b1 b1 b2 b2 b2'
-'b1 b1 b1 b2 b2 b2'
-'b1 b1 b1 b2 b2 b2'
-'b1 b1 b1 b2 b2 b2'
-'b1 b1 b1 b2 b2 b2'
-'b1 b1 b1 b2 b2 b2'
-'b3 b3 b3 b4 b4 b4'
-'b3 b3 b3 b4 b4 b4'
-'b3 b3 b3 b4 b4 b4'
-'b3 b3 b3 b4 b4 b4'
-'b3 b3 b3 b4 b4 b4'
 'b3 b3 b3 b4 b4 b4'
 `;
+
 
 const gridTemplateSmallScreens = `
 't t'
@@ -38,21 +29,8 @@ const gridTemplateSmallScreens = `
 'a a'
 'b c'
 'b1 b1'
-'b1 b1'
-'b1 b1'
-'b1 b1'
-'b2 b2'
-'b2 b2'
-'b2 b2'
 'b2 b2'
 'b3 b3'
-'b3 b3'
-'b3 b3'
-'b3 b3'
-'b3 b3'
-'b4 b4'
-'b4 b4'
-'b4 b4'
 'b4 b4'
 `;
 
@@ -76,66 +54,66 @@ const TablesDashboard = ({ captureScreenshot }) => {
 
   const isLargeScreen = useMediaQuery("(min-width: 1008px)");
   return (
-    <Box
-      width="100%"
-      height="100%"
-      display="grid"
-      gap="2rem"
-      sx={
-        isLargeScreen
-          ? {
-              gridTemplateColumns: "repeat (6, minmax(150px, 1fr))",
-              gridTemplateRows: "repeat (15, minmax(60px, 1fr))",
-              gridTemplateAreas: gridTemplateLargeScreens,
-            }
-          : {
-              gridAutoColumns: "1fr",
-              gridAutoRows: "auto",
-              gridTemplateAreas: gridTemplateSmallScreens,
-            }
-      }
-    >
-      {" "}
-      <Box gridArea="t">
-        <h1>Year & Size</h1>
-      </Box>
-      {/* Client Dropdown */}
-      <Box gridArea="a">
-        <h5>Client Name</h5>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Client Name</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Client Name"
-            // onChange={handleChange}
-          >
-            {menuItem.map((client, idx) => (
-              <MenuItem key={idx} value={idx}>
-                {client}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-      <Box gridArea="nav">
-        <NavBar captureScreenshot={captureScreenshot} />
-      </Box>
-      {/* Number of Claims Box */}
-      <DashboardBox bgcolor="#fff" gridArea="b">
-        <ClaimsBox />
-      </DashboardBox>
-      {/* Total Incurred DashboardBox */}
-      <DashboardBox bgcolor="#fff" gridArea="c">
-        <TotalIncurredBox />
-      </DashboardBox>
-      {/* Table Charts */}
-      <TableBox1 />
-      <TableBox2 />
-      <TableBox3 />
-      <TableBox4 />
-    </Box>
-  );
+		<Box
+			width='95%'
+			height='100%'
+			display='grid'
+			gap='2rem'
+			sx={
+				isLargeScreen
+					? {
+							gridTemplateColumns: 'auto',
+							gridTemplateRows: '2% 10% 13% auto',
+							gridTemplateAreas: gridTemplateLargeScreens,
+					  }
+					: {
+							gridAutoColumns: '1fr',
+							gridAutoRows: 'auto',
+							gridTemplateAreas: gridTemplateSmallScreens,
+					  }
+			}
+		>
+			{' '}
+			<Box gridArea='t'>
+				<h1>Year & Size</h1>
+			</Box>
+			{/* Client Dropdown */}
+			<Box gridArea='a'>
+				<h5>Client Name</h5>
+				<FormControl fullWidth>
+					<InputLabel id='demo-simple-select-label'>Client Name</InputLabel>
+					<Select
+						labelId='demo-simple-select-label'
+						id='demo-simple-select'
+						label='Client Name'
+						// onChange={handleChange}
+					>
+						{menuItem.map((client, idx) => (
+							<MenuItem key={idx} value={idx}>
+								{client}
+							</MenuItem>
+						))}
+					</Select>
+				</FormControl>
+			</Box>
+			<Box gridArea='nav'>
+				<NavBar captureScreenshot={captureScreenshot} />
+			</Box>
+			{/* Number of Claims Box */}
+			<DashboardBox bgcolor='#fff' gridArea='b'>
+				<ClaimsBox />
+			</DashboardBox>
+			{/* Total Incurred DashboardBox */}
+			<DashboardBox bgcolor='#fff' gridArea='c'>
+				<TotalIncurredBox />
+			</DashboardBox>
+			{/* Table Charts */}
+			<TableBox1 />
+			<TableBox2 />
+			<TableBox3 />
+			<TableBox4 />
+		</Box>
+	);
 };
 
 export default TablesDashboard;
