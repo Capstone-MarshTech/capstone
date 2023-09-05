@@ -61,7 +61,7 @@ export const TotalIncurredBox = () => {
   return (
     <>
       <h6>
-        TOTAL INCURRED{" "}
+        TOTAL INCURRED{"  "}
         {selectedYear
           ? ` in ${selectedYear}`
           : selectedMLB1
