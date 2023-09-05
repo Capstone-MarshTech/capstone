@@ -1,4 +1,3 @@
-
 import DashboardBox from "@/components/DashboardBox";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
@@ -43,11 +42,15 @@ type Props = {};
 function TableBox3({}: Props) {
   const [lossBandingData, setLossBandingData] = useState([]);
   const [lossBandingDataYear, setLossBandingDataYear] = useState([]);
-  const [lossBandingDataProductLine, setLossBandingDataProductLine] = useState([]);
+  const [lossBandingDataProductLine, setLossBandingDataProductLine] = useState(
+    []
+  );
 
   const [dataWithMetrics, setDataWithMetrics] = useState([]);
   const [dataWithMetricsYear, setDataWithMetricsYear] = useState([]);
-  const [dataWithMetricsProductLine, setDataWithMetricsProductLine] = useState([]);
+  const [dataWithMetricsProductLine, setDataWithMetricsProductLine] = useState(
+    []
+  );
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -99,7 +102,10 @@ function TableBox3({}: Props) {
         );
         setLossBandingDataProductLine(response.data);
       } catch (error) {
-        console.error("Error fetching loss banding data by product line:", error);
+        console.error(
+          "Error fetching loss banding data by product line:",
+          error
+        );
       }
     };
 
@@ -112,29 +118,33 @@ function TableBox3({}: Props) {
     if (lossBandingData.length > 0) {
       const fetchData = async () => {
         try {
-          const totalIncurredPromises = lossBandingData.map(async (eachBanding) => {
-            try {
-              const response = await axios.get(
-                `${baseUrl}/statistics/total_incurred_by?loss_banding=${eachBanding}`
-              );
-              return response.data;
-            } catch (error) {
-              console.error("Error fetching total incurred data:", error);
-              return null; // Return null for failed requests
+          const totalIncurredPromises = lossBandingData.map(
+            async (eachBanding) => {
+              try {
+                const response = await axios.get(
+                  `${baseUrl}/statistics/total_incurred_by?loss_banding=${eachBanding}`
+                );
+                return response.data;
+              } catch (error) {
+                console.error("Error fetching total incurred data:", error);
+                return null; // Return null for failed requests
+              }
             }
-          });
+          );
 
-          const numberOfClaimsPromises = lossBandingData.map(async (eachBanding) => {
-            try {
-              const response = await axios.get(
-                `${baseUrl}/statistics/number_of_claims_by?loss_banding=${eachBanding}`
-              );
-              return response.data;
-            } catch (error) {
-              console.error("Error fetching number of claims data:", error);
-              return null; // Return null for failed requests
+          const numberOfClaimsPromises = lossBandingData.map(
+            async (eachBanding) => {
+              try {
+                const response = await axios.get(
+                  `${baseUrl}/statistics/number_of_claims_by?loss_banding=${eachBanding}`
+                );
+                return response.data;
+              } catch (error) {
+                console.error("Error fetching number of claims data:", error);
+                return null; // Return null for failed requests
+              }
             }
-          });
+          );
 
           const totalIncurred = await Promise.all(totalIncurredPromises);
           const numberOfClaims = await Promise.all(numberOfClaimsPromises);
@@ -143,7 +153,7 @@ function TableBox3({}: Props) {
           const newData = lossBandingData.map((eachBanding, index) => ({
             id: index,
             "Loss Banding": eachBanding,
-            "Total Incurred": totalIncurred[index],
+            "Total Incurred": totalIncurred[index].toFixed(2),
             "Number of Claims": numberOfClaims[index],
           }));
 
@@ -169,7 +179,10 @@ function TableBox3({}: Props) {
                 );
                 return response.data;
               } catch (error) {
-                console.error("Error fetching number of claims by year data:", error);
+                console.error(
+                  "Error fetching number of claims by year data:",
+                  error
+                );
                 return null; // Return null for failed requests
               }
             }
@@ -183,7 +196,10 @@ function TableBox3({}: Props) {
                 );
                 return response.data;
               } catch (error) {
-                console.error("Error fetching total incurred by year data:", error);
+                console.error(
+                  "Error fetching total incurred by year data:",
+                  error
+                );
                 return null; // Return null for failed requests
               }
             }
@@ -197,7 +213,7 @@ function TableBox3({}: Props) {
             id: index,
             "Loss Banding": eachBanding,
             "Total Incurred": totalIncurred[index].toFixed(2),
-            "Number of Claims": numberOfClaims[index].toFixed(2),
+            "Number of Claims": numberOfClaims[index],
           }));
 
           setDataWithMetricsYear(newData);
@@ -222,7 +238,10 @@ function TableBox3({}: Props) {
                 );
                 return response.data;
               } catch (error) {
-                console.error("Error fetching number of claims by product line data:", error);
+                console.error(
+                  "Error fetching number of claims by product line data:",
+                  error
+                );
                 return null; // Return null for failed requests
               }
             }
@@ -236,7 +255,10 @@ function TableBox3({}: Props) {
                 );
                 return response.data;
               } catch (error) {
-                console.error("Error fetching total incurred by product line data:", error);
+                console.error(
+                  "Error fetching total incurred by product line data:",
+                  error
+                );
                 return null; // Return null for failed requests
               }
             }
@@ -246,12 +268,14 @@ function TableBox3({}: Props) {
           const TotalIncurred = await Promise.all(totalIncurredPromises);
 
           // Filter out null values from failed requests
-          const newData = lossBandingDataProductLine.map((eachBanding, index) => ({
-            id: index,
-            "Loss Banding": eachBanding,
-            "Total Incurred": TotalIncurred[index].toFixed(2),
-            "Number of Claims": totalnumberofclaim[index].toFixed(2),
-          }));
+          const newData = lossBandingDataProductLine.map(
+            (eachBanding, index) => ({
+              id: index,
+              "Loss Banding": eachBanding,
+              "Total Incurred": TotalIncurred[index].toFixed(2),
+              "Number of Claims": totalnumberofclaim[index],
+            })
+          );
 
           setDataWithMetricsProductLine(newData);
         } catch (err) {
