@@ -153,7 +153,10 @@ function TableBox3({}: Props) {
           const newData = lossBandingData.map((eachBanding, index) => ({
             id: index,
             "Loss Banding": eachBanding,
-            "Total Incurred": totalIncurred[index].toFixed(2),
+            "Total Incurred": totalIncurred[index].toLocaleString("en-GB", {
+              style: "currency",
+              currency: "GBP",
+            }),
             "Number of Claims": numberOfClaims[index],
           }));
 

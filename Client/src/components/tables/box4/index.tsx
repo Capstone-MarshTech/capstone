@@ -145,8 +145,17 @@ function TableBox4({}: Props) {
           const newData = lossBandingData.map((eachBanding, index) => ({
             id: index,
             "Loss Band": eachBanding,
-            "Average Cost of Claim": averageTotalIncurred[index].toFixed(2),
-            "Largest Claim": largestClaims[index].toFixed(2),
+            "Average Cost of Claim": averageTotalIncurred[index].toLocaleString(
+              "en-GB",
+              {
+                style: "currency",
+                currency: "GBP",
+              }
+            ),
+            "Largest Claim": largestClaims[index].toLocaleString("en-GB", {
+              style: "currency",
+              currency: "GBP",
+            }),
           }));
 
           setDataWithMetrics(newData);
@@ -193,8 +202,17 @@ function TableBox4({}: Props) {
           const newData = lossBandingDataYear.map((eachBanding, index) => ({
             id: index,
             "Loss Band": eachBanding,
-            "Average Cost of Claim": averageTotalIncurred[index].toFixed(2),
-            "Largest Claim": largestClaims[index].toFixed(2),
+            "Average Cost of Claim": averageTotalIncurred[index].toLocaleString(
+              "en-GB",
+              {
+                style: "currency",
+                currency: "GBP",
+              }
+            ),
+            "Largest Claim": largestClaims[index].toLocaleString("en-GB", {
+              style: "currency",
+              currency: "GBP",
+            }),
           }));
 
           setDataWithMetricsYear(newData);
@@ -239,8 +257,16 @@ function TableBox4({}: Props) {
             (eachBanding, index) => ({
               id: index,
               "Loss Band": eachBanding,
-              "Average Cost of Claim": averageTotalIncurred[index].toFixed(2),
-              "Largest Claim": largestClaims[index].toFixed(2),
+              "Average Cost of Claim": averageTotalIncurred[
+                index
+              ].toLocaleString("en-GB", {
+                style: "currency",
+                currency: "GBP",
+              }),
+              "Largest Claim": largestClaims[index].toLocaleString("en-GB", {
+                style: "currency",
+                currency: "GBP",
+              }),
             })
           );
 
