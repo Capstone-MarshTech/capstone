@@ -79,12 +79,14 @@ const GraphsDashboard = ({ captureScreenshot }) => {
 			{/* Client Dropdown */}
 			<Box gridArea='a'>
 				<h5>Client Name</h5>
+
 				<FormControl fullWidth>
 					<InputLabel id='demo-simple-select-label'>Client Name</InputLabel>
 					<Select
 						labelId='demo-simple-select-label'
 						id='demo-simple-select'
 						label='Client Name'
+						value={0}
 						// onChange={handleChange}
 					>
 						{menuItem.map((client, idx) => (
@@ -92,6 +94,9 @@ const GraphsDashboard = ({ captureScreenshot }) => {
 								{client}
 							</MenuItem>
 						))}
+						<MenuItem>Client X</MenuItem>
+						<MenuItem>Client Y</MenuItem>
+						<MenuItem>Client Z</MenuItem>
 					</Select>
 				</FormControl>
 			</Box>
