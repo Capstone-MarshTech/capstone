@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 const columns: GridColDef[] = [
   {
     field: "Loss Band",
-    headerName: "Loss Band",
+    headerName: "Loss Banding",
     headerClassName: "su-header",
     type: "string",
     minWidth: 20,
@@ -59,10 +59,10 @@ function TableBox4({}: Props) {
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const selectedMLB2 = useSelector((state) => state.filter.selectedMLB2);
   const showTitle = selectedYear
-    ? `Largest Claim Against Average Cost per Claim by Loss Band by ${selectedYear}`
+    ? `Largest Claim Against Average Cost per Claim by Loss Banding by ${selectedYear}`
     : selectedMLB1
-    ? `Largest Claim Against Average Cost per Claim by Loss Band by ${selectedMLB1}`
-    : "Largest Claim Against Average Cost per Claim by Loss Band by All Years";
+    ? `Largest Claim Against Average Cost per Claim by Loss Banding by ${selectedMLB1}`
+    : "Largest Claim Against Average Cost per Claim by Loss Banding by All Years";
 
   useEffect(() => {
     const fetchLossBandingData = async () => {

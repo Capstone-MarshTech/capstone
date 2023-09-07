@@ -57,10 +57,10 @@ function TableBox3({}: Props) {
   const selectedYear = useSelector((state) => state.filter.selectedYear);
   const selectedMLB1 = useSelector((state) => state.filter.selectedMLB1);
   const showTitle = selectedYear
-    ? `Number of Claim Against Total Cost per Claim by Loss Band by ${selectedYear}`
+    ? `Number of Claim Against Total Cost per Claim by Loss Banding by ${selectedYear}`
     : selectedMLB1
-    ? `Number of Claim Against Total Cost per Claim by Loss Band by ${selectedMLB1}`
-    : "Number of Claim Against Total Cost per Claim by Loss Band by All Years";
+    ? `Number of Claim Against Total Cost per Claim by Loss Banding by ${selectedMLB1}`
+    : "Number of Claim Against Total Cost per Claim by Loss Banding by All Years";
 
   useEffect(() => {
     const fetchLossBandingData = async () => {
@@ -213,11 +213,14 @@ function TableBox3({}: Props) {
 
           // Filter out null values from failed requests
           const newData = lossBandingDataYear.map((eachBanding, index) => ({
-            id: index,
-            "Loss Banding": eachBanding,
-            "Total Incurred": totalIncurred[index].toFixed(2),
-            "Number of Claims": numberOfClaims[index],
-          }));
+						id: index,
+						'Loss Banding': eachBanding,
+						'Total Incurred': totalIncurred[index].toLocaleString('en-GB', {
+							style: 'currency',
+							currency: 'GBP',
+						}),
+						'Number of Claims': numberOfClaims[index],
+					}));
 
           setDataWithMetricsYear(newData);
         } catch (err) {
@@ -275,7 +278,10 @@ function TableBox3({}: Props) {
             (eachBanding, index) => ({
               id: index,
               "Loss Banding": eachBanding,
-              "Total Incurred": TotalIncurred[index].toFixed(2),
+              "Total Incurred": TotalIncurred[index].toLocaleString("en-GB", {
+            style: "currency",
+            currency: "GBP",
+          }),
               "Number of Claims": totalnumberofclaim[index],
             })
           );
