@@ -127,12 +127,21 @@ function TableBox2() {
         // console.log(allBusinessData)
 
         return {
-          id: year,
-          year: year.toString(),
-          totalOutstanding: allBusinessData[0].data.toFixed(2),
-          totalPaid: allBusinessData[1].data.toFixed(2),
-          largestClaim: allBusinessData[2].data.toFixed(2),
-        };
+					id: year,
+					year: year.toString(),
+					totalOutstanding: allBusinessData[0].data.toLocaleString('en-GB', {
+						style: 'currency',
+						currency: 'GBP',
+					}),
+					totalPaid: allBusinessData[1].data.toLocaleString('en-GB', {
+						style: 'currency',
+						currency: 'GBP',
+					}),
+					largestClaim: allBusinessData[2].data.toLocaleString('en-GB', {
+						style: 'currency',
+						currency: 'GBP',
+					}),
+				};
       })
     );
     setPolicyYearFilter(businessData);
